@@ -11,7 +11,7 @@ body {
 /* Main content area */
 main {
   width: 100%; /* Adjust this value as needed */
-  padding-right: 100px;
+  padding-right: 50px;
   border-right: 2px solid black;
 }
 
@@ -47,6 +47,7 @@ main {
   border-bottom: 2px solid black;
 }
 
+/* Logo */
 .navbar-brand {
   height: 100px; /* Adjust height */
   text-align: center;
@@ -74,7 +75,6 @@ main {
 
 
 /* Set background color for code chunks */
-
 div.sourceCode {
   border: none;
   background-color: rgba(255, 255, 255, 0.5);
@@ -90,43 +90,6 @@ h1, h2, h3, h4, h5, h6 {  /* Adjust as per your document title levels */
   font-weight: bold;
 }
 
-/* Style the tabset (container for the tabs) */
-div.tabset {
-  border-bottom: 2px solid #E8E5C8;  /* Add border below the entire tabset */
-  margin-bottom: 20px;
-}
-
-/* Style individual tabs */
-div.tabset div.tab {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.7);  /* Semi-transparent white background */
-  border: 2px solid rgba(0, 0, 0, 0.3); /* Light border around tabs */
-  margin-right: 5px;
-  cursor: pointer;
-  font-family: "Courier New", monospace;
-  font-size: 15px;
-  border-radius: 5px;
-}
-
-/* Style the active tab (selected tab) */
-div.tabset div.tab.active {
-  background-color: rgba(0, 0, 0, 0.5); /* Darker background for active tab */
-  color: white;  /* Text color when active */
-  border-color: rgba(0, 0, 0, 0.7); /* Darker border for active tab */
-}
-
-/* Hover effect for tabs */
-div.tabset div.tab:hover {
-  background-color: rgba(0, 0, 0, 0.3);  /* Slightly darker background on hover */
-}
-
-/* Style the tab content area */
-div.tabset div.tab-content {
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.0); 
-}
-
 
 /* Style for tab panels */
 .panel-tabset {
@@ -136,12 +99,12 @@ div.tabset div.tab-content {
 
 /* Style for the tab buttons */
 .nav-tabs {
-  background-color: rgba(200, 203, 232, 0.6);  /* White background with 90% opacity */
+  background-color: rgba(200, 203, 232, 0.6); 
   border-bottom: 2px solid black;  /* Black border at bottom of tabs */
 }
 
 .nav-tabs .nav-link {
-  background-color: rgba(200, 203, 232, 0.6);  /* White background with 90% opacity */
+  background-color: rgba(200, 203, 232, 0.6);  
   color: white;
   border: 2px solid black;  /* Black border around each tab */
   margin-right: 5px;  /* Space between tabs */
@@ -150,9 +113,16 @@ div.tabset div.tab-content {
 
 /* Active tab styling */
 .nav-tabs .nav-link.active {
-  background-color: rgba(232, 200, 219, 0.6);  /* White background with 90% opacity */
+  background-color: rgba(232, 200, 219, 0.6); 
   border-color: black;  /* Black border */
   border-bottom: 2px solid black;  
 }
 
+/* Style for inline code */
+code {
+  font-size: 15px;
+  color: #9699C0; /* Highlighted color */
+  padding: 2px 4px;
+  border-radius: 4px;
+}
   

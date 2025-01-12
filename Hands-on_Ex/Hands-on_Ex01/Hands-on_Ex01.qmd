@@ -45,12 +45,13 @@ ggplot(data=exam_data, aes(x=MATHS)) +
 ```
 :::
 
-### 2.1 Use ggplot2 to customize graphs
+### 2.1 Geom: Use ggplot2 to customize graphs
 
 ::: panel-tabset
 #### Bar
 
 ##### geom_bar()
+
 ```{r}
 ggplot(data=exam_data,
        aes(x=RACE))+
@@ -65,6 +66,7 @@ ggplot(data=exam_data,
 #### Dot
 
 ##### geom_dotplot()
+
 ```{r}
 ggplot(data=exam_data,
        aes(x=MATHS))+
@@ -79,10 +81,10 @@ ggplot(data=exam_data,
   theme(plot.title = element_text(hjust = 0.5, face="bold"))
 ```
 
-
 #### Hist
 
 ##### geom_histogram()
+
 ```{r}
 #  default bin is 30
 ggplot(data=exam_data, 
@@ -95,8 +97,8 @@ ggplot(data=exam_data,
   theme(plot.title = element_text(hjust = 0.5, face="bold"))
 ```
 
-
 ##### geom_histogram() by Gender
+
 ```{r}
 ggplot(data=exam_data,
        aes(x=MATHS,
@@ -114,6 +116,7 @@ ggplot(data=exam_data,
 #### Density
 
 ##### geom_density()
+
 ```{r}
 ggplot(data=exam_data,
        aes(x=MATHS))+
@@ -124,6 +127,7 @@ ggplot(data=exam_data,
 ```
 
 ##### geom_density() by Gender
+
 ```{r}
 ggplot(data=exam_data,
        aes(x=MATHS,colour = GENDER))+
@@ -134,9 +138,11 @@ ggplot(data=exam_data,
   ggtitle("Distribution of Math Scores by Gender")+
   theme(plot.title = element_text(hjust = 0.5, face="bold"))
 ```
+
 #### Box
 
 ##### geom_boxplot()
+
 ```{r}
 ggplot(data=exam_data,
        aes(x=GENDER,
@@ -152,7 +158,9 @@ ggplot(data=exam_data,
 
   
 ```
-##### geom_boxplot() with notch >>> shows median
+
+##### geom_boxplot() with notch \>\>\> shows median
+
 ```{r}
 ggplot(data = exam_data,
        aes(x = GENDER,
@@ -166,7 +174,9 @@ ggplot(data = exam_data,
 ```
 
 #### Violin
+
 ##### geom_violin()
+
 ```{r}
 ggplot(data = exam_data,
        aes(x = GENDER,
@@ -178,9 +188,11 @@ ggplot(data = exam_data,
   ggtitle("Distribution of Math Scores by Gender")+
   theme(plot.title = element_text(hjust = 0.5, face="bold"))
 ```
+
 #### Scatter
 
 ##### geom_point()
+
 ```{r}
 ggplot(data = exam_data,
        aes(x = MATHS,
@@ -192,8 +204,11 @@ ggplot(data = exam_data,
   ggtitle("Distribution of Math Scores by Gender")+
   theme(plot.title = element_text(hjust = 0.5, face="bold"))
 ```
+
 #### Combined
+
 ##### Combine multiple geom objects
+
 ```{r}
 ggplot(data = exam_data,
        aes(y = MATHS,
@@ -207,7 +222,167 @@ ggplot(data = exam_data,
   theme(plot.title = element_text(face = "bold", hjust = 0.5))+
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))
 ```
-
 :::
 
-### 2.2 Working with stat()
+### 2.2 Stat: Working with stat()
+
+Add statistics into your graph:
+
+**1. Adding mean values with *stat_summary() or geom()***
+
+::: panel-tabset
+##### stat_summary()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = GENDER, y = MATHS, fill = GENDER))+
+  geom_boxplot()+
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
+  stat_summary(geom = "point",
+               fun = "mean",
+               color = "black",
+               size = 3
+               )
+```
+
+##### geom_point()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = GENDER, y = MATHS, fill = GENDER))+
+  geom_boxplot()+
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
+  geom_point(stat = "summary",
+               fun = "mean",
+               color = "black",
+               size = 3
+               )
+```
+:::
+
+**2. Adding a best fit curve on a scatter plot with *geom_smooth()***
+
+::: panel-tabset
+#### LOESS Mehod
+
+LOESS method is the default method of ***geom_smooth()***.
+
+LOESS (Locally Estimated Scatterplot Smoothing) is a non-parametric regression method that fits a smooth curve to the data. This method is particularly useful when the relationship between variables is non-linear.
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS, y = ENGLISH))+
+  geom_point()+
+  # default use loess regression method
+  geom_smooth(size=0.5)
+```
+
+#### LM Method
+
+LM(Linear Model) refers to linear regression. It assumes the relationship between the dependent and independent variables are linear.
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS, y = ENGLISH))+
+  geom_point()+
+  geom_smooth(method = "lm", size=0.5)
+```
+:::
+
+### 2.3 Facets: Working with facet_wrap() and facet_grid()
+
+-   **facet_warp():** Creates facets by wrapping them into multiple rows or columns. It is useful for plotting a [single variable]{.underline}. We can control the number of rows or columns with the ***nrow*** and ***ncol*** arguments.
+
+-   **facet_grid():** Creates a grid of facets defined by one or two variables. It is useful for exploring relationships between [two variables]{.underline}.
+
+::: panel-tabset
+#### facet_warp()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS))+
+  geom_histogram(bins=20,fill="#E8C8DB",color="black")+
+  facet_wrap(~ CLASS, nrow = 3)
+```
+
+#### facet_grid()
+
+```{r}
+ggplot(data = exam_data,
+       aes(MATHS))+
+  geom_histogram(bins=20,fill="#E8C8DB",color="black")+
+  facet_grid(~ CLASS)
+```
+:::
+
+### 2.4 Coordinates
+
+-   **coord_flip():** Flips the horizontal bar chart into vertical bar chart.
+
+-   **coord_cartesian():** Fixed both the y-axis and x-axis in certain ranges.
+
+::: panel-tabset
+
+#### coord_flip()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()
+
+```
+
+#### coord_cartesian()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS, y = ENGLISH))+
+  geom_point()+
+  geom_smooth(method = "lm", size=0.5)+
+  # fixes both the y-axis and x-axis range from 0-100
+  coord_cartesian(xlim = c(0,100),
+                  ylim = c(0,100))
+```
+:::
+
+### 2.5 Themes: Working with different themes
+
+::: panel-tabset
+#### theme_gray()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()
+
+```
+
+#### theme_classic()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()+
+  theme_classic()
+
+```
+#### theme_minimal()
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()+
+  theme_minimal()
+
+```
+:::
