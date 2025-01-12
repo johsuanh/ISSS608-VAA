@@ -1,0 +1,158 @@
+/* css styles */
+
+/* Set the entire page background */
+body {
+  width: 100%; /* Change from 85% to 100% */
+  margin: 0;
+  padding: 0;
+  background-color: #E8E5C8;
+}
+
+/* Main content area */
+main {
+  width: 100%; /* Adjust this value as needed */
+  padding-right: 100px;
+  border-right: 2px solid black;
+}
+
+.quarto-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Table of contents container */
+.toc {
+  position: fixed;
+  right: 0;
+  top: 100px; /* Should match your navbar height */
+  width: 2%; /* Adjust this value as needed */
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+/* TOC list styling */
+.toc-content {
+  padding-top: 1rem;
+}
+
+/* Navigation bar setup */
+.navbar {
+  height: 100px; /* Adjust this value as needed */
+  background-color: #E8E5C8;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+.navbar-brand {
+  height: 100px; /* Adjust height */
+  text-align: center;
+}
+
+/* Change Logo height */
+.navbar-brand img {
+  max-height: 100%; /* Ensure it fits within the navbar */
+}
+
+/* Make Navbar Font Bold and Set Font Size */
+.navbar-brand, .navbar-nav > li > a {
+  font-weight: bold; /* Make text bold */
+  font-size: 18px; /* Adjust font size */
+  color: #3d454a; /* Set font color for links */
+}
+
+
+/* Active link styles */
+.navbar a.active, /* For frameworks that add .active */
+.navbar .nav-item.active > a, /* For Bootstrap frameworks */
+.navbar a[aria-current="page"] /* For Quarto links */ {
+  text-decoration: underline; /* Optional for visibility */
+}
+
+
+/* Set background color for code chunks */
+
+div.sourceCode {
+  border: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 10px;
+  font-family: "Courier New", monospace;
+  font-size: 15px;
+}
+
+/* Style for the body title */
+h1, h2, h3, h4, h5, h6 {  /* Adjust as per your document title levels */
+  font-family: Georgia, serif;
+  font-weight: bold;
+}
+
+/* Style the tabset (container for the tabs) */
+div.tabset {
+  border-bottom: 2px solid #E8E5C8;  /* Add border below the entire tabset */
+  margin-bottom: 20px;
+}
+
+/* Style individual tabs */
+div.tabset div.tab {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.7);  /* Semi-transparent white background */
+  border: 2px solid rgba(0, 0, 0, 0.3); /* Light border around tabs */
+  margin-right: 5px;
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+/* Style the active tab (selected tab) */
+div.tabset div.tab.active {
+  background-color: rgba(0, 0, 0, 0.5); /* Darker background for active tab */
+  color: white;  /* Text color when active */
+  border-color: rgba(0, 0, 0, 0.7); /* Darker border for active tab */
+}
+
+/* Hover effect for tabs */
+div.tabset div.tab:hover {
+  background-color: rgba(0, 0, 0, 0.3);  /* Slightly darker background on hover */
+}
+
+/* Style the tab content area */
+div.tabset div.tab-content {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.0); 
+}
+
+
+/* Style for tab panels */
+.panel-tabset {
+  background-color: rgba(232, 229, 200, 0.6);  /* White background with 90% opacity */
+  border: 2px solid black;  /* Black border around the entire tab panel */
+}
+
+/* Style for the tab buttons */
+.nav-tabs {
+  background-color: rgba(200, 203, 232, 0.6);  /* White background with 90% opacity */
+  border-bottom: 2px solid black;  /* Black border at bottom of tabs */
+}
+
+.nav-tabs .nav-link {
+  background-color: rgba(200, 203, 232, 0.6);  /* White background with 90% opacity */
+  color: white;
+  border: 2px solid black;  /* Black border around each tab */
+  margin-right: 5px;  /* Space between tabs */
+  border-bottom: none;  /* Remove bottom border to avoid double border */
+}
+
+/* Active tab styling */
+.nav-tabs .nav-link.active {
+  background-color: rgba(232, 200, 219, 0.6);  /* White background with 90% opacity */
+  border-color: black;  /* Black border */
+  border-bottom: 2px solid black;  
+}
+
+  

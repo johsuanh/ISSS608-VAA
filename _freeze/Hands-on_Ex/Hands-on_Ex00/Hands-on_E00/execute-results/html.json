@@ -1,0 +1,15 @@
+{
+  "hash": "6aaf723b14776a8dfaf03d0ec15729d1",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Hands-on Exercise 00: working with tidyverse\"\nauthor: \"Johsuan Huang\"\ndate-modified: \"last-modified\"\nexecute:\n  echo: true\n  eval: true\n  warning: false\n  freeze: true\n---\n\n\n\n\n### Getting started\n\nLoading tidyverse onto r environment by using the code chunk below.\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse)\n```\n:::\n\n\n\n\n### Importing data\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrealis_2019 <- read_csv(\"data/REALIS2019.csv\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\npopdata_fat <- read_csv(\"data/PopData2019_fat.csv\")\n```\n:::\n\n\n\n\n### Pivoting data\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npopdata_long <- popdata_fat %>%\n  pivot_longer(c(3,21),\n               names_to = \"Age Group\",\n               values_to = \"Population\")\n```\n:::\n\n\n\n\n### Export and Import R data files (.rds)\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nwrite_rds(popdata_long, \"data/rds/popdata_long.rds\")\n```\n:::\n\n::: {.cell}\n\n:::\n\n\n\n\n### Select and filter columns\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrealis2019_filtered <- realis_2019 %>%\n  select(`Project Name`, `Type of Sale`, `Transacted Price ($)`, `Property Type`, `Unit Price ($ psm)`) %>%\n  filter(`Property Type` == \"Condominium\" | `Property Type` == \"Apartment\") %>%\n  filter(`Type of Sale` == \"New Sale\") %>%\n  filter(`Unit Price ($ psm)` > 11000)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

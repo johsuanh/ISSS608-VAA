@@ -1,0 +1,7 @@
+---
+title: "Johsuan's Visual Analytics Site"
+---
+
+This website contains exercises from ISSS608 Visual Analytics and Applications.
+
+If you have any questions, please feel free to contact me :-)

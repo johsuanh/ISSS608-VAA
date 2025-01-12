@@ -1,0 +1,213 @@
+---
+title: "Hands-on Exercise 1"
+author: "Johsuan Huang"
+date-modified: "last-modified"
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+### 1.1 Load the Package and Data
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+### 1.2 Comparison with different R packages
+
+::: panel-tabset
+#### R graphics
+
+```{r}
+hist(exam_data$MATHS)
+```
+
+#### ggplot 2
+
+```{r}
+ggplot(data=exam_data, aes(x=MATHS)) +
+  # use geom_histogram() to create a hist plot
+  geom_histogram(bins=10,
+                 boundary=100,
+                 color="black",
+                 fill="#E8C8DB") +
+  # setting a clean background
+  theme_classic()+
+  ggtitle("Distribution of Maths scores")+
+  # adjust the position and weight of the title
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+:::
+
+### 2.1 Use ggplot2 to customize graphs
+
+::: panel-tabset
+#### Bar
+
+##### geom_bar()
+```{r}
+ggplot(data=exam_data,
+       aes(x=RACE))+
+  geom_bar(color="black",
+           fill="#E8C8DB")+
+  theme_classic()+
+  ggtitle("Distribution of Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+
+```
+
+#### Dot
+
+##### geom_dotplot()
+```{r}
+ggplot(data=exam_data,
+       aes(x=MATHS))+
+  geom_dotplot(binwidth=2.5,
+               dotsize = 0.5,
+               fill="#E8C8DB")+
+  # use scale_y_continuous() to turn off y-axis
+  theme_classic()+
+  scale_y_continuous(NULL,
+                     breaks=NULL)+
+  ggtitle("Distribution of Math Scores")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+
+
+#### Hist
+
+##### geom_histogram()
+```{r}
+#  default bin is 30
+ggplot(data=exam_data, 
+       aes(x=MATHS))+
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="#E8C8DB")+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+
+
+##### geom_histogram() by Gender
+```{r}
+ggplot(data=exam_data,
+       aes(x=MATHS,
+           fill=GENDER))+
+  geom_histogram(bins=20,
+                 color="black")+
+  # customize the fill color
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+              
+```
+
+#### Density
+
+##### geom_density()
+```{r}
+ggplot(data=exam_data,
+       aes(x=MATHS))+
+  geom_density()+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+
+##### geom_density() by Gender
+```{r}
+ggplot(data=exam_data,
+       aes(x=MATHS,colour = GENDER))+
+  geom_density()+
+    # customize the color
+  scale_color_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+#### Box
+
+##### geom_boxplot()
+```{r}
+ggplot(data=exam_data,
+       aes(x=GENDER,
+           y=MATHS,
+           # add "fill" to customize boxplot's colors
+           fill=GENDER))+
+         geom_boxplot()+
+    # customize the color
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+
+  
+```
+##### geom_boxplot() with notch >>> shows median
+```{r}
+ggplot(data = exam_data,
+       aes(x = GENDER,
+           y = MATHS,
+           fill = GENDER))+
+  geom_boxplot(notch = TRUE)+
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+
+#### Violin
+##### geom_violin()
+```{r}
+ggplot(data = exam_data,
+       aes(x = GENDER,
+           y = MATHS,
+           fill = GENDER))+
+  geom_violin()+
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+#### Scatter
+
+##### geom_point()
+```{r}
+ggplot(data = exam_data,
+       aes(x = MATHS,
+           y = ENGLISH,
+           color = GENDER))+
+  geom_point()+
+  scale_color_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+```
+#### Combined
+##### Combine multiple geom objects
+```{r}
+ggplot(data = exam_data,
+       aes(y = MATHS,
+           x = GENDER,
+           fill = GENDER))+
+  geom_point(position = "jitter", 
+             size = 0.5)+
+  geom_boxplot()+
+  theme_classic()+
+  ggtitle("Distribution of Math Scores by Gender")+
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))+
+  scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))
+```
+
+:::
+
+### 2.2 Working with stat()

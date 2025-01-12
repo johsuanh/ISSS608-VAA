@@ -1,0 +1,26 @@
+/* css styles */
+
+.about-container {
+  display: flex;
+}
+
+.left-content {
+  flex: 1;
+  padding: 20px;
+  align-items: center;
+
+}
+
+.right-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-image {
+  max-width: 300px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
