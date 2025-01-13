@@ -6,7 +6,23 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f3f1e9;
+  /*font-family: 'Helvetica Neue', sans-serif;*/
+  font-size: 15px;
+  line-height: 1.5;
 }
+
+/* Style for the body title */
+h1,h2,h3,h4,h5,h6 {  /* Adjust as per your document title levels */
+  /*font-family: 'Helvetica Neue', sans-serif;*/
+  font-weight: bold;
+}
+
+h1 {font-size: 2em}
+h2 {font-size: 1.7em}
+h3 {font-size: 1.5em}
+h4 {font-size: 1.2em}
+h5,h6 {font-size: 1em}
+
 
 /* Main content area */
 main {
@@ -74,6 +90,7 @@ main {
 }
 
 
+
 /* Set background color for code chunks */
 div.sourceCode {
   border: none;
@@ -84,16 +101,19 @@ div.sourceCode {
   font-size: 15px;
 }
 
-/* Style for the body title */
-h1, h2, h3, h4, h5, h6 {  /* Adjust as per your document title levels */
-  font-family: Georgia, serif;
-  font-weight: bold;
+/* Style for inline code */
+code {
+  font-size: 14px;
+  color: #9699C0; /* Highlighted color */
+  padding: 2px 4px;
+  border-radius: 4px;
 }
+  
 
 
 /* Style for tab panels */
 .panel-tabset {
-  background-color: rgba(243, 241, 233, 1.0);  /* White background with 90% opacity */
+  background-color: rgba(243, 241, 233, 1.0);  
   border: 2px solid black;  /* Black border around the entire tab panel */
 }
 
@@ -118,11 +138,59 @@ h1, h2, h3, h4, h5, h6 {  /* Adjust as per your document title levels */
   border-bottom: 2px solid black;  
 }
 
-/* Style for inline code */
-code {
-  font-size: 15px;
-  color: #9699C0; /* Highlighted color */
-  padding: 2px 4px;
-  border-radius: 4px;
+/* Tab content area */
+.tab-content {
+  background-color: rgba(243, 241, 233, 1.0);  
+  padding: 15px;  /* Add some padding inside the content area */
+  border-bottom: none;  
+
 }
-  
+
+/* Basic callout customization */
+div.callout {
+  border: 2px solid; /* Thicker border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 1em; /* Inner spacing */
+  margin: 1em 0; /* Vertical spacing */
+}
+
+/* Customize specific types of callouts */
+div.callout-note {
+  background-color: #C8DBE8;
+  border-color: #C8DBE8;
+}
+
+div.callout-tip {
+  background-color: #C8E8D5;
+  border-color: #C8E8D5;
+}
+
+div.callout-warning {
+  background-color: #E8E5C8;
+  border-color: #E8E5C8;
+}
+
+div.callout-important {
+  background-color: #E8C8DB;
+  border-color: #E8C8DB;
+}
+
+/* Customize the callout header */
+.callout-header {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+/* Customize the callout icon */
+.callout-icon {
+  margin-right: 0.5em;
+}
+
+/* Customize callout title */
+.callout-title {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.5em;
+}

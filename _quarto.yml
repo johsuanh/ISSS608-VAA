@@ -27,7 +27,7 @@ format:
   html:
     theme: cosmo
     css: styles.css
-    favicon: images/Logo_hi.png
+    favicon: "images/favicon.ico"
     toc: true
     toc-location: right
 
