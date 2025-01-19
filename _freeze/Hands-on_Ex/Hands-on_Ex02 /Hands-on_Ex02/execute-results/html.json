@@ -1,0 +1,15 @@
+{
+  "hash": "e313a73898dc117e16643e917ed36406",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Hands-on_Ex02: Beyond ggplot2 Fundamentals\"\ndate: 2024-01-18\ndate-modified: \"last-modified\"\nexecute:\n  echo: true\n  eval: true\n  warning: false\n  freeze: true\n---\n\n\n\n## 2.1 Learning Object\n\nLearn several ggplot2 extentions:\n\n1.  Use **ggrepel** to control the placement of annotations on graphs\n\n2.  Use **ggthemes** and **hrbrthemes** to create professional publication quality figure\n\n3.  Use **patchwork** package to plot composite figure by combining ggplot2 graphs\n\n## 2.2 Getting Started\n\n### 2.2.1 **Installing and loading the required libraries**\n\n-   ggrepel: an R package provides geoms for ggplot2 to repel overlapping text labels.\n\n-   ggthemes: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.\n\n-   hrbrthemes: an R package provides typography-centric themes and theme components for ggplot2.\n\n-   patchwork: an R package for preparing composite figure created using ggplot2.\n\nCode chunk below will be used to check if these packages have been installed and also will load them onto your working R environment.\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(ggrepel, patchwork,ggthemes, hrbrthemes,tidyverse) \n```\n:::\n\n\n\n### 2.2.2 **Importing data**\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nexam_data <- read_csv(\"data/Exam_data.csv\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -14,7 +14,6 @@ body {
 /* Style for the body title */
 h1,h2,h3,h4,h5,h6 {  /* Adjust as per your document title levels */
   /*font-family: 'Helvetica Neue', sans-serif;*/
-  font-weight: bold;
 }
 
 h1 {font-size: 2em}
@@ -29,6 +28,17 @@ main {
   width: 100%; /* Adjust this value as needed */
   padding-right: 50px;
   border-right: 2px solid black;
+}
+
+main a {
+  color: #8087CA !important;
+  font-weight: bold;
+}
+
+main a:hover,
+a:active,
+a:focus {
+    color: #A4A9D9 !important;
 }
 
 .quarto-container {
@@ -53,7 +63,28 @@ main {
 /* TOC list styling */
 .toc-content {
   padding-top: 1rem;
+  border: none;
 }
+
+/* Change TOC link color on hover */
+.sidebar nav[role="doc-toc"] ul > li > a:hover,
+.sidebar nav[role="doc-toc"] ul > li > a.active {
+    color: #A4A9D9 !important;
+    border-left: solid 1px #A4A9D9 !important;
+}
+
+
+
+/* Styling for the second level of the list */
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a:hover
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a:active,
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a:focus{
+    color: #A4A9D9 !important;
+    border-left: solid 1px #A4A9D9 !important;
+
+
+}
+
 
 /* Navigation bar setup */
 .navbar {
@@ -81,13 +112,32 @@ main {
   color: #3d454a; /* Set font color for links */
 }
 
-
 /* Active link styles */
-.navbar a.active, /* For frameworks that add .active */
-.navbar .nav-item.active > a, /* For Bootstrap frameworks */
-.navbar a[aria-current="page"] /* For Quarto links */ {
-  text-decoration: underline; /* Optional for visibility */
+.navbar a.active, 
+.navbar .nav-item.active > a,
+.navbar a[aria-current="page"],
+.navbar .nav-link.active {
+  text-decoration: underline;
+  color: #A4A9D9 !important;
 }
+
+
+/* Hover and focus styles for all navbar links */
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus,
+.navbar .navbar-brand:active,
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link:active,
+.navbar a:hover,
+.navbar a:focus,
+.navbar a:active {
+  color: #A4A9D9 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 
 
 
@@ -124,19 +174,31 @@ code {
 }
 
 .nav-tabs .nav-link {
+  color: white !important;
   background-color: rgba(200, 203, 232, 0.6);  
-  color: white;
   border: 2px solid black;  /* Black border around each tab */
   margin-right: 5px;  /* Space between tabs */
   border-bottom: none;  /* Remove bottom border to avoid double border */
 }
 
+/* Hover and focus states */
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  color: #f0f0f0 !important;  /* Your desired hover color */
+  background-color: rgba(232, 200, 219, 0.6) !important;
+  border: 2px solid black;
+  border-bottom: none; 
+}
+
 /* Active tab styling */
 .nav-tabs .nav-link.active {
+  color: black !important;
   background-color: rgba(232, 200, 219, 0.6); 
   border-color: black;  /* Black border */
   border-bottom: 2px solid black;  
 }
+
+
 
 /* Tab content area */
 .tab-content {
@@ -146,33 +208,38 @@ code {
 
 }
 
-/* Basic callout customization */
+
+/* callout */
 div.callout {
-  border: 2px solid; /* Thicker border */
+  border: dotted 2px !important;
   border-radius: 5px; /* Rounded corners */
   padding: 1em; /* Inner spacing */
   margin: 1em 0; /* Vertical spacing */
+
 }
 
-/* Customize specific types of callouts */
+
 div.callout-note {
-  background-color: #C8DBE8;
-  border-color: #C8DBE8;
+  background-color: rgba(200, 203,232, 0.3);
+  border-color: #A4A9D9 !important;
+  border-style: dashed;
+  
 }
+
 
 div.callout-tip {
-  background-color: #C8E8D5;
-  border-color: #C8E8D5;
+  background-color: rgba(200, 232,213,0.2) ;
+  border-color: #C8E8D5 !important;
 }
 
 div.callout-warning {
-  background-color: #E8E5C8;
-  border-color: #E8E5C8;
+  background-color: rgba(217, 160, 102 ,0.1);
+  border-color: #e1b588 !important;
 }
 
 div.callout-important {
-  background-color: #E8C8DB;
-  border-color: #E8C8DB;
+  background-color: rgba(232, 200, 219, 0.3);
+  border-color: #E8C8DB !important;
 }
 
 /* Customize the callout header */

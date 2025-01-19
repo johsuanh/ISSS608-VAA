@@ -1,6 +1,6 @@
 ---
-title: "Hands-on Exercise 1"
-author: "Johsuan Huang"
+title: "Hands-on Exercise 01 - A Layered Grammar of Graphics: ggplot2 methods"
+date: 2024-01-11
 date-modified: "last-modified"
 execute:
   echo: true
@@ -73,7 +73,11 @@ ggplot(data=exam_data, aes(x=MATHS)) +
   theme_classic()+
   ggtitle("Distribution of Maths scores")+
   # adjust the position and weight of the title
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
 ```
 :::
 
@@ -184,9 +188,12 @@ ggplot(data=exam_data,
   geom_bar(color="black",
            fill="#E8C8DB")+
   ggtitle("Distribution of Race")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
-
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
 ```
 
 #### Dot
@@ -217,8 +224,12 @@ ggplot(data=exam_data,
   scale_y_continuous(NULL,
                      breaks=NULL)+
   ggtitle("Distribution of Math Scores")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
 ```
 
 #### Hist
@@ -233,8 +244,13 @@ ggplot(data=exam_data,
                  color="black",
                  fill="#E8C8DB")+
   ggtitle("Distribution of Math Scores")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
 ##### geom_histogram() by Gender
@@ -256,9 +272,14 @@ ggplot(data=exam_data,
   # customize the fill color
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
-              
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
+
 ```
 
 #### Density
@@ -276,8 +297,12 @@ ggplot(data=exam_data,
        aes(x=MATHS))+
   geom_density()+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
 ```
 
 ##### geom_density() by Gender
@@ -291,8 +316,13 @@ ggplot(data=exam_data,
     # customize the color
   scale_color_manual(values = c("#E8C8DB", "#C8DBE8"))+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 ```
 
@@ -312,9 +342,13 @@ ggplot(data=exam_data,
     # customize the color
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
-
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
   
 ```
 
@@ -330,8 +364,13 @@ ggplot(data = exam_data,
   geom_boxplot(notch = TRUE)+
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
 #### Violin
@@ -348,8 +387,13 @@ ggplot(data = exam_data,
   geom_violin()+
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
 #### Point
@@ -364,10 +408,15 @@ ggplot(data = exam_data,
            y = ENGLISH,
            color = GENDER))+
   geom_point()+
-  scale_color_manual(values = c("#E8C8DB", "#C8DBE8"))+
+  scale_color_manual(values = c("#D9A4C3", "#A4A8D9"))+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
 #### Combined
@@ -385,9 +434,14 @@ ggplot(data = exam_data,
              size = 0.5)+
   geom_boxplot()+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))+
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
-  theme_classic()
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 ```
 :::::
@@ -420,7 +474,12 @@ ggplot(data = exam_data,
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
   theme_classic()+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
   stat_summary(geom = "point",
                fun = "mean",
                color = "black",
@@ -437,7 +496,12 @@ ggplot(data = exam_data,
   scale_fill_manual(values = c("#E8C8DB", "#C8DBE8"))+
   theme_classic()+
   ggtitle("Distribution of Math Scores by Gender")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
   geom_point(stat = "summary",
                fun = "mean",
                color = "black",
@@ -498,7 +562,10 @@ ggplot(data = exam_data,
   geom_histogram(bins=20,fill="#E8C8DB",color="black")+
   facet_wrap(~ CLASS, nrow = 3)+
   ggtitle("Distribution of Math Scores by Class")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 
 ```
@@ -511,8 +578,11 @@ ggplot(data = exam_data,
   geom_boxplot() +
   stat_summary(geom = "point", fun = mean, colour ="#C8DBE8", size=2) + 
   facet_wrap(~ RACE)+
-   ggtitle("Distribution of Math Scores by ")+
-  theme(plot.title = element_text(hjust = 0.5, face="bold"))
+  ggtitle("Distribution of Math Scores by Race and Class ")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
 #### facet_grid()
@@ -523,7 +593,12 @@ ggplot(data = exam_data,
 ggplot(data = exam_data,
        aes(MATHS))+
   geom_histogram(bins=20,fill="#E8C8DB",color="black")+
-  facet_grid(~ CLASS)
+  facet_grid(~ CLASS)+
+  ggtitle("Distribution of Math Scores by Race and Class ")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
 -   **Two variables: MATHS & RACE**
@@ -533,7 +608,12 @@ ggplot(data = exam_data,
        aes(x = CLASS, y = MATHS))+
   geom_boxplot() +
   stat_summary(geom = "point", fun = mean, colour ="#C8DBE8", size=2) + 
-  facet_grid(~ RACE)
+  facet_grid(~ RACE)+
+  ggtitle("Distribution of Math Scores by Race and Class ")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))  
 ```
 :::
 
@@ -556,7 +636,14 @@ The Coordinates functions map the position of objects onto the plane of the plot
 ggplot(data = exam_data,
        aes(x = RACE))+
   geom_bar(bins=20,fill="#E8C8DB",color="black")+
-  coord_flip()
+  coord_flip()+
+  ggtitle("Number of Students by Race")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        panel.background = element_rect(fill = "#f3f1e9",color = NA),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 ```
 
@@ -571,7 +658,14 @@ ggplot(data = exam_data,
   geom_smooth(method = "lm", size=0.5)+
   # fixes both the y-axis and x-axis range from 0-100
   coord_cartesian(xlim = c(0,100),
-                  ylim = c(0,100))
+                  ylim = c(0,100))+
+  ggtitle("Relationship between English and Math")+
+  theme_classic()+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        panel.background = element_rect(fill = "#f3f1e9",color = NA),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 ```
 :::
 
@@ -600,7 +694,13 @@ This is the default theme.
 ggplot(data = exam_data,
        aes(x = RACE))+
   geom_bar(bins=20,fill="#E8C8DB",color="black")+
-  coord_flip()
+  coord_flip()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
+
 
 ```
 
@@ -611,7 +711,12 @@ ggplot(data = exam_data,
        aes(x = RACE))+
   geom_bar(bins=20,fill="#E8C8DB",color="black")+
   coord_flip()+
-  theme_classic()
+  theme_classic()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 ```
 
@@ -622,7 +727,12 @@ ggplot(data = exam_data,
        aes(x = RACE))+
   geom_bar(bins=20,fill="#E8C8DB",color="black")+
   coord_flip()+
-  theme_minimal()
+  theme_minimal()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 ```
 
@@ -633,7 +743,62 @@ ggplot(data = exam_data,
        aes(x = RACE))+
   geom_bar(bins=20,fill="#E8C8DB",color="black")+
   coord_flip()+
-  theme_bw()
+  theme_bw()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        # adjust the color of panel grid
+        legend.background = element_rect(fill = "#f3f1e9"))
+
+```
+
+#### theme_dark()
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()+
+  theme_dark()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9"))
+
+```
+
+#### theme_linedraw()
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()+
+  theme_linedraw()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        # adjust the color of panel grid
+        legend.background = element_rect(fill = "#f3f1e9"))
+
+```
+
+#### theme_void()
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE))+
+  geom_bar(bins=20,fill="#E8C8DB",color="black")+
+  coord_flip()+
+  theme_void()+
+  ggtitle("Number of Students by Race")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        # adjust the color behind the bar chart
+        panel.background = element_rect(fill = "#f3f1e9",color = NA),
+        # adjust the background color of the whole plot
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        # adjust the color of panel grid
+        legend.background = element_rect(fill = "#f3f1e9"))
 
 ```
 :::
