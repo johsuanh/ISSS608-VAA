@@ -442,24 +442,24 @@ We can plot more complex composite by using appropriate operators. For example, 
 
 In order to identify subplots in text, **patchwork** also provides auto-tagging capabilities as shown in the figure below.
 
-tag_levels could be 'I', 'A', '1', c('A','1') \<- meaning combine A&1
+tag_levels could be 'I', 'A', '1'
 
 ::: panel-tabset
-## I
+## tag_levels = 'I'
 
 ```{r}
 ((p1/p2)|p3) + 
   plot_annotation(tag_levels = 'I')
 ```
 
-## A
+## tag_levels = 'A'
 
 ```{r}
 ((p1+p2)/p3) + 
   plot_annotation(tag_levels = 'A')
 ```
 
-## 1
+## tag_levels = '1'
 
 ```{r}
 ((p1/p2)|p3) + 

@@ -11,16 +11,32 @@ body {
   line-height: 1.5;
 }
 
-/* Style for the body title */
-h1,h2,h3,h4,h5,h6 {  /* Adjust as per your document title levels */
-  /*font-family: 'Helvetica Neue', sans-serif;*/
+
+h1 {
+    font-size: 2em;
+    font-weight: bold; /* Makes the heading bold */
 }
 
-h1 {font-size: 2em}
-h2 {font-size: 1.7em}
-h3 {font-size: 1.5em}
-h4 {font-size: 1.2em}
-h5,h6 {font-size: 1em}
+h2 {
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+h5, h6 {
+    font-size: 1em;
+    font-weight: bold;
+}
+
 
 
 /* Main content area */
@@ -180,7 +196,6 @@ code {
   background-color: rgba(200, 203, 232, 0.6);  
   border: 2px solid black;  /* Black border around each tab */
   margin-right: 5px;  /* Space between tabs */
-  border-bottom: none;  /* Remove bottom border to avoid double border */
 }
 
 /* Hover and focus states */
@@ -189,7 +204,6 @@ code {
   color: #f0f0f0 !important;  /* Your desired hover color */
   background-color: rgba(232, 200, 219, 0.6) !important;
   border: 2px solid black;
-  border-bottom: none; 
 }
 
 /* Active tab styling */
