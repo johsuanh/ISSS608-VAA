@@ -69,19 +69,18 @@ a:focus {
 /* Change TOC link color on hover */
 .sidebar nav[role="doc-toc"] ul > li > a:hover,
 .sidebar nav[role="doc-toc"] ul > li > a.active {
-    color: #A4A9D9 !important;
-    border-left: solid 1px #A4A9D9 !important;
+    color: #8087CA !important;
+    border-left: solid 1px #8087CA !important;
 }
 
 
 
 /* Styling for the second level of the list */
-.sidebar nav[role="doc-toc"] ul > li > ul > li > a:hover
-.sidebar nav[role="doc-toc"] ul > li > ul > li > a:active,
-.sidebar nav[role="doc-toc"] ul > li > ul > li > a:focus{
-    color: #A4A9D9 !important;
-    border-left: solid 1px #A4A9D9 !important;
-
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a:hover,
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a.active,
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a:focus {
+    color: #8087CA !important;
+    border-left: solid 1px #8087CA !important;
 
 }
 
@@ -118,7 +117,7 @@ a:focus {
 .navbar a[aria-current="page"],
 .navbar .nav-link.active {
   text-decoration: underline;
-  color: #A4A9D9 !important;
+  color: #8087CA !important;
 }
 
 
@@ -132,7 +131,7 @@ a:focus {
 .navbar a:hover,
 .navbar a:focus,
 .navbar a:active {
-  color: #A4A9D9 !important;
+  color: #8087CA !important;
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
@@ -153,10 +152,13 @@ div.sourceCode {
 
 /* Style for inline code */
 code {
-  font-size: 14px;
-  color: #9699C0; /* Highlighted color */
-  padding: 2px 4px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #8087CA;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 2px;
   border-radius: 4px;
+  
 }
   
 
