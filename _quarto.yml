@@ -3,7 +3,7 @@ project:
 
 website:
   title: "ISSS608-VAA"
-  favicon: "images/favicon/favicon.ico"
+  favicon: "images/favicon/web-app-manifest-512x512.png"
   navbar: 
     logo: images/Logo_VAA.png
     title: false
