@@ -1,7 +1,21 @@
 ---
 title: "Johsuan's Visual Analytics Site"
+listing:
+  contents:
+    - Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.qmd
+    - Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.qmd
+  type: grid
+  sort: "date desc"
+  categories: true
+  fields: [title, date, description]
+  page-size: 5
+  date-format: "MMMM DD, YYYY"
 ---
 
 This website contains exercises from ISSS608 Visual Analytics and Applications.
 
 If you have any questions, please feel free to contact me :-)
+
+------------------------------------------------------------------------
+
+**Here are my latest posts :**

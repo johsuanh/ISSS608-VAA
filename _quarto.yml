@@ -3,7 +3,7 @@ project:
 
 website:
   title: "ISSS608-VAA"
-  favicon: images/favicon/web-app-manifest-192x192.png
+  favicon: images/favicon/favicon-96x96.png
   navbar: 
     logo: images/Logo_VAA.png
     title: false
@@ -35,3 +35,5 @@ format:
     toc-location: right
 
 editor: visual
+
+

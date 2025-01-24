@@ -14,7 +14,7 @@ body {
 
 h1 {
     font-size: 2em;
-    font-weight: bold; /* Makes the heading bold */
+    font-weight: bold; 
 }
 
 h2 {
@@ -41,7 +41,7 @@ h5, h6 {
 
 /* Main content area */
 main {
-  width: 100%; /* Adjust this value as needed */
+  width: 100%; 
   padding-right: 50px;
   border-right: 2px solid black;
 }
@@ -70,8 +70,8 @@ a:focus {
 .toc {
   position: fixed;
   right: 0;
-  top: 100px; /* Should match your navbar height */
-  width: 2%; /* Adjust this value as needed */
+  top: 100px; 
+  width: 2%; 
   height: calc(100vh - 100px);
   overflow-y: auto;
 }
@@ -116,20 +116,20 @@ div.navbar-collapse {
 
 /* Logo */
 .navbar-brand {
-  height: 100px; /* Adjust height */
+  height: 100px; 
   text-align: center;
 }
 
 /* Change Logo height */
 .navbar-brand img {
-  max-height: 100%; /* Ensure it fits within the navbar */
+  max-height: 100%; 
 }
 
 /* Make Navbar Font Bold and Set Font Size */
 .navbar-brand, .navbar-nav > li > a {
-  font-weight: bold; /* Make text bold */
-  font-size: 18px; /* Adjust font size */
-  color: #3d454a; /* Set font color for links */
+  font-weight: bold; 
+  font-size: 18px; 
+  color: #3d454a; 
 }
 
 /* Active link styles */
@@ -206,7 +206,7 @@ code {
 /* Hover and focus states */
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:focus {
-  color: #f0f0f0 !important;  /* Your desired hover color */
+  color: #f0f0f0 !important; 
   background-color: rgba(232, 200, 219, 0.6) !important;
   border: 2px solid black;
 }
@@ -215,7 +215,7 @@ code {
 .nav-tabs .nav-link.active {
   color: black !important;
   background-color: rgba(232, 200, 219, 0.6); 
-  border-color: black;  /* Black border */
+  border-color: black; 
   border-bottom: 2px solid black;  
 }
 
@@ -224,7 +224,7 @@ code {
 /* Tab content area */
 .tab-content {
   background-color: rgba(243, 241, 233, 1.0);  
-  padding: 15px;  /* Add some padding inside the content area */
+  padding: 15px;  
   border-bottom: none;  
 
 }

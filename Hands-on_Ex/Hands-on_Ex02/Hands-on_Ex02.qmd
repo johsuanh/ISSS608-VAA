@@ -1,7 +1,9 @@
 ---
-title: "Hands-on_Ex02: Beyond ggplot2 Fundamentals"
+title: "Hands-on Exercise 02"
 date: 2024-01-18
 date-modified: "last-modified"
+description: "Beyond ggplot2 Fundamentals"
+categories: [ggplot2]
 execute:
   echo: true
   eval: true

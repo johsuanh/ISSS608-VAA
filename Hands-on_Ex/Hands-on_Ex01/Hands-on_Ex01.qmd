@@ -1,7 +1,10 @@
 ---
-title: "Hands-on Exercise 01 - A Layered Grammar of Graphics: ggplot2 methods"
+title: "Hands-on Exercise 01"
 date: 2024-01-11
 date-modified: "last-modified"
+description: "A Layered Grammar of Graphics: ggplot2 methods"
+categories: [ggplot2]
+
 execute:
   echo: true
   eval: true
