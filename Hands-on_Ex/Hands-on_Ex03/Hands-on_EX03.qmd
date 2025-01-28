@@ -32,6 +32,7 @@ First, write a code chunk to check, install and launch the following R packages:
 The code chunk below will be used to accomplish the task:
 
 ```{r}
+
 pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, hrbrthemes)
 ```
 
@@ -40,11 +41,13 @@ pacman::p_load(ggiraph, plotly, patchwork, DT, tidyverse, hrbrthemes)
 In this section, Exam_data.csv provided will be used. Using read_csv() of readr package, import Exam_data.csv into R.
 
 ```{r}
+
 exam_data <- read_csv("data/Exam_data.csv")
 
 ```
 
 ```{r}
+
 head(exam_data,5)
 ```
 
@@ -89,6 +92,10 @@ Let's breakdown the setting in geom_dotplot_interactive():
 :::
 
 ```{r}
+#| eval: true
+#| echo: true
+#| include: true
+
 # create ggplot object
 p <- ggplot(data=exam_data, aes(x=MATHS))+
   geom_dotplot_interactive(aes(tooltip = ID),stackgroups=TRUE, 
@@ -98,7 +105,7 @@ p <- ggplot(data=exam_data, aes(x=MATHS))+
   theme_ipsum()+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(size=14, face = "bold", family = "Helvetica"),
+        plot.title = element_text(size=14, face = "bold"),
         plot.subtitle = element_text(size = 9,face= "italic" ,family = "Helvetica"),
         plot.caption = element_text(size=6, face="plain"))+
   labs(title = "The example of an interactive graph",
@@ -132,6 +139,9 @@ The content of the tooltip can be customized by including a list object as shown
 :::
 
 ```{r}
+#| eval: true
+#| echo: true
+#| include: true
 
 # create new column "tooltip" in the dataframe "exam_data"
 exam_data$tooltip <- c(paste0(
@@ -148,7 +158,7 @@ p1 <- ggplot(data=exam_data, aes(x=MATHS))+
   theme_ipsum()+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(size=14, face = "bold", family = "Helvetica"),
+        plot.title = element_text(size=14, face = "bold"),
         plot.subtitle = element_text(size = 9,face= "italic" ,family = "Helvetica"),
         plot.caption = element_text(size=6, face="plain"))+
   labs(title = "The example of an interactive graph",
@@ -178,6 +188,10 @@ We can also add `opts_hover_inv(css = "opacity:0.1;")` to the `options` argument
 
 ```{r}
 
+#| eval: true
+#| echo: true
+#| include: true
+
 # create a varibale for customized tooltip style
 hover_css <- "fill:#A4A9D9; stroke:black ;stroke-width:1px;"
 tooltip_css <- "background-color:white; font-style: bold; color:black; border-radius: 5px; margin: 3px; padding:3px;"  
@@ -192,7 +206,7 @@ p2 <- ggplot(data=exam_data, aes(x=MATHS))+
   theme_ipsum()+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(size=14, face = "bold", family = "Helvetica"),
+        plot.title = element_text(size=14, face = "bold"),
         plot.subtitle = element_text(size = 9,face= "italic" ,family = "Helvetica"),
         plot.caption = element_text(size=6, face="plain"))+
   labs(title = "The example of an interactive graph",
@@ -214,6 +228,10 @@ girafe(ggobj = p2,
 
 ```{r}
 
+#| eval: true
+#| echo: true
+#| include: true
+
 # create a varibale for customized tooltip style
 hover_css <- "fill:black; stroke:black ;stroke-width:1px;"
 tooltip_css <- "background-color:white; font-style: bold; color:black; border-radius: 5px; margin: 3px; padding:3px;"  
@@ -225,7 +243,7 @@ p3 <- ggplot(data=exam_data, aes(x=MATHS, y=ENGLISH, color = GENDER))+
   theme_ipsum()+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(size=14, face = "bold", family = "Helvetica"),
+        plot.title = element_text(size=14, face = "bold"),
         plot.subtitle = element_text(size = 9,face= "italic" ,family = "Helvetica"),
         plot.caption = element_text(size=6, face="plain",),
         legend.title = element_text(size = 8,face= "bold" ,family = "Arial"),
@@ -283,6 +301,11 @@ Let's break down the code below step by step:
 :::
 
 ```{r}
+
+#| eval: true
+#| echo: true
+#| include: true
+
 tooltip_s <- function(y, ymax, accuracy= .01){
   mean <- scales::number(y, accuracy = accuracy)
   sem <- scales::number(ymax - y)
@@ -300,7 +323,7 @@ gg_point <- ggplot(data=exam_data, aes(x=RACE))+
   theme_ipsum()+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(size=14, face = "bold", family = "Helvetica"),
+        plot.title = element_text(size=14, face = "bold"),
         plot.subtitle = element_text(size = 10,face= "italic" ,family = "Helvetica"),
         plot.caption = element_text(size=10, face="plain"),
         panel.grid.major = element_blank(),
@@ -328,6 +351,11 @@ Note that click actions must be a string column in the dataset containing valid 
 The code chunk below shown an example of `onclick`.
 
 ```{r}
+
+#| eval: true
+#| echo: true
+#| include: true
+
 exam_data$onclick <- sprintf("window.open(\"%s%s\")",
                              "https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
                              as.character(exam_data$ID))
@@ -340,7 +368,7 @@ gg_click <- ggplot(data=exam_data,aes(x=MATHS))+
   theme_ipsum()+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(size=14, face = "bold", family = "Helvetica"),
+        plot.title = element_text(size=14, face = "bold"),
         plot.subtitle = element_text(size = 10,face= "italic" ,family = "Helvetica"),
         plot.caption = element_text(size=10, face="plain"),
         panel.grid.major = element_blank(),
@@ -365,6 +393,7 @@ Coordinated multiple views methods has been implemented in the data visualisatio
 Notice that when a data point of one of the dotplot is selected, the corresponding data point ID on the second data visualisation will be highlighted too.
 
 ```{r}
+#| eval: true
 #| echo: false
 
 common_theme <- theme_minimal(base_size = 10) +
@@ -382,7 +411,7 @@ common_theme <- theme_minimal(base_size = 10) +
 
 p1 <- ggplot(data=exam_data, aes(x = MATHS)) +
   geom_dotplot_interactive(              
-    aes(data_id = ID,tooltip = tooltip),              
+    aes(data_id = exam_data$ID,tooltip = exam_data$tooltip),              
     stackgroups = TRUE,                  
     binwidth = 1,                        
     method = "histodot") +  
@@ -392,7 +421,7 @@ p1 <- ggplot(data=exam_data, aes(x = MATHS)) +
 
 p2 <- ggplot(data=exam_data, aes(x = ENGLISH)) +
   geom_dotplot_interactive(              
-    aes(data_id = ID, tooltip = tooltip),              
+    aes(data_id = exam_data$ID, tooltip = exam_data$tooltip),              
     stackgroups = TRUE,                  
     binwidth = 1,                        
     method = "histodot") + 
@@ -500,11 +529,15 @@ There are two ways to create interactive graph by using plotly, they are:
 The tabset below shows an example a basic interactive plot created by using plot_ly().
 
 ```{r}
+#| eval: true
+#| echo: true
+#| include: true
+
 plot_ly(data = exam_data, x = ~MATHS, y = ~ENGLISH) %>%
   layout(plot_bgcolor = "#f3f1e9",paper_bgcolor = "#f3f1e9",
          title = list(
       text = "The example of an interactive graph by plot_ly()",
-      font = list(size = 18, family = "Helvetica", face = "bold")
+      font = list(size = 18, face = "bold")
     ))
 ```
 
@@ -513,12 +546,17 @@ plot_ly(data = exam_data, x = ~MATHS, y = ~ENGLISH) %>%
 In the code chunk below, color argument is mapped to a qualitative visual variable (i.e. RACE).
 
 ```{r}
+
+#| eval: true
+#| echo: true
+#| include: true
+
 plot_ly(data = exam_data, x = ~ENGLISH, y = ~MATHS, 
         color = ~RACE) %>%
   layout(plot_bgcolor = "#f3f1e9",paper_bgcolor = "#f3f1e9",
          title = list(
       text = "The example of an interactive graph by plot_ly()",
-      font = list(size = 18, family = "Helvetica", face = "bold")
+      font = list(size = 18, face = "bold")
     ))
 ```
 
@@ -527,6 +565,11 @@ plot_ly(data = exam_data, x = ~ENGLISH, y = ~MATHS,
 The code chunk below plots an interactive scatter plot by using ggplotly(). \* Notice that the only extra line you need to include in the code chunk is ggplotly().
 
 ```{r}
+
+#| eval: true
+#| echo: true
+#| include: true
+
 p <- ggplot(data=exam_data, 
             aes(x = MATHS,
                 y = ENGLISH)) +
@@ -564,6 +607,11 @@ Thing to learn from the code chunk:
 :::
 
 ```{r}
+
+#| eval: true
+#| echo: true
+#| include: true
+
 d <- highlight_key(exam_data)
 
 common_theme <- theme_ipsum()+
@@ -607,6 +655,10 @@ A wrapper of the JavaScript Library DataTables
 Data objects in R can be rendered as HTML tables using the JavaScript library ‘DataTables’ (typically via R Markdown or Shiny).
 
 ```{r}
+#| eval: true
+#| echo: true
+#| include: true
+
 table <- DT::datatable(exam_data, class= "display",
               caption = "Table 1: Exam data") %>%
   formatStyle(
@@ -623,6 +675,10 @@ table
 Code chunk below is used to implement the coordinated brushing shown below.
 
 ```{r}
+
+#| eval: true
+#| echo: true
+#| include: true
 d <- highlight_key(exam_data) 
 
 p <- ggplot(d, 
