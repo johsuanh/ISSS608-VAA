@@ -282,3 +282,34 @@ div.callout-important {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 0.5em;
 }
+
+
+
+/* Change border color of Quarto listing items */
+.quarto-grid-item, .quarto-listing-item {
+    border: 2px solid black;  
+    border-radius: 10px; 
+    padding: 5px;
+    margin-bottom: 5px;
+    /*background-color: rgba(200, 232,213,0.2);*/
+    /*box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); */
+}
+
+/* Hover effect to highlight listing items */
+.quarto-grid-item:hover, .quarto-listing-item:hover {
+    border-color: #A4A9D9;  
+}
+
+/* Change the font size of category links */
+.quarto-listing-category {
+    font-size: 14px !important; 
+    font-weight: bold;
+    /*color: #8087CA;*/  
+}
+
+/* Change font size on hover for better visibility */
+.quarto-listing-category:hover {
+    font-size: 14px !important;  
+    color: #A4A9D9;  /* Optional hover color change */
+}
+

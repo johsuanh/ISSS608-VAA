@@ -482,7 +482,7 @@ ggplot(data = exam_data,
         panel.background = element_rect(fill = "#f3f1e9"),
         # adjust the background color of the whole plot
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        legend.background = element_rect(fill = "#f3f1e9"))
+        legend.background = element_rect(fill = "#f3f1e9"))+
   stat_summary(geom = "point",
                fun = "mean",
                color = "black",
@@ -504,7 +504,7 @@ ggplot(data = exam_data,
         panel.background = element_rect(fill = "#f3f1e9"),
         # adjust the background color of the whole plot
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        legend.background = element_rect(fill = "#f3f1e9"))
+        legend.background = element_rect(fill = "#f3f1e9"))+
   geom_point(stat = "summary",
                fun = "mean",
                color = "black",
@@ -557,7 +557,7 @@ Facetting generates small multiples (sometimes also called trellis plot), each d
 ::: panel-tabset
 #### facet_wrap()
 
--   **One variable: MATH**
+-   **One variable: Math by Class**
 
 ```{r}
 ggplot(data = exam_data,
@@ -573,7 +573,7 @@ ggplot(data = exam_data,
 
 ```
 
--   **Two variables: MATHS & RACE**
+-   **Two variables: Math by Class & RACE**
 
 ```{r}
 ggplot(data = exam_data,
@@ -590,21 +590,21 @@ ggplot(data = exam_data,
 
 #### facet_grid()
 
--   **One variable: MATH**
+-   **One variable: Math by Class**
 
 ```{r}
 ggplot(data = exam_data,
        aes(MATHS))+
   geom_histogram(bins=20,fill="#E8C8DB",color="black")+
   facet_grid(~ CLASS)+
-  ggtitle("Distribution of Math Scores by Race and Class ")+
+  ggtitle("Distribution of Math Scores by Class ")+
   theme(plot.title = element_text(hjust = 0.5, face="bold"),
         # adjust the background color of the whole plot
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
         legend.background = element_rect(fill = "#f3f1e9"))
 ```
 
--   **Two variables: MATHS & RACE**
+-   **Two variables: Math by Class & RACE**
 
 ```{r}
 ggplot(data = exam_data,

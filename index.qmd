@@ -4,12 +4,13 @@ listing:
   contents:
     - Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.qmd
     - Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.qmd
+    - Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.qmd
   type: grid
   sort: "date desc"
   categories: true
   fields: [title, date, description]
   page-size: 5
-  date-format: "MMMM DD, YYYY"
+  date-format: "MMM DD, YYYY"
 ---
 
 This website contains exercises from ISSS608 Visual Analytics and Applications.
