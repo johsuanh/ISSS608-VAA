@@ -1,9 +1,9 @@
 ---
-title: "Hands-on Exercise 3"
+title: "Hands-on Exercise 03-1"
 date: 2024-01-25
 date-modified: "last-modified"
 description: "Programming Interactive Data Visualisation with R"
-categories: [ggplot2,ggiraph,plotlyr]
+categories: [ggplot2,ggiraph,plotly]
 execute:
   echo: true
   eval: true
@@ -94,7 +94,6 @@ Let's breakdown the setting in geom_dotplot_interactive():
 ```{r}
 #| eval: true
 #| echo: true
-#| include: true
 
 # create ggplot object
 p <- ggplot(data=exam_data, aes(x=MATHS))+
@@ -141,7 +140,7 @@ The content of the tooltip can be customized by including a list object as shown
 ```{r}
 #| eval: true
 #| echo: true
-#| include: true
+
 
 # create new column "tooltip" in the dataframe "exam_data"
 exam_data$tooltip <- c(paste0(
@@ -187,10 +186,9 @@ We can also add `opts_hover_inv(css = "opacity:0.1;")` to the `options` argument
 ## Example 1
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 
 # create a varibale for customized tooltip style
 hover_css <- "fill:#A4A9D9; stroke:black ;stroke-width:1px;"
@@ -230,7 +228,7 @@ girafe(ggobj = p2,
 
 #| eval: true
 #| echo: true
-#| include: true
+
 
 # create a varibale for customized tooltip style
 hover_css <- "fill:black; stroke:black ;stroke-width:1px;"
@@ -301,10 +299,9 @@ Let's break down the code below step by step:
 :::
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 
 tooltip_s <- function(y, ymax, accuracy= .01){
   mean <- scales::number(y, accuracy = accuracy)
@@ -351,10 +348,9 @@ Note that click actions must be a string column in the dataset containing valid 
 The code chunk below shown an example of `onclick`.
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 
 exam_data$onclick <- sprintf("window.open(\"%s%s\")",
                              "https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
@@ -531,7 +527,7 @@ The tabset below shows an example a basic interactive plot created by using plot
 ```{r}
 #| eval: true
 #| echo: true
-#| include: true
+
 
 plot_ly(data = exam_data, x = ~MATHS, y = ~ENGLISH) %>%
   layout(plot_bgcolor = "#f3f1e9",paper_bgcolor = "#f3f1e9",
@@ -546,10 +542,9 @@ plot_ly(data = exam_data, x = ~MATHS, y = ~ENGLISH) %>%
 In the code chunk below, color argument is mapped to a qualitative visual variable (i.e. RACE).
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 
 plot_ly(data = exam_data, x = ~ENGLISH, y = ~MATHS, 
         color = ~RACE) %>%
@@ -565,10 +560,9 @@ plot_ly(data = exam_data, x = ~ENGLISH, y = ~MATHS,
 The code chunk below plots an interactive scatter plot by using ggplotly(). \* Notice that the only extra line you need to include in the code chunk is ggplotly().
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 
 p <- ggplot(data=exam_data, 
             aes(x = MATHS,
@@ -607,10 +601,9 @@ Thing to learn from the code chunk:
 :::
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 
 d <- highlight_key(exam_data)
 
@@ -657,7 +650,7 @@ Data objects in R can be rendered as HTML tables using the JavaScript library �
 ```{r}
 #| eval: true
 #| echo: true
-#| include: true
+
 
 table <- DT::datatable(exam_data, class= "display",
               caption = "Table 1: Exam data") %>%
@@ -675,10 +668,9 @@ table
 Code chunk below is used to implement the coordinated brushing shown below.
 
 ```{r}
-
 #| eval: true
 #| echo: true
-#| include: true
+
 d <- highlight_key(exam_data) 
 
 p <- ggplot(d, 
@@ -737,9 +729,7 @@ This [link](https://davidgohel.github.io/ggiraph/index.html) provides online v
 
 -   [Plotly R Library Fundamentals](https://plotly.com/r/plotly-fundamentals/) is a good place to learn the fundamental features of Plotly’s R API.
 
--   [Getting Started](https://gganimate.com/articles/gganimate.html)
-
--   Visit this [link](https://rpubs.com/raymondteo/dataviz8) for a very interesting implementation of gganimate by your senior.
+-   [gganimate - Getting Started](https://gganimate.com/articles/gganimate.html)
 
 -   [Building an animation step-by-step with gganimate](https://www.alexcookson.com/post/2020-10-18-building-an-animation-step-by-step-with-gganimate/).
 

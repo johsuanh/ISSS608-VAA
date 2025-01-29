@@ -3,7 +3,7 @@ title: "Hands-on Exercise 02"
 date: 2024-01-18
 date-modified: "last-modified"
 description: "Beyond ggplot2 Fundamentals"
-categories: [ggplot2]
+categories: [ggplot2,ggrepel,patchwork,themes]
 execute:
   echo: true
   eval: true
