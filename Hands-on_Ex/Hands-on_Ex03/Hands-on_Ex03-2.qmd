@@ -13,7 +13,11 @@ execute:
 
 ## 4.1 Overview
 
-When telling a visually-driven data story, animated graphics tends to attract the interest of the audience and make deeper impression than static graphics. In this hands-on exercise, we will learn how to **create animated data visualisation by using gganimate and plotly r** packages. At the same time, we will also learn how to (i) **reshape data by using tidyr** package, and (ii) process, **wrangle and transform data by using dplyr** package.
+When telling a visually-driven data story, animated graphics tends to attract the interest of the audience and make deeper impression than static graphics. In this hands-on exercise, we will learn how to:
+
+1.  Create animated data visualisation by using `gganimate` and `plotly` r packages
+2.  Reshape data by using `tidyverse` package
+3.  Process, wrangle and transform data by using `dplyr` package
 
 ### 4.1.1 Basic concepts of animation
 
@@ -51,35 +55,77 @@ First, write a code chunk to check, install and load the following R packages:
 
 ```{r}
 pacman::p_load(readxl, gifski, gapminder,
-               plotly, gganimate, tidyverse, ggthemes)
+               plotly, gganimate, tidyverse, ggthemes, DT)
 ```
 
-### 4.2.2 Importing the data
+### 4.2.2 Importing and Examing the data
 
 In this hands-on exercise, the *Data* worksheet from *GlobalPopulation* Excel workbook will be used.
 
-Write a code chunk to import Data worksheet from GlobalPopulation Excel workbook by using appropriate R package from tidyverse family.
+We first use `read_xls` of `tidyverse` package to import the document:
 
-We first use `read_xls` to import the document. However, the imported data have few issues to transform:
+```{r}
+globalpop_raw <- read_xls("data/GlobalPopulation.xls",sheet="Data") 
+```
+
+Next, we use function `str()` , `head()` from R, function `summarise_all()` and `n_distinct()` from `dplyr` to examine the data structure and variable types:
+
+-   The dataset contains 6,204 observations with no missing values
+
+<!-- -->
+
+-   **Country**: The dataset contains 222 countries stored as character data type
+
+-   **Year**: The data spans from 1996 to 1950 and stored as double data type
+
+-   **Young**: Based on the data context, the "Young" variable represents the percentage of young people in the population with values ranging from 15.5% to **109.2%.** It stored as double data type
+
+-   **Old**: Based on the data context, the "Old" variable represents the percentage of elderly people in the population with values ranging from 1% to 77.1% It stored as double data type
+
+-   **Population**: The values ranging from 3 K to 1,807,878.6 K within the data period
+
+-   **Continent:** The dataset contains 6 continenet stored as character data type
+
+```{r}
+#| echo: true
+str(globalpop_raw)
+```
+
+```{r}
+head(globalpop_raw)
+```
+
+```{r}
+globalpop_raw %>%
+  summarise_all(~n_distinct(.))
+```
+
+```{r}
+# check if there're any missing values
+any(is.na(globalpop_raw))
+```
+
+```{r}
+summary(globalpop_raw)
+```
+
+### 4.2.3 Handling Data Issues
+
+### 4.2.3.1 Data Type Issues
 
 1.  **Year**: Since year is a whole number rather than a decimal, we should transform its data type from double \<dbl\> to integer\<int\>.
 2.  **Country and Continent**: Since these two categorical variables will be analyzed further, we need to transform their data type from character \<chr\> to factor\<fctr\>. In R, factors are used to handle categorical data and ordered variable.
 
-```{r}
-globalpop_original <- read_xls("data/GlobalPopulation.xls",sheet="Data") 
-head(globalpop_original)
-```
-
-Hence, we use `mutate_each_()` of `dplyr` package to convert all character data type into factor, and use `mutate` of `dplyr` package to convert data values of Year field into integer.
+Here, we use `mutate_each_()` of `dplyr` package to convert all character data type into factor, and use `mutate` of `dplyr` package to convert data values of Year field into integer.
 
 ```{r}
 col <- c("Country","Continent")
 
-globalPop <- read_xls("data/GlobalPopulation.xls",sheet="Data") %>%
+globalpop_raw <- read_xls("data/GlobalPopulation.xls",sheet="Data") %>%
   mutate_each_(funs(factor(.)),col) %>%
   mutate(Year = as.integer(Year))
   
-head(globalPop)
+head(globalpop_raw)
 
 ```
 
@@ -88,11 +134,11 @@ Unfortunately, `mutate_each_()` was deprecated in dplyr 0.7.0. and `funs()` 
 ```{r}
 col <- c("Country","Continent")
 
-globalPop <- read_xls("data/GlobalPopulation.xls",sheet="Data") %>%
+globalpop_raw <- read_xls("data/GlobalPopulation.xls",sheet="Data") %>%
   mutate_at(col, as.factor) %>%
   mutate(Year = as.integer(Year))
   
-head(globalPop)
+head(globalpop_raw)
 
 ```
 
@@ -101,12 +147,51 @@ Instead of using `mutate_at()`, [`across()`](https://dplyr.tidyverse.org/refer
 ```{r}
 col <- c("Country","Continent")
 
-globalPop <- read_xls("data/GlobalPopulation.xls",sheet="Data") %>%
+globalpop_raw <- read_xls("data/GlobalPopulation.xls",sheet="Data") %>%
   mutate(across(all_of(col), as.factor)) %>%
   mutate(Year = as.integer(Year))
 
-head(globalPop)
+head(globalpop_raw)
 
+```
+
+### 4.2.3.2 Data Quality Issues
+
+The data summary statistics show that the maximum value of Young% is 109.2%, indicating inaccurate or incomplete data. This is problematic because Young% + Old% should be less than or equal to 100%. A value exceeding this would imply a negative Mid-aged%, which is neraly impossible and suggests inaccurate or missing data in this dataset.
+
+```{r}
+summary(globalpop_raw)
+```
+
+Below are 63 observations with data accuracy issue. To maintain dataset's integrity, we should remove these problematic countries records.
+
+```{r}
+dq_issues <- subset(globalpop_raw, Young > 100 | (Young + Old) > 100)
+
+table <- DT::datatable(dq_issues, class= "display",
+              caption = "Table 1: Observations with data quality issues") %>%
+  formatStyle(
+    columns = colnames(dq_issues), 
+    fontSize = '12px', 
+    fontFamily = 'Helvetica', 
+    lineHeight = '1.2'
+  )
+table
+```
+
+##### 
+
+After remove problematic records, there are 5,953 observations remained with 213 distinct countries.
+
+```{r}
+c_removed = unique(dq_issues$Country)
+globalPop <- subset(globalpop_raw, !(Country %in% c_removed))
+str(globalPop)
+summary(globalPop)
+```
+
+```{r}
+globalPop %>% summarise_all(~n_distinct(.))
 ```
 
 ## 4.3 Animated Data Visualisation: gganimate methods
@@ -173,7 +258,7 @@ In **Plotly R** package, both `ggplotly()` and `plot_ly()` support key fra
 
 ### 4.4.1 Building an animated bubble plot: ggplotly() method
 
-In this sub-section, you will learn how to create an animated bubble plot by using `ggplotly()` method.
+In this sub-section, we will create an animated bubble plot by using `ggplotly()` method.
 
 ::: {.callout-note appearance="simple"}
 ## Things to learn from the code chunk
@@ -194,14 +279,13 @@ gg <- ggplot(globalPop, aes(x = Old, y = Young,
                  frame = Year),
              alpha = 0.7,
              show.legend = FALSE) +
-  # country_colors: colors for the 142 countries
-  scale_colour_manual(values = country_colors) +
+  scale_colour_manual(values = country_colors)+
   # control the size of points from 2 to 12
   scale_size(range = c(2,12))+
   labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
-  theme_wsj(base_size = 8)+
+  theme_wsj(base_size = 8) + 
   theme(axis.title.x = element_text(size = 12, face = "bold"),
         axis.title.y = element_text(size = 12, face = "bold"))
 
@@ -217,14 +301,13 @@ gg <- ggplot(globalPop, aes(x = Old, y = Young,
                  frame = Year),
              alpha = 0.7,
              show.legend = FALSE) +
-  # country_colors: colors for the 142 countries
-  scale_colour_manual(values = country_colors) +
+  scale_colour_manual(values = country_colors)+
   # control the size of points from 2 to 12
   scale_size(range = c(2,12))+
   labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
-  theme_wsj(base_size = 8)+
+  theme_wsj(base_size = 8) + 
   theme(axis.title.x = element_text(size = 12, face = "bold"),
         axis.title.y = element_text(size = 12, face = "bold"))
 
@@ -232,9 +315,11 @@ ggplotly(gg)
 ```
 :::
 
-###### 
+### 4.4.1.1 Improvements Needed
 
-Notice that although `show.legend = FALSE` argument was used, the legend still appears on the plot. To overcome this problem, `theme(legend.position='none')` should be used as shown in the plot and code chunk below.
+1.  **Legend:** Notice that although `show.legend = FALSE` argument was used, the legend still appears on the plot. To overcome this problem, `theme(legend.position='none')` should be used as shown in the plot and code chunk below.
+2.  **Color:** Although the "`country_colors`" palette from gapminder provides colors for 142 countries, our dataset contains 213 countries, causing many data points to appear in grey. To improve visual distinction, we should color code the data by "Continent" rather than "Country".
+3.  **Tooltips:** To improve the readability of the plot, tooltips are customized with detailed infomations by using `text()`.
 
 ::: panel-tabset
 ## Plot
@@ -242,45 +327,50 @@ Notice that although `show.legend = FALSE` argument was used, the legend still
 ```{r}
 #| echo: false
 gg <- ggplot(globalPop, aes(x = Old, y = Young,
-                            size = Population, colour = Country))+
-  geom_point(aes(size = Population,
-                 frame = Year),
-             alpha = 0.7,
-             show.legend = FALSE) +
-  scale_colour_manual(values = country_colors) +
+                            size = Population, colour = Continent,
+                            text = paste("Year:",Year, # customize the content in tooltips
+                                         "<br>Continent:",Continent,
+                                         "<br>Country:", Country,
+                                         "<br>Population:", scales::comma(Population), "K",
+                                         "<br>Old:",round(Old,2),"%",
+                                         "<br>Young:",round(Young,2),"%")))+ 
+  geom_point(aes(frame = Year),alpha = 0.7) +
   scale_size(range = c(2,12))+
   labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
-       y = '% Young')+
-  theme_wsj(base_size = 8)+
+       y = '% Young',)+
+  theme_wsj(base_size = 8)+ scale_color_wsj()+
   theme(axis.title.x = element_text(size = 12, face = "bold"),
         axis.title.y = element_text(size = 12, face = "bold"),
-        legend.position = 'none')
+        legend.position = 'none') # remove legend
 
 
-ggplotly(gg)
+ggplotly(gg, tooltip = "text")
 ```
 
 ## Code
 
 ``` r
 gg <- ggplot(globalPop, aes(x = Old, y = Young,
-                            size = Population, colour = Country))+
-  geom_point(aes(size = Population,
-                 frame = Year),
-             alpha = 0.7,
-             show.legend = FALSE) +
-  scale_colour_manual(values = country_colors) +
+                            size = Population, colour = Continent,
+                            text = paste("Year:",Year, # customize the content in tooltips
+                                         "<br>Continent:",Continent,
+                                         "<br>Country:", Country,
+                                         "<br>Population:", scales::comma(Population), "K",
+                                         "<br>Old:",round(Old,2),"%",
+                                         "<br>Young:",round(Young,2),"%")))+ 
+  geom_point(aes(frame = Year),alpha = 0.7) +
   scale_size(range = c(2,12))+
   labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
-  theme_wsj(base_size = 8)+
+  theme_wsj(base_size = 8)+ scale_color_wsj()+
   theme(axis.title.x = element_text(size = 12, face = "bold"),
         axis.title.y = element_text(size = 12, face = "bold"),
-        legend.position = 'none')
+        legend.position = 'none') # remove legend
 
-ggplotly(gg)
+
+ggplotly(gg, tooltip = "text")
 ```
 :::
 
@@ -298,7 +388,7 @@ To customized the layout of plot_ly(), we need to use layout().
 bp <- globalPop %>%
   plot_ly(x = ~Old, y= ~Young,
           size = ~Population, color = ~Continent,
-          sizes = c(2,10),
+          sizes = c(2,100),
           frame = ~Year, text = ~Country,
           hoverinfo = "text",
           type = "scatter", mode = "markers") %>%
@@ -321,7 +411,7 @@ bp
 bp <- globalPop %>%
   plot_ly(x = ~Old, y= ~Young,
           size = ~Population, color = ~Continent,
-          sizes = c(2,10),
+          sizes = c(2,100),
           frame = ~Year, text = ~Country,
           hoverinfo = "text",
           type = "scatter", mode = "markers") %>%
