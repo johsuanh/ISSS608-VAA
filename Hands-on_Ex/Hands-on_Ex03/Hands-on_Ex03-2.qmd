@@ -134,7 +134,7 @@ ggplot(globalPop, aes(x = Old, y = Young,
   geom_point(alpha=0.7, show.legend = FALSE)+
   scale_colour_manual(values = country_colors)+
   scale_size(range= c(2,12))+
-  labs(title = 'Global Population Change from 1997 to 2050',
+  labs(title = 'Global Population Change from 1996 to 2050',
        subtitle = 'Year:{frame_time}',
        x = '% Aged',
        y = '% Young')+
@@ -158,7 +158,7 @@ In the code chunk below,
       geom_point(alpha = 0.7, show.legend = FALSE)+
       scale_colour_manual(values = country_colors)+
       scale_size(range = c(2,12))+   # control point size to be 2~12
-      labs(title = 'Global Population Change from 1997 to 2050',
+      labs(title = 'Global Population Change from 1996 to 2050',
            subtitle = 'Year:{frame_time}',   # {frame_time} is a special placeholder (dynamic title) in gganimate
            x = '% Aged',
            y = '% Young')+
@@ -198,10 +198,12 @@ gg <- ggplot(globalPop, aes(x = Old, y = Young,
   scale_colour_manual(values = country_colors) +
   # control the size of points from 2 to 12
   scale_size(range = c(2,12))+
-  labs(title = 'Global Population Change from 1997 to 2050',
+  labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
-  theme_wsj(base_size = 8)
+  theme_wsj(base_size = 8)+
+  theme(axis.title.x = element_text(size = 12, face = "bold"),
+        axis.title.y = element_text(size = 12, face = "bold"))
 
 ggplotly(gg)
 ```
@@ -219,10 +221,12 @@ gg <- ggplot(globalPop, aes(x = Old, y = Young,
   scale_colour_manual(values = country_colors) +
   # control the size of points from 2 to 12
   scale_size(range = c(2,12))+
-  labs(title = 'Global Population Change from 1997 to 2050',
+  labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
-  theme_wsj(base_size = 8)
+  theme_wsj(base_size = 8)+
+  theme(axis.title.x = element_text(size = 12, face = "bold"),
+        axis.title.y = element_text(size = 12, face = "bold"))
 
 ggplotly(gg)
 ```
@@ -245,11 +249,14 @@ gg <- ggplot(globalPop, aes(x = Old, y = Young,
              show.legend = FALSE) +
   scale_colour_manual(values = country_colors) +
   scale_size(range = c(2,12))+
-  labs(title = 'Global Population Change from 1997 to 2050',
+  labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
   theme_wsj(base_size = 8)+
-  theme(legend.position = 'none')
+  theme(axis.title.x = element_text(size = 12, face = "bold"),
+        axis.title.y = element_text(size = 12, face = "bold"),
+        legend.position = 'none')
+
 
 ggplotly(gg)
 ```
@@ -265,11 +272,13 @@ gg <- ggplot(globalPop, aes(x = Old, y = Young,
              show.legend = FALSE) +
   scale_colour_manual(values = country_colors) +
   scale_size(range = c(2,12))+
-  labs(title = 'Global Population Change from 1997 to 2050',
+  labs(title = 'Global Population Change from 1996 to 2050',
        x = '% Aged', 
        y = '% Young')+
   theme_wsj(base_size = 8)+
-  theme(legend.position = 'none')
+  theme(axis.title.x = element_text(size = 12, face = "bold"),
+        axis.title.y = element_text(size = 12, face = "bold"),
+        legend.position = 'none')
 
 ggplotly(gg)
 ```
@@ -289,12 +298,12 @@ To customized the layout of plot_ly(), we need to use layout().
 bp <- globalPop %>%
   plot_ly(x = ~Old, y= ~Young,
           size = ~Population, color = ~Continent,
-          sizes = c(2,100),
+          sizes = c(2,10),
           frame = ~Year, text = ~Country,
           hoverinfo = "text",
           type = "scatter", mode = "markers") %>%
   layout(showlegend = FALSE,
-         title = list (text = "Global Population Change from 1997 to 2050",
+         title = list (text = "Global Population Change from 1996 to 2050",
                        font = list(size = 15,family="Georgia", face = "bold")),
          xaxis = list(title = "% Aged", 
                       titlefont = list(size = 12, family = "Georgia")),
@@ -312,12 +321,12 @@ bp
 bp <- globalPop %>%
   plot_ly(x = ~Old, y= ~Young,
           size = ~Population, color = ~Continent,
-          sizes = c(2,100),
+          sizes = c(2,10),
           frame = ~Year, text = ~Country,
           hoverinfo = "text",
           type = "scatter", mode = "markers") %>%
   layout(showlegend = FALSE,
-         title = list (text = "Global Population Change from 1997 to 2050",
+         title = list (text = "Global Population Change from 1996 to 2050",
                        font = list(size = 15,family="Georgia", face = "bold")),
          xaxis = list(title = "% Aged", 
                       titlefont = list(size = 12, family = "Georgia")),
