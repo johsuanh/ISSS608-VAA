@@ -7,19 +7,17 @@ format:
 
 ::::: about-container
 ::: left-content
-![](images/IMG_2466.png){fig-align="left" width="265"}
-
-💡 **Contact Info:**
-
--   **Linkedin:** [johsuan-h](https://www.linkedin.com/in/johsuan-h/)
--   **Email:** johsuan.h\@gmail.com
+![](images/IMG_1714.png){fig-align="left" width="518"}
 :::
 
 ::: right-content
 # About
 
-Hi! I'm **Johsuan (Doreen) Huang,** a finance and accounting professional in the beauty industry with a passion for uncovering insights through visual analytics. My contact information is on the right—feel free to reach out with any questions.
+Hi! I'm **Johsuan (Doreen) Huang,** a finance and accounting professional in the beauty industry with a passion for uncovering insights through visual analytics. I hope you enjoy exploring my website!
 
-Enjoy exploring my website!
+#### **- Contact Info -**
+
+-   **Linkedin:** [johsuan-h](https://www.linkedin.com/in/johsuan-h/)
+-   **Email:** johsuan.h\@gmail.com
 :::
 :::::
