@@ -10,14 +10,14 @@ website:
     left:
       - text: "Hands-on Exercise"
         menu: 
-          - text: "Hands-on Exercise 1"
-            href: Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.qmd
-          - text: "Hands-on Exercise 2"
-            href: Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.qmd
-          - text: "Hands-on Exercise 3-1"
-            href: Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.qmd
-          - text: "Hands-on Exercise 3-2"
-            href: Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.qmd
+          - text: "01: A Layered Grammar of Graphics: ggplot2 methods"
+            href: Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html
+          - text: "02: Beyond ggplot2 Fundamentals"
+            href: Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html
+          - text: "03: Programming Interactive Data Visualisation with R"
+            href: Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html
+          - text: "03: Programming Animated Statistical Graphics with R"
+            href: Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html
       - text: "In-class Exercise"
         menu:
           - text: "In-class Exercise 1"
@@ -26,11 +26,12 @@ website:
             href: https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex02_17377898724670/Dashboard1
       - text: "Take-home Exercise"
         menu:
-          - text: "Take-home Exercise"
+          - text: "Take-home Exercise 1"
+            href: Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html
     right:
-      - href: index.qmd
+      - href: index.html
         text: Home
-      - href: about.qmd
+      - href: about.html
         text: About
 
 format:

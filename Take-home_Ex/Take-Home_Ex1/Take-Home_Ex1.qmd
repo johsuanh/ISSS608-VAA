@@ -1,0 +1,13 @@
+---
+title: "Take Home Exercise 1"
+author: Johsuan Huang
+date: "Febuary 1, 2025"
+date-modified: "last modified"
+description: "pending revision"
+categories: []
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
