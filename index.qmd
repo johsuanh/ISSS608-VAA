@@ -6,6 +6,7 @@ listing:
     - Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.qmd
     - Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.qmd
     - Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.qmd
+    - Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.qmd
   type: grid
   sort: "date desc"
   categories: true
@@ -16,7 +17,7 @@ listing:
 
 This website contains exercises from ISSS608 Visual Analytics and Applications.
 
-If you have any questions, please feel free to contact me :-)
+I hope you enjoy exploring my website!
 
 ------------------------------------------------------------------------
 

@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Johsuan Huang">
+<meta name="dcterms.date" content="2024-01-28">
+<meta name="description" content="Visualising Distribution">
+
+<title>Hands-on Exercise 04 – ISSS608-VAA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon/favicon-96x96.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/Logo_VAA.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">
+ <span class="dropdown-text">01: A Layered Grammar of Graphics: ggplot2 methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html">
+ <span class="dropdown-text">02: Beyond ggplot2 Fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html">
+ <span class="dropdown-text">03.a: Programming Interactive Data Visualisation with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html">
+ <span class="dropdown-text">03.b: Programming Animated Statistical Graphics with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
+ <span class="dropdown-text">04.a: Visualising Distribution</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex01_17371866110690/Dashboard1">
+ <span class="dropdown-text">In-class Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex02_17377898724670/Dashboard1">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Take-home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link active" data-scroll-target="#learning-outcome">1 Learning Outcome</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2 Getting Started</a></li>
+  <li><a href="#visualising-distribution-with-ridgeline-plot" id="toc-visualising-distribution-with-ridgeline-plot" class="nav-link" data-scroll-target="#visualising-distribution-with-ridgeline-plot">3 Visualising Distribution with Ridgeline Plot</a>
+  <ul class="collapse">
+  <li><a href="#plotting-ridgeline-graph-ggridges-method" id="toc-plotting-ridgeline-graph-ggridges-method" class="nav-link" data-scroll-target="#plotting-ridgeline-graph-ggridges-method">3.1 Plotting ridgeline graph: ggridges method</a></li>
+  <li><a href="#varying-fill-colors-along-the-x-axis" id="toc-varying-fill-colors-along-the-x-axis" class="nav-link" data-scroll-target="#varying-fill-colors-along-the-x-axis">3.2 Varying fill colors along the x axis</a></li>
+  <li><a href="#mapping-the-probabilities-directly-onto-colour" id="toc-mapping-the-probabilities-directly-onto-colour" class="nav-link" data-scroll-target="#mapping-the-probabilities-directly-onto-colour">3.3 Mapping the probabilities directly onto colour</a></li>
+  <li><a href="#ridgeline-plots-with-quantile-lines" id="toc-ridgeline-plots-with-quantile-lines" class="nav-link" data-scroll-target="#ridgeline-plots-with-quantile-lines">3.4 Ridgeline plots with quantile lines</a></li>
+  </ul></li>
+  <li><a href="#visualising-distribution-with-raincloud-plot" id="toc-visualising-distribution-with-raincloud-plot" class="nav-link" data-scroll-target="#visualising-distribution-with-raincloud-plot">4 Visualising Distribution with Raincloud Plot</a>
+  <ul class="collapse">
+  <li><a href="#plotting-a-half-eye-graph" id="toc-plotting-a-half-eye-graph" class="nav-link" data-scroll-target="#plotting-a-half-eye-graph">4.1 Plotting a Half Eye graph</a></li>
+  <li><a href="#adding-the-boxplot-with-geom_boxplot" id="toc-adding-the-boxplot-with-geom_boxplot" class="nav-link" data-scroll-target="#adding-the-boxplot-with-geom_boxplot">4.2 Adding the boxplot with geom_boxplot()</a></li>
+  <li><a href="#adding-the-dot-plots-with-stat_dots" id="toc-adding-the-dot-plots-with-stat_dots" class="nav-link" data-scroll-target="#adding-the-dot-plots-with-stat_dots">4.3 Adding the Dot Plots with&nbsp;<code>stat_dots()</code></a></li>
+  <li><a href="#finishing-the-touching" id="toc-finishing-the-touching" class="nav-link" data-scroll-target="#finishing-the-touching">4.4 Finishing the touching</a></li>
+  </ul></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">5 Reference</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hands-on Exercise 04</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">ggplot2</div>
+    <div class="quarto-category">ggridges</div>
+    <div class="quarto-category">ggdist</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Visualising Distribution
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Johsuan Huang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 28, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">February 2, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-outcome" class="level2">
+<h2 class="anchored" data-anchor-id="learning-outcome">1 Learning Outcome</h2>
+<p>In previous hand-on exercises, we have draw some popular statistical graphs, like histogram, boxplot, scatter plot and etc. In this hands-on exercise, we are going to learn new statistical graphic methods for visualising distribution, namely <strong>ridgeline plot</strong> and <strong>raincloud plot</strong> by using ggplot2 and its extensions.</p>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">2 Getting Started</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Loading the packages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Importing the data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Examining the data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Transforming the data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Use the <strong>pacman</strong> package <code>p_load()</code> to check, install and launch the following R packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggdist, ggridges, ggthemes,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               colorspace, tidyverse, patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 92%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Library</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ggridges</td>
+<td>a ggplot2 extension specially designed for plotting ridgeline plots</td>
+</tr>
+<tr class="even">
+<td>ggdist</td>
+<td>a ggplot2 extension spacially desgin for visualising distribution and uncertainty</td>
+</tr>
+<tr class="odd">
+<td>tidyverse</td>
+<td>a family of R packages for data processing</td>
+</tr>
+<tr class="even">
+<td>ggthemes</td>
+<td>a ggplot extension for ggplots, providing additional themes, scales, and geoms</td>
+</tr>
+<tr class="odd">
+<td>colorspace</td>
+<td>a R package provides a broad toolbox for selecting individual colors or color palettes, manipulating and employing these colors in various kinds of visualisations.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>In this exercise, <strong><em>Exam_data.csv</em></strong> will be used. We use <code>read_csv()</code> of <strong>readr</strong> to import the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Exam_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>After importing the data, let’s examine it to understand its data structure:</p>
+<p>The dataset contains 7 attributes and 322 observations with no missing values.</p>
+<ul>
+<li><p>The categorical attributes are: ID, CLASS, GENDER and RACE.</p></li>
+<li><p>The continuous attributes are: MATHS, ENGLISH and SCIENCE.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE
+  &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 Student321 3I    Male   Malay        21     9      15
+2 Student305 3I    Female Malay        24    22      16
+3 Student289 3H    Male   Chinese      26    16      16
+4 Student227 3F    Male   Chinese      27    77      31
+5 Student318 3I    Male   Malay        27    11      25
+6 Student306 3I    Female Malay        31    16      16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [322 × 7] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ ID     : chr [1:322] "Student321" "Student305" "Student289" "Student227" ...
+ $ CLASS  : chr [1:322] "3I" "3I" "3H" "3F" ...
+ $ GENDER : chr [1:322] "Male" "Female" "Male" "Male" ...
+ $ RACE   : chr [1:322] "Malay" "Malay" "Chinese" "Chinese" ...
+ $ ENGLISH: num [1:322] 21 24 26 27 27 31 31 31 33 34 ...
+ $ MATHS  : num [1:322] 9 22 16 77 11 16 21 18 19 49 ...
+ $ SCIENCE: num [1:322] 15 16 16 31 25 16 25 27 15 37 ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   ID = col_character(),
+  ..   CLASS = col_character(),
+  ..   GENDER = col_character(),
+  ..   RACE = col_character(),
+  ..   ENGLISH = col_double(),
+  ..   MATHS = col_double(),
+  ..   SCIENCE = col_double()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ID               CLASS              GENDER              RACE          
+ Length:322         Length:322         Length:322         Length:322        
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+    ENGLISH          MATHS          SCIENCE     
+ Min.   :21.00   Min.   : 9.00   Min.   :15.00  
+ 1st Qu.:59.00   1st Qu.:58.00   1st Qu.:49.25  
+ Median :70.00   Median :74.00   Median :65.00  
+ Mean   :67.18   Mean   :69.33   Mean   :61.16  
+ 3rd Qu.:78.00   3rd Qu.:85.00   3rd Qu.:74.75  
+ Max.   :96.00   Max.   :99.00   Max.   :96.00  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(exam))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>In R, factors are used to handle categorical data and ordered variable. As there are categorical attributes in our dataset, we are going to convert their data type from &lt;chr&gt; to &lt;fctr&gt;:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CLASS"</span>,<span class="st">"GENDER"</span>,<span class="st">"RACE"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> exam <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(col), as.factor))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After converting the attributes, let’s check the data again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE
+  &lt;chr&gt;      &lt;fct&gt; &lt;fct&gt;  &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 Student321 3I    Male   Malay        21     9      15
+2 Student305 3I    Female Malay        24    22      16
+3 Student289 3H    Male   Chinese      26    16      16
+4 Student227 3F    Male   Chinese      27    77      31
+5 Student318 3I    Male   Malay        27    11      25
+6 Student306 3I    Female Malay        31    16      16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualising-distribution-with-ridgeline-plot" class="level2">
+<h2 class="anchored" data-anchor-id="visualising-distribution-with-ridgeline-plot">3 Visualising Distribution with Ridgeline Plot</h2>
+<p>A <a href="https://www.data-to-viz.com/graph/ridgeline.html">Ridgeline plot</a> (sometimes called Joyplot) shows the distribution of a numeric value for several groups. Distribution can be represented using histograms or density plots, all aligned to the same horizontal scale and presented with a slight overlap.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+What for?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Ridgeline plots make sense when the number of group to represent is&nbsp;<code>medium to high</code>, and thus a classic window separation would take to much space. Indeed, the fact that groups overlap each other allows to use space more efficiently. If you have less than ~6 groups, dealing with other&nbsp;<a href="http://www.data-to-viz.com/#portfolio">distribution plots</a>&nbsp;is probably better.</p></li>
+<li><p>It works well when there is a clear pattern in the result, like if there is an obvious ranking in groups. Otherwise group will tend to overlap each other, leading to a messy plot not providing any insight.</p></li>
+</ul>
+</div>
+</div>
+<section id="plotting-ridgeline-graph-ggridges-method" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-ridgeline-graph-ggridges-method">3.1 Plotting ridgeline graph: ggridges method</h3>
+<p>ggridges package provides two main geom to plot gridgeline plots, they are:&nbsp;<a href="https://wilkelab.org/ggridges/reference/geom_ridgeline.html"><code>geom_ridgeline()</code></a>&nbsp;and&nbsp;<a href="https://wilkelab.org/ggridges/reference/geom_density_ridges.html"><code>geom_density_ridges()</code></a>. The former takes height values directly to draw the ridgelines, and the latter first estimates data densities and then draws those using ridgelines.</p>
+<p>The ridgeline plot below is plotted by using&nbsp;<code>geom_density_ridges()</code>:</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x=</span>ENGLISH, <span class="at">y=</span>CLASS))<span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale =</span> <span class="dv">2</span>, <span class="co"># adjust the size (height) of the ridges</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel_min_height =</span> <span class="fl">0.01</span>, <span class="co"># control the min height of the ridges</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">bandwidth =</span> <span class="dv">3</span>, <span class="co"># control the smoothness of the density estimate</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">lighten</span>(<span class="st">"#EBCF89"</span>, .<span class="dv">6</span>), <span class="co"># lighten the color </span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#D18A7D"</span>) <span class="sc">+</span> <span class="co"># border color</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"English Grades"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span> <span class="co">#remove spaces before and after the data range</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">add =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="dv">1</span>)) <span class="co"># add more spaces before 3A and after 3I</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insights
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The density plot of English grades by class, reveals the clear differences in grade distributions: Classes 3A and 3B show similar grade ranges, also do classes 3C and 3D, and 3E~3G, while class 3F notably contains few outliers with lower grades around 25.</p>
+</div>
+</div>
+<p>The ggridges package offers enhanced versions of <strong><code>geom_density_ridges2</code></strong> and <strong><code>geom_ridgeline2</code></strong>. These versions improve compatibility with different data structures and eliminate the need to manually adjust ridge heights using parameters like <strong><code>scale</code></strong> or <strong><code>rel_min_height</code></strong>.</p>
+<p>However, in the patchwork below, under the default setting, the only noticeabke difference is the border displayed under each class’s density plot:</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x =</span> ENGLISH, <span class="at">y=</span>CLASS))<span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges2</span>()<span class="sc">+</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"geom_density_ridges2"</span>)<span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x =</span> ENGLISH, <span class="at">y=</span>CLASS))<span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges</span>()<span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"geom_density_ridges"</span>)<span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>a<span class="sc">+</span>b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="varying-fill-colors-along-the-x-axis" class="level3">
+<h3 class="anchored" data-anchor-id="varying-fill-colors-along-the-x-axis">3.2 Varying fill colors along the x axis</h3>
+<p>Sometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis. This effect can be achieved by using either&nbsp;<a href="https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html"><code>geom_ridgeline_gradient()</code></a>&nbsp;or&nbsp;<a href="https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html"><code>geom_density_ridges_gradient()</code></a>. Both geoms work just like&nbsp;<code>geom_ridgeline()</code>&nbsp;and&nbsp;<code>geom_density_ridges()</code>, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. For technical reasons, we can have changing fill colors or transparency but not both.</p>
+<p>We use the argument <code>scale_fill_viridis_c()</code> to apply color scaling, where “c” represents continuous data. The palette is also available for binned data (<code>scale_fill_viridis_b()</code>) and discrete data (<code>scale_fill_viridis_d()</code>).</p>
+<p>Below are the argument we used to adjust the <a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html"><code>scale_fill_viridis_c()</code></a>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Discription</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>name</strong></td>
+<td>The name of the scale. Used as the axis or legend title</td>
+</tr>
+<tr class="even">
+<td><strong>alpha</strong></td>
+<td>The alpha transparency, a number in [0,1], see argument alpha in&nbsp;<a href="https://rdrr.io/r/grDevices/hsv.html"><code>hsv</code></a>.</td>
+</tr>
+<tr class="odd">
+<td><strong>direction</strong></td>
+<td>Sets the order of colors in the scale. If 1, the default, colors are ordered from darkest to lightest. If -1, the order of colors is reversed.</td>
+</tr>
+<tr class="even">
+<td><strong>option</strong></td>
+<td><p>A character string indicating the color map option to use. Eight options are available:</p>
+<ul>
+<li><p><code>"magma"</code>&nbsp;(or&nbsp;<code>"A"</code>)</p></li>
+<li><p><code>"inferno"</code>&nbsp;(or&nbsp;<code>"B"</code>)</p></li>
+<li><p><code>"plasma"</code>&nbsp;(or&nbsp;<code>"C"</code>)</p></li>
+<li><p><code>"viridis"</code>&nbsp;(or&nbsp;<code>"D"</code>)</p></li>
+<li><p><code>"cividis"</code>&nbsp;(or&nbsp;<code>"E"</code>)</p></li>
+<li><p><code>"rocket"</code>&nbsp;(or&nbsp;<code>"F"</code>)</p></li>
+<li><p><code>"mako"</code>&nbsp;(or&nbsp;<code>"G"</code>)</p></li>
+<li><p><code>"turbo"</code>&nbsp;(or&nbsp;<code>"H"</code>)</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x=</span>ENGLISH, <span class="at">y=</span>CLASS,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="fu">stat</span>(x)))<span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges_gradient</span>(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale =</span> <span class="dv">3</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel_min_height =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="cn">NULL</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">option =</span> <span class="st">"C"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">alpha=</span><span class="dv">1</span>)<span class="sc">+</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">"English Grades"</span>, <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))<span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">name=</span><span class="cn">NULL</span>)<span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Gradient Colors for English Scores'</span>) <span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mapping-the-probabilities-directly-onto-colour" class="level3">
+<h3 class="anchored" data-anchor-id="mapping-the-probabilities-directly-onto-colour">3.3 Mapping the probabilities directly onto colour</h3>
+<p>Beside providing additional geom objects to support the need to plot ridgeline plot, ggridges package also provides a stat function called&nbsp;<a href="https://wilkelab.org/ggridges/reference/stat_density_ridges.html"><code>stat_density_ridges()</code></a>&nbsp;that replaces&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_density.html"><code>stat_density()</code></a>&nbsp;of ggplot2.</p>
+<p>Figure below is plotted by mapping the probabilities calculated by using&nbsp;<code>stat(ecdf)</code>&nbsp;which represent the empirical cumulative density function for the distribution of English score.</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x=</span>ENGLISH, <span class="at">y=</span>CLASS,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="fl">0.5</span> <span class="sc">-</span> <span class="fu">abs</span>(<span class="fl">0.5</span><span class="sc">-</span><span class="fu">stat</span>(ecdf))))<span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_density_ridges</span>(<span class="at">geom =</span> <span class="st">"density_ridges_gradient"</span>, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">calc_ecdf =</span> <span class="cn">TRUE</span>)<span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Tail probability"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">option =</span> <span class="st">"F"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Distribution of English Scores Across Classes'</span>) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="ridgeline-plots-with-quantile-lines" class="level3">
+<h3 class="anchored" data-anchor-id="ridgeline-plots-with-quantile-lines">3.4 Ridgeline plots with quantile lines</h3>
+<p>By using geom_density_ridges_gradient(), we can colour the ridgeline plot by <strong>quantile</strong>, via the calculated stat(quantile) aesthetic as shown in the figure below.</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x=</span>ENGLISH, <span class="at">y=</span>CLASS,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="fu">factor</span>(<span class="fu">stat</span>(quantile))))<span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_density_ridges</span>(<span class="at">geom =</span> <span class="st">"density_ridges_gradient"</span>, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">calc_ecdf =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">quantiles =</span> <span class="dv">4</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">quantile_lines =</span> <span class="cn">TRUE</span>)<span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_d</span>(<span class="at">name =</span> <span class="st">"Qunatile"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">option =</span> <span class="st">"D"</span>)<span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Distribution of English Scores Across Classes'</span>) <span class="sc">+</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insights
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By filling with quantile colors, we can now clearly compare grades across classes. While classes 3D and 3E have similar overall grade ranges and distributions in their top 50%, class 3D shows a higher proportion of students with lower grades in Quantile 1.</p>
+</div>
+</div>
+<p>Instead of using number to define the quartiles, we can also specify quartiles by cut points such as 10% and 90% tails to colour the ridgeline plot as shown in the figure below:</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, <span class="fu">aes</span>(<span class="at">x=</span>ENGLISH, <span class="at">y=</span>CLASS,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="fu">factor</span>(<span class="fu">stat</span>(quantile))))<span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_density_ridges</span>(<span class="at">geom =</span> <span class="st">"density_ridges_gradient"</span>, </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">calc_ecdf =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">quantiles =</span> <span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))<span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">"Probability"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">values =</span> <span class="fu">c</span>())<span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_ridges</span>()<span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Quantile Distribution of English Grades'</span>) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insights
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If we only care about comparing the difference of top 10% and bottom 10% of students’ performance, setting the quantiles c(0.1,0.9) would make it easier for readers to understand the performance differences across classes.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="visualising-distribution-with-raincloud-plot" class="level2">
+<h2 class="anchored" data-anchor-id="visualising-distribution-with-raincloud-plot">4 Visualising Distribution with Raincloud Plot</h2>
+<p>Raincloud Plot is a data visualisation techniques that produces a half-density to a distribution plot. It gets the name because the density plot is in the shape of a “raincloud”. The raincloud (half-density) plot enhances the traditional box-plot by highlighting multiple modes. The boxplot does not show where densities are clustered, but the raincloud plot does.</p>
+<section id="plotting-a-half-eye-graph" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-a-half-eye-graph">4.1 Plotting a Half Eye graph</h3>
+<p>First, we will plot a Half-Eye graph by using&nbsp;<a href="https://mjskay.github.io/ggdist/reference/stat_halfeye.html"><code>stat_halfeye()</code></a>&nbsp;of&nbsp;<strong>ggdist</strong>&nbsp;package.</p>
+<p>This produces a Half Eye visualization, which is contains a half-density and a slab-interval.</p>
+<p>We remove the slab interval by setting .width = 0 and point_colour = NA.</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> RACE,<span class="at">y =</span> ENGLISH)) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="at">adjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">justification =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">point_colour =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Distribution of English Scores Across Races"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>, <span class="at">y=</span><span class="st">"English Score"</span>)<span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="adding-the-boxplot-with-geom_boxplot" class="level3">
+<h3 class="anchored" data-anchor-id="adding-the-boxplot-with-geom_boxplot">4.2 Adding the boxplot with geom_boxplot()</h3>
+<p>Next, we will add the second geometry layer using&nbsp;<a href="https://r4va.netlify.app/chap09"><code>geom_boxplot()</code></a>&nbsp;of ggplot2. This produces a narrow boxplot. We reduce the width and adjust the opacity.</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> RACE,<span class="at">y =</span> ENGLISH)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="at">adjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">justification =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">point_colour =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> <span class="fl">0.20</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">outlier.shape =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Distribution of English Scores Across Races"</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>, <span class="at">y=</span><span class="st">"English Score"</span>)<span class="sc">+</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="adding-the-dot-plots-with-stat_dots" class="level3">
+<h3 class="anchored" data-anchor-id="adding-the-dot-plots-with-stat_dots">4.3 Adding the Dot Plots with&nbsp;<code>stat_dots()</code></h3>
+<p>Next, we will add the third geometry layer using&nbsp;<a href="https://mjskay.github.io/ggdist/reference/stat_dots.html"><code>stat_dots()</code></a>&nbsp;of ggdist package. This produces a half-dotplot, which is similar to a histogram that indicates the number of samples (number of dots) in each bin. We select side = “left” to indicate we want it on the left-hand side.</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> RACE,<span class="at">y =</span> ENGLISH)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="at">adjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">justification =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">point_colour =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> <span class="fl">0.20</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">outlier.shape =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_dots</span>(<span class="at">side =</span> <span class="st">"left"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">justification =</span> <span class="fl">1.2</span>, </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">binwidth =</span> .<span class="dv">5</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">dotsize =</span> <span class="dv">2</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>            )<span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Distribution of English Scores Across Races"</span>,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>, <span class="at">y=</span><span class="st">"English Score"</span>)<span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insights
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This graph contains a lot of information, including numbers of student and distribution, outliers, range and quartiles of English scores across races:</p>
+<ul>
+<li><p>Numbers of student: Chinese &gt; Malay &gt;&gt; Indian &gt; Others</p></li>
+<li><p>Median of English scores: Chinese &gt; Others &gt; Malay &gt; Indian</p></li>
+<li><p>IQR of English scores: Indian &gt; Malay &gt; Chinese &gt; Others</p></li>
+<li><p>Numbers of Outliers (lower scores): Chinese &gt; Others &gt; Malay = Indian</p></li>
+</ul>
+<p>In conclusion, both Chinese students and those in the “Others” category perform well in English, with mean scores around 70. The Chinese group shows more extreme performance variation, with notable numbers of students having scores below 40. Meanwhile, the “Others” group shows a more normal distribution with few outliers, suggesting consistently strong English performance across the group.</p>
+</div>
+</div>
+</section>
+<section id="finishing-the-touching" class="level3">
+<h3 class="anchored" data-anchor-id="finishing-the-touching">4.4 Finishing the touching</h3>
+<p>Lastly,&nbsp;<a href="https://ggplot2.tidyverse.org/reference/coord_flip.html"><code>coord_flip()</code></a>&nbsp;of ggplot2 package will be used to flip the raincloud chart horizontally to give it the raincloud appearance. Also, we add <code>aes(fill = RACE)</code> in stat_halfeye() function to highlight different races:</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(exam, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> RACE,<span class="at">y =</span> ENGLISH)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_halfeye</span>(<span class="fu">aes</span>(<span class="at">fill =</span> RACE),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">adjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">justification =</span> <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">.width =</span> <span class="dv">0</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">point_colour =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">width =</span> <span class="fl">0.20</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">outlier.shape =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_dots</span>(</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">side =</span> <span class="st">"left"</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">justification =</span> <span class="fl">1.2</span>, </span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">binwidth =</span> <span class="cn">NA</span>,</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">dotsize =</span> <span class="dv">2</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>            )<span class="sc">+</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span><span class="st">"Distribution of English Scores Across Races"</span>,</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">""</span>, <span class="at">y=</span><span class="st">"English Score"</span>)<span class="sc">+</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">'none'</span>,</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="reference" class="level2">
+<h2 class="anchored" data-anchor-id="reference">5 Reference</h2>
+<ul>
+<li><p>Kam, T.S. (2025).&nbsp;<a href="https://r4va.netlify.app/chap09">Visualising Distribution</a>.</p></li>
+<li><p><a href="https://blog.revolutionanalytics.com/2017/07/joyplots.html">Introducing Ridgeline Plots (formerly Joyplots)</a></p></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
