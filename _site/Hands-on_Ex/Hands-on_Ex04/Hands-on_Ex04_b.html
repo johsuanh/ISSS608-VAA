@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Johsuan Huang">
+<meta name="dcterms.date" content="2024-02-02">
+<meta name="description" content="Visual Statistical Analysis">
+
+<title>Hands-on Exercise 04 – ISSS608-VAA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon/favicon-96x96.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/Logo_VAA.png" alt="" class="navbar-logo">
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">
+ <span class="dropdown-text">01: A Layered Grammar of Graphics: ggplot2 methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html">
+ <span class="dropdown-text">02: Beyond ggplot2 Fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html">
+ <span class="dropdown-text">03.a: Programming Interactive Data Visualisation with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html">
+ <span class="dropdown-text">03.b: Programming Animated Statistical Graphics with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
+ <span class="dropdown-text">04.a: Visualising Distribution</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex01_17371866110690/Dashboard1">
+ <span class="dropdown-text">In-class Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex02_17377898724670/Dashboard1">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Take-home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link active" data-scroll-target="#learning-outcome">1 Learning Outcome</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2 Getting Started</a></li>
+  <li><a href="#one-sample-test-gghistostats-method" id="toc-one-sample-test-gghistostats-method" class="nav-link" data-scroll-target="#one-sample-test-gghistostats-method">3 One-sample test:&nbsp;<em>gghistostats()</em>&nbsp;method</a>
+  <ul class="collapse">
+  <li><a href="#bayes-factor" id="toc-bayes-factor" class="nav-link" data-scroll-target="#bayes-factor">3.1 Bayes Factor</a></li>
+  </ul></li>
+  <li><a href="#plotting-with-ggbetweenstats" id="toc-plotting-with-ggbetweenstats" class="nav-link" data-scroll-target="#plotting-with-ggbetweenstats">4 Plotting with ggbetweenstats()</a>
+  <ul class="collapse">
+  <li><a href="#two-sample-mean-test-ggbetweenstats-method" id="toc-two-sample-mean-test-ggbetweenstats-method" class="nav-link" data-scroll-target="#two-sample-mean-test-ggbetweenstats-method">4.1 Two-sample mean test: <strong><em>ggbetweenstats()</em></strong> <strong>method</strong></a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Hands-on Exercise 04</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">ggplot2</div>
+    <div class="quarto-category">ggstatsplot</div>
+    <div class="quarto-category">nortest</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Visual Statistical Analysis
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Johsuan Huang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 2, 2024</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">February 2, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-outcome" class="level2">
+<h2 class="anchored" data-anchor-id="learning-outcome">1 Learning Outcome</h2>
+<p>In this exercise, we will gain hands-on expirience on using:</p>
+<ul>
+<li><p><strong>ggstatsplot</strong> package to create visual graphics with rich statistical information</p></li>
+<li><p><strong>performance</strong> package to visualise model diagnostics</p></li>
+<li><p><strong>parameters</strong> package to visualise model parameters</p></li>
+</ul>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">2 Getting Started</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Loading the packages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Importing the data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Examining the data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Transforming the data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Use the <strong>pacman</strong> package <code>p_load()</code> to check, install and launch the following R packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(ggstatsplot, tidyverse, nortest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 90%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Library</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ggstatsplot</td>
+<td>a ggplot2 extension for creating graphics with details from statistical tests included in the information-rich plots themselves.</td>
+</tr>
+<tr class="even">
+<td>tidyverse</td>
+<td>a family of R packages for data processing</td>
+</tr>
+<tr class="odd">
+<td>nortest</td>
+<td>a package for normality test</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>In this exercise, <strong><em>Exam_data.csv</em></strong> will be used. We use <code>read_csv()</code> of <strong>readr</strong> to import the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Exam_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>After importing the data, let’s examine it to understand its data structure:</p>
+<p>The dataset contains 7 attributes and 322 observations with no missing values.</p>
+<ul>
+<li><p>The categorical attributes are: ID, CLASS, GENDER and RACE.</p></li>
+<li><p>The continuous attributes are: MATHS, ENGLISH and SCIENCE.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE
+  &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 Student321 3I    Male   Malay        21     9      15
+2 Student305 3I    Female Malay        24    22      16
+3 Student289 3H    Male   Chinese      26    16      16
+4 Student227 3F    Male   Chinese      27    77      31
+5 Student318 3I    Male   Malay        27    11      25
+6 Student306 3I    Female Malay        31    16      16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [322 × 7] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ ID     : chr [1:322] "Student321" "Student305" "Student289" "Student227" ...
+ $ CLASS  : chr [1:322] "3I" "3I" "3H" "3F" ...
+ $ GENDER : chr [1:322] "Male" "Female" "Male" "Male" ...
+ $ RACE   : chr [1:322] "Malay" "Malay" "Chinese" "Chinese" ...
+ $ ENGLISH: num [1:322] 21 24 26 27 27 31 31 31 33 34 ...
+ $ MATHS  : num [1:322] 9 22 16 77 11 16 21 18 19 49 ...
+ $ SCIENCE: num [1:322] 15 16 16 31 25 16 25 27 15 37 ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   ID = col_character(),
+  ..   CLASS = col_character(),
+  ..   GENDER = col_character(),
+  ..   RACE = col_character(),
+  ..   ENGLISH = col_double(),
+  ..   MATHS = col_double(),
+  ..   SCIENCE = col_double()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      ID               CLASS              GENDER              RACE          
+ Length:322         Length:322         Length:322         Length:322        
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+    ENGLISH          MATHS          SCIENCE     
+ Min.   :21.00   Min.   : 9.00   Min.   :15.00  
+ 1st Qu.:59.00   1st Qu.:58.00   1st Qu.:49.25  
+ Median :70.00   Median :74.00   Median :65.00  
+ Mean   :67.18   Mean   :69.33   Mean   :61.16  
+ 3rd Qu.:78.00   3rd Qu.:85.00   3rd Qu.:74.75  
+ Max.   :96.00   Max.   :99.00   Max.   :96.00  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(exam))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>In R, factors are used to handle categorical data and ordered variable. As there are categorical attributes in our dataset, we are going to convert their data type from &lt;chr&gt; to &lt;fctr&gt;:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>col <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CLASS"</span>,<span class="st">"GENDER"</span>,<span class="st">"RACE"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>exam <span class="ot">&lt;-</span> exam <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(col), as.factor))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After converting the attributes, let’s check the data again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(exam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+  ID         CLASS GENDER RACE    ENGLISH MATHS SCIENCE
+  &lt;chr&gt;      &lt;fct&gt; &lt;fct&gt;  &lt;fct&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 Student321 3I    Male   Malay        21     9      15
+2 Student305 3I    Female Malay        24    22      16
+3 Student289 3H    Male   Chinese      26    16      16
+4 Student227 3F    Male   Chinese      27    77      31
+5 Student318 3I    Male   Malay        27    11      25
+6 Student306 3I    Female Malay        31    16      16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="one-sample-test-gghistostats-method" class="level2">
+<h2 class="anchored" data-anchor-id="one-sample-test-gghistostats-method">3 One-sample test:&nbsp;<em>gghistostats()</em>&nbsp;method</h2>
+<p>In the code chunk below,&nbsp;<a href="https://indrajeetpatil.github.io/ggstatsplot/reference/gghistostats.html"><em>gghistostats()</em></a>&nbsp;of <strong>ggstatsplot</strong> is used to to build an visual of one-sample test on English scores.</p>
+<ul>
+<li>One-sample test is a statistical test used to determine whether the mean of a single sample is&nbsp;significantly different&nbsp;from a known or hypothesized population mean (mu=60).</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">BF-plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Argument</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<section id="hypothesis" class="level4">
+<h4 class="anchored" data-anchor-id="hypothesis">Hypothesis</h4>
+<p>H0: Mean of English score = 60</p>
+<p>H1: Mean of English score != 60</p>
+</section>
+<section id="conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion">Conclusion</h4>
+<p>Since BF = e^-31.52, which is a tiny number close to 0. We have significant evidence to reject the null hypothesis and conclude that the mean English score doesn’t equal to 60.</p>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gghistostats</span>(exam,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> ENGLISH,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">type =</span> <span class="st">"bayes"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">test.value =</span> <span class="dv">60</span>, <span class="co">#mu</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">xlab =</span> <span class="st">"English scores"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">bin.args =</span> <span class="fu">list</span>(<span class="at">fill =</span> <span class="st">"grey90"</span>, <span class="at">color=</span><span class="st">"grey30"</span>),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">centrality.line.args =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>))<span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_b_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>gghistostats() includes below arguments:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>binwidth</strong></td>
+<td>The width of the histogram bins. The default is to use the&nbsp;<code>max(x) - min(x) / sqrt(N)</code></td>
+</tr>
+<tr class="even">
+<td><strong>type</strong></td>
+<td><p>A character specifying the type of statistical approach and its hypothesis testing:</p>
+<ul>
+<li><p><code>"parametric"</code>: One-sample Student’s&nbsp;<em>t</em>-test (<a href="https://rdrr.io/r/stats/t.test.html">stats::t.test()</a>)</p></li>
+<li><p><code>"nonparametric"</code>: One-sample Wilcoxon test (<a href="https://rdrr.io/r/stats/wilcox.test.html">stats::wilcox.test()</a>)</p></li>
+<li><p><code>"robust"</code>: Bootstrap-<em>t</em>&nbsp;method for one-sample test(<a href="https://rdrr.io/pkg/WRS2/man/trimcibt.html">WRS2::trimcibt()</a>)</p></li>
+<li><p><code>"bayes"</code>: One-sample Student’s&nbsp;<em>t</em>-test (<a href="https://rdrr.io/pkg/BayesFactor/man/ttestBF.html">BayesFactor::ttestBF()</a>)</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td><strong>test.value</strong></td>
+<td>A number indicating the true value of the mean (Default:&nbsp;<code>0</code>).</td>
+</tr>
+<tr class="even">
+<td><strong>bin.args</strong></td>
+<td>A list of additional aesthetic arguments to be passed to the&nbsp;<code>stat_bin</code>&nbsp;used to display the bins.</td>
+</tr>
+<tr class="odd">
+<td><strong>centrality.line.args</strong></td>
+<td>A list of additional aesthetic arguments to be passed to the&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_path.html"><code>ggplot2::geom_line()</code></a>&nbsp;used to display the lines corresponding to the centrality parameter.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section id="bayes-factor" class="level3">
+<h3 class="anchored" data-anchor-id="bayes-factor">3.1 Bayes Factor</h3>
+<ul>
+<li><p>A Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. It can be interpreted as a measure of the strength of evidence in favor of one theory among two competing theories.</p></li>
+<li><p>That’s because the Bayes factor gives us a way to evaluate the data in favor of a null hypothesis, and to use external information to do so. It tells us what the weight of the evidence is in favor of a given hypothesis.</p></li>
+<li><p>When we are comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes Factor is often written as B10. It can be defined mathematically as</p></li>
+<li><p>The&nbsp;<a href="https://www.statisticshowto.com/bayesian-information-criterion/"><strong>Schwarz criterion</strong></a>&nbsp;is one of the easiest ways to calculate rough approximation of the Bayes Factor.</p></li>
+<li><p>Bayes Factor&nbsp;can be any <strong>positive number</strong>:</p>
+<p>One of the most common interpretations is this one—first proposed by Harold Jeffereys (1961) and slightly modified by&nbsp;<a href="https://www-tandfonline-com.libproxy.smu.edu.sg/doi/pdf/10.1080/00031305.1999.10474443?needAccess=true">Lee and Wagenmakers</a>&nbsp;in 2013:</p>
+<p><img src="../../images/bayes_factor.png" class="img-fluid"></p></li>
+</ul>
+<section id="section" class="level4">
+<h4 class="anchored" data-anchor-id="section"></h4>
+<p>However, before one-sample testing, we should use Anderson-Darling normality test to check if English scores follow normal distribution:</p>
+<p><strong>Hypothesis</strong></p>
+<p>H0: English scores follow the normal distribution</p>
+<p>H1: English scores don’t follow the normal distribution</p>
+<p>alpha = 0.05</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ad.test</span>(exam<span class="sc">$</span>ENGLISH)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Anderson-Darling normality test
+
+data:  exam$ENGLISH
+A = 4.3661, p-value = 7.341e-11</code></pre>
+</div>
+</div>
+<p>Results from the Anderson-Darling normality test shows siginificant evidence (p-value &lt;0.05) to reject the null hypothesis and conclude that the English scores do not&nbsp;follow normal distribution . Thus <strong>non parametric: One-sample Wilcoxon test</strong> is used in the following one-sample test model.</p>
+<p><strong>Hypothesis</strong>:</p>
+<p>H0: Mean of English score = 60</p>
+<p>H1: Mean of English score != 60</p>
+<p>Alpha = 0.05</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Conclusion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We reach the same conclusion using both approaches:</p>
+<p>Since the p-value &lt; 0.05, we have significant evidence to reject the null hypothesis and suggests that the mean English score is different from 60.</p>
+</div>
+</div>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gghistostats</span>(exam,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> ENGLISH,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">type =</span> <span class="st">"np"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">test.value =</span> <span class="dv">60</span>, <span class="co">#mu</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">xlab =</span> <span class="st">"English scores"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">bin.args =</span> <span class="fu">list</span>(<span class="at">fill =</span> <span class="st">"grey90"</span>, <span class="at">color=</span><span class="st">"grey30"</span>),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">centrality.line.args =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>))<span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_b_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="plotting-with-ggbetweenstats" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-with-ggbetweenstats">4 Plotting with ggbetweenstats()</h2>
+<section id="two-sample-mean-test-ggbetweenstats-method" class="level3">
+<h3 class="anchored" data-anchor-id="two-sample-mean-test-ggbetweenstats-method">4.1 Two-sample mean test: <strong><em>ggbetweenstats()</em></strong> <strong>method</strong></h3>
+<p><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html"><em>ggbetweenstats()</em></a>&nbsp;is used to build a visual for two-sample mean test of Maths scores by gender:</p>
+<p>Before testing, we use Shapiro-Wilk normality test to check if math scores for both genders follow normal distribution:</p>
+<p><strong>Hypothesis</strong></p>
+<p>H0: Math scores for male / female follow the normal distribution</p>
+<p>H1: Math scores for male / female don’t follow the normal distribution</p>
+<p>alpha = 0.05</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by</span>(exam<span class="sc">$</span>ENGLISH, exam<span class="sc">$</span>GENDER, shapiro.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exam$GENDER: Female
+
+    Shapiro-Wilk normality test
+
+data:  dd[x, ]
+W = 0.95337, p-value = 2.026e-05
+
+------------------------------------------------------------ 
+exam$GENDER: Male
+
+    Shapiro-Wilk normality test
+
+data:  dd[x, ]
+W = 0.95485, p-value = 7.564e-05</code></pre>
+</div>
+</div>
+<p>Results from Shapiro-Wilk test shows significant evidence (p-value &lt;0.05) to reject the null hypothesis and conclude that the math scores for both gender do not&nbsp;follow normal distribution . Thus <strong>non parametric: Mann-Whitney&nbsp;<em>U</em>&nbsp;test</strong> is used in the following two-sample test model.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Two Sample plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Argument</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<section id="hypothesis-1" class="level4">
+<h4 class="anchored" data-anchor-id="hypothesis-1">Hypothesis</h4>
+<p><strong>H0: Mean math score for male = Mean math score for female</strong></p>
+<p><strong>H1: Mean math score for male != Mean math score for female</strong></p>
+<p><strong>alpha = 0.05</strong></p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Conclusion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Since the p-value is &gt; 0.05, we don’t have enough evidence to reject the null hypothesis and conclude that there is no statistically significant difference in the mean math scores between males and females.</p>
+</div>
+</div>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggbetweenstats</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> exam,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> GENDER, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> MATHS,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"np"</span>, <span class="co">#nonparametric</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">messages =</span> <span class="cn">FALSE</span>)<span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_b_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>ggbetweenstats() includes below arguments:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>type</strong></td>
+<td><p>A character specifying the type of statistical approach and its hypothesis testing:</p>
+<ul>
+<li><p><code>"parametric"</code>: Student’s or Welch’s&nbsp;<em>t</em>-test(<a href="https://rdrr.io/r/stats/t.test.html">stats::t.test()</a>)</p></li>
+<li><p><code>"nonparametric"</code>: Mann-Whitney&nbsp;<em>U</em>&nbsp;test(<a href="https://rdrr.io/r/stats/wilcox.test.html">stats::wilcox.test()</a>)</p></li>
+<li><p><code>"robust"</code>: Yuen’s test for trimmed means(<a href="https://rdrr.io/pkg/WRS2/man/yuen.html">WRS2::yuen()</a>)</p></li>
+<li><p><code>"bayes"</code>: Student’s&nbsp;<em>t</em>-test (<a href="https://rdrr.io/pkg/BayesFactor/man/ttestBF.html">BayesFactor::ttestBF()</a>)</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td><strong>pairwise.display<br>
+(ANOVA)</strong></td>
+<td><p>Decides&nbsp;<em>which</em>&nbsp;pairwise comparisons to display. Available options are:</p>
+<ul>
+<li><p><code>"significant"</code>&nbsp;(abbreviation accepted:&nbsp;<code>"s"</code>)</p></li>
+<li><p><code>"non-significant"</code>&nbsp;(abbreviation accepted:&nbsp;<code>"ns"</code>)</p></li>
+<li><p><code>"all"</code></p></li>
+<li><p>If set to&nbsp;<code>"none"</code>, no pairwise comparisons will be displayed.</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td><strong>bf.message</strong></td>
+<td>It decides whether to display Bayes Factor in favor of the&nbsp;<em>null</em>&nbsp;hypothesis. This argument is relevant only&nbsp;<strong>for parametric test</strong>&nbsp;(Default:&nbsp;<code>TRUE</code>).</td>
+</tr>
+<tr class="even">
+<td><strong>var.equal</strong></td>
+<td>whether to treat the two variances as being equal. If&nbsp;<code>TRUE</code>&nbsp;then the pooled variance is used to estimate the variance otherwise the Welch (or Satterthwaite) approximation to the degrees of freedom is used.</td>
+</tr>
+<tr class="odd">
+<td><strong>centrality.point.args, centrality.label.args</strong></td>
+<td>A list of additional aesthetic arguments to be passed to&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_point.html"><code>ggplot2::geom_point()</code></a>&nbsp;and<a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html"><code>ggrepel::geom_label_repel()</code></a>&nbsp;geoms, which are involved in mean plotting.</td>
+</tr>
+<tr class="even">
+<td><strong>point.args</strong></td>
+<td>A list of additional aesthetic arguments to be passed to the&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_point.html"><code>ggplot2::geom_point()</code></a>.</td>
+</tr>
+<tr class="odd">
+<td><strong>boxplot.args</strong></td>
+<td>A list of additional aesthetic arguments passed on to&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html"><code>ggplot2::geom_boxplot()</code></a>.</td>
+</tr>
+<tr class="even">
+<td><strong>violin.args</strong></td>
+<td>A list of additional aesthetic arguments to be passed to the&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_violin.html"><code>ggplot2::geom_violin()</code></a>.</td>
+</tr>
+<tr class="odd">
+<td><strong>ggsignif.args</strong></td>
+<td>A list of additional aesthetic arguments to be passed to&nbsp;<a href="https://const-ae.github.io/ggsignif/reference/stat_signif.html"><code>ggsignif::geom_signif()</code></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<section id="oneway-anova-test-ggbetweenstats-method" class="level4">
+<h4 class="anchored" data-anchor-id="oneway-anova-test-ggbetweenstats-method">4.2 <strong>Oneway ANOVA Test:&nbsp;<em>ggbetweenstats()</em> method</strong></h4>
+<p><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html"><em>ggbetweenstats()</em></a>&nbsp;can also be used to build a visual for One-way ANOVA test on English score by race.</p>
+<p>Before testing, we use Shapiro-Wilk normality test to check if math scores for both genders follow normal distribution:</p>
+<p><strong>Hypothesis</strong></p>
+<p>H0: Math scores for races follow the normal distribution</p>
+<p>H1: Math scores for races don’t follow the normal distribution</p>
+<p>alpha = 0.05</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by</span>(exam<span class="sc">$</span>ENGLISH, exam<span class="sc">$</span>RACE, shapiro.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exam$RACE: Chinese
+
+    Shapiro-Wilk normality test
+
+data:  dd[x, ]
+W = 0.93491, p-value = 1.305e-07
+
+------------------------------------------------------------ 
+exam$RACE: Indian
+
+    Shapiro-Wilk normality test
+
+data:  dd[x, ]
+W = 0.9647, p-value = 0.8483
+
+------------------------------------------------------------ 
+exam$RACE: Malay
+
+    Shapiro-Wilk normality test
+
+data:  dd[x, ]
+W = 0.96894, p-value = 0.01251
+
+------------------------------------------------------------ 
+exam$RACE: Others
+
+    Shapiro-Wilk normality test
+
+data:  dd[x, ]
+W = 0.93378, p-value = 0.5182</code></pre>
+</div>
+</div>
+<p>Results from Shapiro-Wilk test doesn’t show significant evidence (p-value &gt;0.05)and fail to reject the null hypothesis. Thus <strong>parametric test</strong> is used in the following onw-way ANOVA model.</p>
+</section>
+<section id="hypothesis-2" class="level4">
+<h4 class="anchored" data-anchor-id="hypothesis-2">Hypothesis</h4>
+<p>H0: There is no difference in English scores among races.</p>
+<p>H1: There are differences in English scores among races.</p>
+<p>alpha = 0.05</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Conclusion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Since p-value &lt; 0.05, we have enough evidence to reject the null hypothesis and conclude that NOT ALL means of English scores by race are the same. The results shows that the means of English scores of Chinese, Indian and Malay are significantly different.</p>
+</div>
+</div>
+<div class="toggle">
+<details>
+<summary>
+<strong>Display Code</strong>
+</summary>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggbetweenstats</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> exam,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> RACE, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> ENGLISH,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"p"</span>, <span class="co"># parametric</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.ci =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pairwise.comparisons =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pairwise.display =</span> <span class="st">"s"</span>, <span class="co"># display significant one</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"fdr"</span>, <span class="co"># False Discovery Rate</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">messages =</span> <span class="cn">FALSE</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>)<span class="sc">+</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span>))</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex04_b_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,541 @@
+---
+title: "Hands-on Exercise 04"
+author: Johsuan Huang
+date: 2024-02-02
+date-modified: "last-modified"
+description: "Visual Statistical Analysis"
+categories: [ggplot2,ggstatsplot, nortest]
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+## 1 Learning Outcome
+
+In this exercise, we will gain hands-on expirience on using:
+
+-   **ggstatsplot** package to create visual graphics with rich statistical information
+
+-   **performance** package to visualise model diagnostics
+
+-   **parameters** package to visualise model parameters
+
+## 2 Getting Started
+
+::: panel-tabset
+## Loading the packages
+
+Use the **pacman** package `p_load()` to check, install and launch the following R packages:
+
+```{r}
+pacman::p_load(ggstatsplot, tidyverse, nortest)
+```
+
++-------------+----------------------------------------------------------------------------------------------------------------------------------+
+| **Library** | **Description**                                                                                                                  |
++=============+==================================================================================================================================+
+| ggstatsplot | a ggplot2 extension for creating graphics with details from statistical tests included in the information-rich plots themselves. |
++-------------+----------------------------------------------------------------------------------------------------------------------------------+
+| tidyverse   | a family of R packages for data processing                                                                                       |
++-------------+----------------------------------------------------------------------------------------------------------------------------------+
+| nortest     | a package for normality test                                                                                                     |
++-------------+----------------------------------------------------------------------------------------------------------------------------------+
+
+## Importing the data
+
+In this exercise, ***Exam_data.csv*** will be used. We use `read_csv()` of **readr** to import the data:
+
+```{r}
+exam <- read_csv("data/Exam_data.csv")
+```
+
+## Examining the data
+
+After importing the data, let's examine it to understand its data structure:
+
+The dataset contains 7 attributes and 322 observations with no missing values.
+
+-   The categorical attributes are: ID, CLASS, GENDER and RACE.
+
+-   The continuous attributes are: MATHS, ENGLISH and SCIENCE.
+
+```{r}
+head(exam)
+```
+
+```{r}
+str(exam)
+```
+
+```{r}
+summary(exam)
+```
+
+```{r}
+any(is.na(exam))
+```
+
+## Transforming the data
+
+In R, factors are used to handle categorical data and ordered variable. As there are categorical attributes in our dataset, we are going to convert their data type from \<chr\> to \<fctr\>:
+
+```{r}
+col <- c("CLASS","GENDER","RACE")
+exam <- exam %>% mutate(across(all_of(col), as.factor))
+
+```
+
+After converting the attributes, let's check the data again:
+
+```{r}
+head(exam)
+```
+:::
+
+## 3 Statistics Test: ggstatsplot
+
+### 3.1 One-sample test: *gghistostats()* method
+
+In the code chunk below, [*gghistostats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/gghistostats.html) of **ggstatsplot** is used to to build an visual of one-sample test on English scores.
+
+-   One-sample test is a statistical test used to determine whether the mean of a single sample is significantly different from a known or hypothesized population mean (mu=60).
+
+:::: panel-tabset
+## BF-plot
+
+#### Hypothesis
+
+H0: Mean of English score = 60
+
+H1: Mean of English score != 60
+
+#### Conclusion
+
+Since BF = e\^-31.52, which is a tiny number close to 0. We have significant evidence to reject the null hypothesis and conclude that the mean English score doesn't equal to 60.
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+set.seed(1)
+
+gghistostats(exam,
+             x = ENGLISH,
+             type = "bayes",
+             test.value = 60, #mu
+             xlab = "English scores",
+             bin.args = list(fill = "grey90", color="grey30"),
+             centrality.line.args = list(color = "black", linewidth = 1, linetype = "dashed"))+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+set.seed(1)
+
+gghistostats(exam,
+             x = ENGLISH,
+             type = "bayes",
+             test.value = 60, #mu
+             xlab = "English scores",
+             bin.args = list(fill = "grey90", color="grey30"),
+             centrality.line.args = list(color = "black", linewidth = 1, linetype = "dashed"))+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+```
+
+## Argument
+
+gghistostats() includes below arguments:
+
++--------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Argument                 | Description                                                                                                                                                                                                        |
++==========================+====================================================================================================================================================================================================================+
+| **binwidth**             | The width of the histogram bins. The default is to use the `max(x) - min(x) / sqrt(N)`                                                                                                                             |
++--------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **type**                 | A character specifying the type of statistical approach and its hypothesis testing:                                                                                                                                |
+|                          |                                                                                                                                                                                                                    |
+|                          | -   `"parametric"`: One-sample Student's *t*-test ([stats::t.test()](https://rdrr.io/r/stats/t.test.html))                                                                                                         |
+|                          |                                                                                                                                                                                                                    |
+|                          | -   `"nonparametric"`: One-sample Wilcoxon test ([stats::wilcox.test()](https://rdrr.io/r/stats/wilcox.test.html))                                                                                                 |
+|                          |                                                                                                                                                                                                                    |
+|                          | -   `"robust"`: Bootstrap-*t* method for one-sample test([WRS2::trimcibt()](https://rdrr.io/pkg/WRS2/man/trimcibt.html))                                                                                           |
+|                          |                                                                                                                                                                                                                    |
+|                          | -   `"bayes"`: One-sample Student's *t*-test ([BayesFactor::ttestBF()](https://rdrr.io/pkg/BayesFactor/man/ttestBF.html))                                                                                          |
++--------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **test.value**           | A number indicating the true value of the mean (Default: `0`).                                                                                                                                                     |
++--------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **bin.args**             | A list of additional aesthetic arguments to be passed to the `stat_bin` used to display the bins.                                                                                                                  |
++--------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **centrality.line.args** | A list of additional aesthetic arguments to be passed to the [`ggplot2::geom_line()`](https://ggplot2.tidyverse.org/reference/geom_path.html) used to display the lines corresponding to the centrality parameter. |
++--------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+::::
+
+#### 3.1.1 Bayes Factor
+
+-   A Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. It can be interpreted as a measure of the strength of evidence in favor of one theory among two competing theories.
+
+-   That’s because the Bayes factor gives us a way to evaluate the data in favor of a null hypothesis, and to use external information to do so. It tells us what the weight of the evidence is in favor of a given hypothesis.
+
+-   When we are comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes Factor is often written as B10. It can be defined mathematically as
+
+-   The [**Schwarz criterion**](https://www.statisticshowto.com/bayesian-information-criterion/) is one of the easiest ways to calculate rough approximation of the Bayes Factor.
+
+-   Bayes Factor can be any **positive number**:
+
+    One of the most common interpretations is this one—first proposed by Harold Jeffereys (1961) and slightly modified by [Lee and Wagenmakers](https://www-tandfonline-com.libproxy.smu.edu.sg/doi/pdf/10.1080/00031305.1999.10474443?needAccess=true) in 2013:
+
+    ![](/images/bayes_factor.png)
+
+#### 
+
+However, before one-sample testing, we should use Anderson-Darling normality test to check if English scores follow normal distribution:
+
+**Hypothesis**
+
+H0: English scores follow the normal distribution
+
+H1: English scores don't follow the normal distribution
+
+alpha = 0.05
+
+```{r}
+ad.test(exam$ENGLISH)
+```
+
+Results from the Anderson-Darling normality test shows siginificant evidence (p-value \<0.05) to reject the null hypothesis and conclude that the English scores do not follow normal distribution . Thus **non parametric: One-sample Wilcoxon test** is used in the following one-sample test model.
+
+**Hypothesis**:
+
+H0: Mean of English score = 60
+
+H1: Mean of English score != 60
+
+Alpha = 0.05
+
+::: {.callout-tip appearance="simple"}
+## Conclusion
+
+We reach the same conclusion using both approaches:
+
+Since the p-value \< 0.05, we have significant evidence to reject the null hypothesis and suggests that the mean English score is different from 60.
+:::
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+set.seed(1)
+
+gghistostats(exam,
+             x = ENGLISH,
+             type = "np",
+             test.value = 60, #mu
+             xlab = "English scores",
+             bin.args = list(fill = "grey90", color="grey30"),
+             centrality.line.args = list(color = "black", linewidth = 1, linetype = "dashed"))+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+set.seed(1)
+
+gghistostats(exam,
+             x = ENGLISH,
+             type = "np",
+             test.value = 60, #mu
+             xlab = "English scores",
+             bin.args = list(fill = "grey90", color="grey30"),
+             centrality.line.args = list(color = "black", linewidth = 1, linetype = "dashed"))+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+```
+
+### 3.2 Two-sample mean test: ***ggbetweenstats()*** **method**
+
+[*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for two-sample mean test of Maths scores by gender:
+
+Before testing, we use Shapiro-Wilk normality test to check if math scores for both genders follow normal distribution:
+
+**Hypothesis**
+
+H0: Math scores for male / female follow the normal distribution
+
+H1: Math scores for male / female don't follow the normal distribution
+
+alpha = 0.05
+
+```{r}
+by(exam$ENGLISH, exam$GENDER, shapiro.test)
+
+```
+
+Results from Shapiro-Wilk test shows significant evidence (p-value \<0.05) to reject the null hypothesis and conclude that the math scores for both gender do not follow normal distribution . Thus **non parametric: Mann-Whitney *U* test** is used in the following two-sample test model.
+
+::::: panel-tabset
+## Two Sample plot
+
+#### Hypothesis
+
+**H0: Mean math score for male = Mean math score for female**
+
+**H1: Mean math score for male != Mean math score for female**
+
+**alpha = 0.05**
+
+::: {.callout-tip appearance="simple"}
+## Conclusion
+
+Since the p-value is \> 0.05, we don't have enough evidence to reject the null hypothesis and conclude that there is no statistically significant difference in the mean math scores between males and females.
+:::
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+ggbetweenstats(
+  data = exam,
+  x = GENDER, 
+  y = MATHS,
+  type = "np", #nonparametric
+  messages = FALSE)+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+ggbetweenstats(
+  data = exam,
+  x = GENDER, 
+  y = MATHS,
+  type = "np", #nonparametric
+  messages = FALSE)+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+  
+```
+
+## Argument
+
+ggbetweenstats() includes below arguments:
+
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Argument                                         | Description                                                                                                                                                                                                                                                                            |
++==================================================+========================================================================================================================================================================================================================================================================================+
+| **type**                                         | A character specifying the type of statistical approach and its hypothesis testing:                                                                                                                                                                                                    |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | **No. of groups:**                                                                                                                                                                                                                                                                     |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"parametric"`: Student's or Welch's *t*-test([stats::t.test()](https://rdrr.io/r/stats/t.test.html))                                                                                                                                                                              |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"nonparametric"`: Mann-Whitney *U* test([stats::wilcox.test()](https://rdrr.io/r/stats/wilcox.test.html))                                                                                                                                                                         |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"robust"`: Yuen's test for trimmed means([WRS2::yuen()](https://rdrr.io/pkg/WRS2/man/yuen.html))                                                                                                                                                                                  |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"bayes"`: Student's *t*-test ([BayesFactor::ttestBF()](https://rdrr.io/pkg/BayesFactor/man/ttestBF.html))                                                                                                                                                                         |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | **No. of groups \> 2:**                                                                                                                                                                                                                                                                |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   Parametric: Fisher's or Welch's one-way ANOVA ([stats::oneway.test()](https://rdrr.io/r/stats/oneway.test.html))                                                                                                                                                                   |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   Non-parametric: Kruskal-Wallis one-way ANOVA ([stats::kruskal.test()](https://rdrr.io/r/stats/kruskal.test.html))                                                                                                                                                                  |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   Robust: Heteroscedastic one-way ANOVA for trimmed means ([WRS2::t1way()](https://rdrr.io/pkg/WRS2/man/t1way.html))                                                                                                                                                                 |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   Bayes Factor: Fisher's ANOVA ([BayesFactor::anovaBF()](https://rdrr.io/pkg/BayesFactor/man/anovaBF.html))                                                                                                                                                                          |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **pairwise.display\                              | Decides *which* pairwise comparisons to display. Available options are:                                                                                                                                                                                                                |
+| (ANOVA)**                                        |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"significant"` (abbreviation accepted: `"s"`) \>\>\> only significant                                                                                                                                                                                                             |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"non-significant"` (abbreviation accepted: `"ns"`) \>\>\> only non-significant                                                                                                                                                                                                    |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   `"all"`\>\>\> everything                                                                                                                                                                                                                                                           |
+|                                                  |                                                                                                                                                                                                                                                                                        |
+|                                                  | -   If set to `"none"`, no pairwise comparisons will be displayed.                                                                                                                                                                                                                     |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **bf.message**                                   | It decides whether to display Bayes Factor in favor of the *null* hypothesis. This argument is relevant only **for parametric test** (Default: `TRUE`).                                                                                                                                |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **var.equal**                                    | whether to treat the two variances as being equal. If `TRUE` then the pooled variance is used to estimate the variance otherwise the Welch (or Satterthwaite) approximation to the degrees of freedom is used.                                                                         |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **centrality.point.args, centrality.label.args** | A list of additional aesthetic arguments to be passed to [`ggplot2::geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html) and[`ggrepel::geom_label_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) geoms, which are involved in mean plotting. |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **point.args**                                   | A list of additional aesthetic arguments to be passed to the [`ggplot2::geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html).                                                                                                                                       |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **boxplot.args**                                 | A list of additional aesthetic arguments passed on to [`ggplot2::geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html).                                                                                                                                          |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **violin.args**                                  | A list of additional aesthetic arguments to be passed to the [`ggplot2::geom_violin()`](https://ggplot2.tidyverse.org/reference/geom_violin.html).                                                                                                                                     |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **ggsignif.args**                                | A list of additional aesthetic arguments to be passed to [`ggsignif::geom_signif()`](https://const-ae.github.io/ggsignif/reference/stat_signif.html).                                                                                                                                  |
++--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+:::::
+
+### 3.3 **Oneway ANOVA Test: *ggbetweenstats()* method**
+
+[*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) can also be used to build a visual for One-way ANOVA test on English score by race.
+
+Before testing, we use Shapiro-Wilk normality test to check if math scores for both genders follow normal distribution:
+
+**Hypothesis**
+
+H0: Math scores for races follow the normal distribution
+
+H1: Math scores for races don't follow the normal distribution
+
+alpha = 0.05
+
+```{r}
+by(exam$ENGLISH, exam$RACE, shapiro.test)
+
+```
+
+Results from Shapiro-Wilk test doesn't show significant evidence (p-value \>0.05)and fail to reject the null hypothesis. Thus **parametric test** is used in the following onw-way ANOVA model.
+
+#### Hypothesis
+
+H0: There is no difference in English scores among races.
+
+H1: There are differences in English scores among races.
+
+alpha = 0.05
+
+::: {.callout-tip appearance="simple"}
+## Conclusion
+
+Since p-value \< 0.05, we have enough evidence to reject the null hypothesis and conclude that there are differences in English scores among races.
+
+The pairwise test `ggbetweenstats()` below further shows that the means of English scores of Chinese, Indian and Malay are significantly different.
+:::
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+ggbetweenstats(
+  data = exam,
+  x = RACE, 
+  y = ENGLISH,
+  type = "p", # parametric
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s", # display significant one
+  p.adjust.method = "fdr", # False Discovery Rate
+  messages = FALSE
+)+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+  
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+ggbetweenstats(
+  data = exam,
+  x = RACE, 
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+```
+
+### 3.4 **Significant Test of Correlation: *ggscatterstats()***
+
+In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html) is used to build a visual for Significant Test of Correlation between Maths scores and English scores.
+
+::: {.callout-note appearance="simple"}
+## Conclusion
+
+The result indicates a statistically significant posistive relationship (r = 0.83, p-value \<0.05) between English and math scores. This suggests that higher English scores are correlated with higher math scores.
+:::
+
+```{r}
+ggscatterstats(data = exam,
+               x = MATHS,
+               y = ENGLISH,
+               marginal = FALSE,)+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+  
+```
+
+### 3.5 Significant Test of Association (Depedence): *ggbarstats()* methods
+
+In the code chunk below, the Maths scores is binned into a 4-class variable by using [*cut()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut).
+
+```{r}
+exam1 <- exam %>%
+  mutate(MATHS_bins=
+           cut(MATHS, breaks = c(0,60,75,85,100)))
+```
+
+-   (0,60\] means excluding 0 and including 60.
+
+```{r}
+head(exam1)
+```
+
+In this code chunk below [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association.
+
+**Hypothesis**
+
+H0: There is no association between math_bin and gender.
+
+H1: There is an association between math_bin and gender.
+
+Alpha = 0.05
+
+::: {.callout-tip appearance="simple"}
+## Conclusion
+
+Since the p-value is \> 0.05, we don't have enough evidence to reject the null hypothesis that there is no association between the math_bin and gender variables.
+:::
+
+```{r}
+ggbarstats(exam1,
+           x = MATHS_bins,
+           y = GENDER)+
+  theme(legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA
+                                       ))
+  
+```
+
+## 4 **Visualizing Models**
+
+In this section, Toyota Corolla case study will be used. We will learn how to visualize model diagnostic and model parameters by using parameters package.
+
+### 4.1 
