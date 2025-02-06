@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 03-2"
+title: "Hands-on Exercise 03.b"
 date: 2024-01-28
 date-modified: "last-modified"
 description: "Programming Animated Statistical Graphics with R"

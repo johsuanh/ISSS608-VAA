@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 03-1"
+title: "Hands-on Exercise 03.a"
 date: 2024-01-25
 date-modified: "last-modified"
 description: "Programming Interactive Data Visualisation with R"
