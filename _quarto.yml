@@ -20,6 +20,10 @@ website:
             href: Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html
           - text: "04.a: Visualising Distribution"
             href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html
+          - text: "04.b: Visual Statistical Analysis"
+            href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_b.html
+          - text: "04.c: Visualising Uncertainty"
+            href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html
       - text: "In-class Exercise"
         menu:
           - text: "In-class Exercise 1"
