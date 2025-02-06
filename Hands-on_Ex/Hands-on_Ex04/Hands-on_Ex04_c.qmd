@@ -140,15 +140,21 @@ ggplot(my_sum) +
     alpha = 0.9,
     linewidth =0.5)+
   geom_point(aes(x=RACE,y=mean),
-             stat = 'identity', # Don't apply any statistics, just plot 'mean' values
-             color = "red",
+             stat = 'identity', 
+             color = "#D9A4C3",
              size = 1.5, alpha=1)+
-  labs(title = "Standard error of mean maths score by race",y="MEAN")+
+  labs(title = "Standard Error of Mean Math Score by Race",
+       subtitle = "68% Confidence Interval",
+       y="Mean math score")+
   theme_wsj(base_size = 9)+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(hjust=0, face="bold", size = 14),
-        axis.title.y = element_text(size = 10))
+        plot.title = element_text(hjust=0, face="bold", size = 18),
+        plot.subtitle = element_text(hjust=0, size = 14),
+        axis.title.y = element_text(size = 10),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3)
+        )
   
 ```
 
@@ -168,14 +174,20 @@ ggplot(my_sum) +
     linewidth =0.5)+
   geom_point(aes(x=RACE,y=mean),
              stat = 'identity', 
-             color = "red",
+             color = "#D9A4C3",
              size = 1.5, alpha=1)+
-  labs(title = "Standard error of mean maths score by race",y="MEAN")+
+  labs(title = "Standard Error of Mean Math Score by Race",
+       subtitle = "68% Confidence Interval",
+       y="Mean math score")+
   theme_wsj(base_size = 9)+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(hjust=0, face="bold", size = 14),
-        axis.title.y = element_text(size = 10))
+        plot.title = element_text(hjust=0, face="bold", size = 18),
+        plot.subtitle = element_text(hjust=0, size = 14),
+        axis.title.y = element_text(size = 10),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3)
+        )
   
 ```
 
@@ -195,7 +207,7 @@ Instead of plotting the standard error bar of point estimates, we can also plot 
 ``` r
 ggplot(my_sum) +
   geom_errorbar(
-    aes(x=reorder(RACE, -mean), # sort the order by means
+    aes(x=reorder(RACE, -mean),
         ymin = mean-1.96*se,
         ymax = mean+1.96*se),
     width = 0.2,
@@ -204,14 +216,20 @@ ggplot(my_sum) +
     linewidth =0.5)+
   geom_point(aes(x=RACE,y=mean),
              stat = 'identity', 
-             color = "red",
+             color = "#D9A4C3",
              size = 1.5, alpha=1)+
-  labs(title = "95% confidence interval of mean maths score by race",x="Math Score")+
+  labs(title = "Standard Error of Mean Math Score by Race",
+       subtitle = "95% Confidence Interval",
+       y="Mean math score")+
   theme_wsj(base_size = 9)+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(hjust=0, face="bold", size = 14),
-        axis.title.y = element_text(size = 10))
+        plot.title = element_text(hjust=0, face="bold", size = 18),
+        plot.subtitle = element_text(hjust=0, size = 14),
+        axis.title.y = element_text(size = 10),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3)
+        )
 ```
 
 </details>
@@ -230,22 +248,28 @@ ggplot(my_sum) +
     linewidth =0.5)+
   geom_point(aes(x=RACE,y=mean),
              stat = 'identity', 
-             color = "red",
+             color = "#D9A4C3",
              size = 1.5, alpha=1)+
-  labs(title = "95% confidence interval of mean maths score by race",x="Math Score")+
+  labs(title = "Standard Error of Mean Math Score by Race",
+       subtitle = "95% Confidence Interval",
+       y="Mean math score")+
   theme_wsj(base_size = 9)+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(hjust=0, face="bold", size = 14),
-        axis.title.y = element_text(size = 10))
+        plot.title = element_text(hjust=0, face="bold", size = 18),
+        plot.subtitle = element_text(hjust=0, size = 14),
+        axis.title.y = element_text(size = 10),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3)
+        )
 
 ```
 
 ### 3.3 Visualizing the uncertainty of point estimates with interactive error bars
 
-In this section, you will learn how to plot interactive error bars for the 99% confidence interval of mean maths score by race as shown in the figure below.
+In this section, we will plot interactive error bars for the 99% confidence interval of mean maths score by race as shown in the figure below.
 
--   **`bscols()`**: This is used to create a layout where the plot occupies 4 columns (out of a 12-column grid) and the data table occupies 8 columns. This is typically used in Shiny apps or R Markdown documents to create a side-by-side layout.
+-   **`bscols()`**: This is used to create a layout where the plot occupies 4 columns (out of a 12-column grid) and the data table occupies 8 columns. This is typically used in Shiny apps or R Markdown documents to **create a side-by-side layout**.
 
 ::: toggle
 <details>
@@ -253,20 +277,56 @@ In this section, you will learn how to plot interactive error bars for the 99% c
 <summary>**Display Code**</summary>
 
 ``` r
-ggplot(exam, aes(x=ENGLISH, y=CLASS,
-                 fill = stat(x)))+
-  geom_density_ridges_gradient(
-    scale = 3,
-    rel_min_height = 0.01)+
-  scale_fill_viridis_c(name = NULL,
-                       option = "C",
-                       alpha=1)+ 
-  scale_x_continuous(name = "English Grades", expand = c(0,0))+
-  scale_y_discrete(name=NULL)+
-  theme_ridges()+
-  labs(title = 'Gradient Colors for English Scores') +
-  theme(panel.background = element_rect(fill = "#f3f1e9"),
-        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+shared_df = SharedData$new(my_sum) #create new shared data frame
+
+bscols(
+  widths = c(4, 8),  # Set column widths for plot and table 4:8
+  ggplotly(
+    ggplot(shared_df) + 
+      geom_errorbar(
+        aes(x = reorder(RACE, -mean),
+            ymin = mean - 2.58 * se,  
+            ymax = mean + 2.58 * se), 
+        width = 0.2, 
+        colour = "black",
+        alpha = 0.9,
+        linewidth = 0.5
+      ) +
+      geom_point(
+        aes(x = RACE, y = mean,
+            text = paste("RACE:", RACE,
+                         "<br>N:", n,
+                         "<br>Avg. Scores:", round(mean, 2),
+                         "<br>99% CI:[", round((mean - 2.58 * se), 2), ",",
+                         round((mean + 2.58 * se), 2), "]")),
+        stat = 'identity', 
+        color = "#D9A4C3", 
+        size = 1.5, 
+        alpha = 1
+      ) +
+      labs(x="Race",y="Average Scores",
+           title = "99% Confidence interval of average /<br>maths scores by race")+
+      theme_wsj(base_size = 9) + 
+      theme(
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA),
+        plot.title = element_text(hjust = 0, face = "bold", size = 11.5),
+        axis.title.y = element_text(size = 10),
+        axis.title.x = element_text(size = 10),
+        axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1),
+        tooltip = "text"
+      )
+  ), 
+  DT::datatable(
+    shared_df,
+    rownames = FALSE,
+    class = "compact",
+    width = "100%",
+    options = list(pageLength = 10, scrollX = TRUE),
+    colnames = c("No. of pupils", "Avg Scores", "Std Dev", "Std Error")
+  ) %>%
+    formatRound(columns = c('mean', 'sd', 'se'), digits = 2)
+)
 ```
 
 </details>
@@ -298,7 +358,7 @@ bscols(
                          "<br>99% CI:[", round((mean - 2.58 * se), 2), ",",
                          round((mean + 2.58 * se), 2), "]")),
         stat = 'identity', 
-        color = "red", 
+        color = "#D9A4C3", 
         size = 1.5, 
         alpha = 1
       ) +
@@ -334,15 +394,15 @@ bscols(
 
 -   [**ggdist**](https://mjskay.github.io/ggdist/index.html) is an R package that provides a flexible set of ggplot2 geoms and stats designed especially for visualising distributions and uncertainty.
 
--   It is designed for both frequentist and Bayesian uncertainty visualization, taking the view that uncertainty visualization can be unified through the perspective of distribution visualization:
+-   It is designed for both **frequentist** and **Bayesian uncertainty** visualization, taking the view that uncertainty visualization can be unified through the perspective of distribution visualization:
 
-    -   for frequentist models, one visualises confidence distributions or bootstrap distributions (see vignette(“freq-uncertainty-vis”));
+    -   **Frequentist models:** Visualizing confidence distributions or bootstrap distributions (see vignette(“freq-uncertainty-vis”));
 
-    -   for Bayesian models, one visualises probability distributions (see the tidybayes package, which builds on top of ggdist).
+    -   **Bayesian models**: Visualizing probability distributions (see the tidybayes package, which builds on top of ggdist).
 
 ### 4.1 Visualizing the uncertainty of point estimates: ggdist methods
 
-In the code chunk below, [`stat_pointinterval()`](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html) of **ggdist** is used to build a visual for displaying distribution of maths scores by race.
+In the code chunk below, [`stat_pointinterval()`](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html) of **ggdist** is used to build a visual for displaying distribution of maths scores by race:
 
 ::: toggle
 <details>
@@ -354,12 +414,19 @@ exam %>%
   ggplot(aes(x = RACE, 
              y = MATHS)) +
   stat_pointinterval() +
+  aes(interval_color=stat(level)) +
+  scale_color_manual(
+    values = c("grey20", "grey50"), # customize colors for 95% and 99% CI
+    aesthetics = "interval_color") +
   labs(
     title = "Visualising confidence intervals of mean math score",
-    subtitle = "Mean Point + Multiple-interval plot")+
+    subtitle = "Mean Point + Multiple-interval plot of 66% and 95%")+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(face = "bold"))
+        legend.background = element_rect(fill = "#f3f1e9"),
+        plot.title = element_text(face = "bold"),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
 ```
 
 </details>
@@ -371,12 +438,19 @@ exam %>%
   ggplot(aes(x = RACE, 
              y = MATHS)) +
   stat_pointinterval() +
+  aes(interval_color=stat(level)) +
+  scale_color_manual(
+    values = c("grey20", "grey50"), # customize colors for 95% and 99% CI
+    aesthetics = "interval_color") +
   labs(
     title = "Visualising confidence intervals of mean math score",
     subtitle = "Mean Point + Multiple-interval plot of 66% and 95%")+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(face = "bold"))
+        legend.background = element_rect(fill = "#f3f1e9"),
+        plot.title = element_text(face = "bold"),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
     
 ```
 
@@ -389,7 +463,7 @@ Below are some stat_pointinterval() argument
 | **.interval** | It decides the interval type (quantile interval, `qi`; highest-density interval, `hdi`; or highest-density continuous interval, `hdci`). |
 | **orientation** | Whether this geom is drawn horizontally or vertically: `"horizontal"` (or `"y"`), `"vertical"` (or `"x"`), NA |
 
-Below we are going to customize the argument we mentioned above:
+We are going to customize the arguments we learned above:
 
 ::: toggle
 <details>
@@ -408,7 +482,9 @@ exam %>%
     subtitle = "Median Point + 95% CI plot")+
     theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(face = "bold"))
+        plot.title = element_text(face = "bold"),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
 ```
 
 </details>
@@ -427,7 +503,9 @@ exam %>%
     subtitle = "Median Point + 95% CI plot")+
     theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(face = "bold"))
+        plot.title = element_text(face = "bold"),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
 ```
 
 Below is the multiple CI plot showing both 95% and 99% levels:
@@ -441,15 +519,22 @@ Below is the multiple CI plot showing both 95% and 99% levels:
 exam %>%
   ggplot(aes(x = RACE, y = MATHS)) +
   stat_pointinterval(.width = c(0.95,0.99),
-                     .point = median,
+                     .point = mean,
                      .interval = qi,
                      .orientation = "na") +
+  aes(interval_color=stat(level)) +
+  scale_color_manual(
+    values = c("#6a994e", "#E8C8DB"), # customize colors for 95% and 99% CI
+    aesthetics = "interval_color") +
   labs(
-    title = "Visualising confidence intervals of median math score",
-    subtitle = "Median Point + 95% CI plot")+
+    title = "Visualising confidence intervals of mean math score",
+    subtitle = "Mean Point + Multiple of interval plot of 95% and 99% levels")+
     theme(panel.background = element_rect(fill = "#f3f1e9"),
-          plot.background = element_rect(fill = "#f3f1e9",color = NA),
-          plot.title = element_text(face = "bold"))
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.background = element_rect(fill = "#f3f1e9",color = NA),
+        plot.title = element_text(face = "bold"),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
 ```
 
 </details>
@@ -465,7 +550,7 @@ exam %>%
                      .orientation = "na") +
   aes(interval_color=stat(level)) +
   scale_color_manual(
-    values = c("#6a994e", "#bc4749"), # customize colors for 95% and 99% CI
+    values = c("#6a994e", "#E8C8DB"), # customize colors for 95% and 99% CI
     aesthetics = "interval_color") +
   labs(
     title = "Visualising confidence intervals of mean math score",
@@ -473,7 +558,9 @@ exam %>%
     theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
         legend.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(face = "bold"))
+        plot.title = element_text(face = "bold"),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
 ```
 
 ### 4.2 Visualizing the uncertainty of point estimates: ggdist methods
@@ -486,17 +573,20 @@ In the code chunk below, [`stat_gradientinterval()`](https://mjskay.github.io/g
 <summary>**Display Code**</summary>
 
 ``` r
-ggplot(exam, 
-       aes(x = RACE,y = ENGLISH)) +
-  stat_halfeye(adjust = 0.5,
-               justification = -0.2,
-               .width = 0,
-               point_colour = NA)+
-  labs(title ="Distribution of English Scores Across Races",
-       x = "", y="English Score")+
+exam %>%
+  ggplot(aes(x = RACE, y = MATHS))+
+  stat_gradientinterval(   
+    fill = "grey30",      
+    show.legend = TRUE)+                        
+  labs(
+    title = "Visualising confidence intervals of mean math score",
+    subtitle = "Gradient + interval plot")+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(face = "bold"))
+        plot.title = element_text(face = "bold"),
+        legend.background = element_rect(fill = "#f3f1e9",color = NA),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
 ```
 
 </details>
@@ -515,7 +605,9 @@ exam %>%
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
         plot.title = element_text(face = "bold"),
-        legend.background = element_rect(fill = "#f3f1e9",color = NA))
+        legend.background = element_rect(fill = "#f3f1e9",color = NA),
+        axis.line.x = element_line(linewidth = 0.3),
+        axis.line.y = element_line(linewidth = 0.3))
   
 ```
 
@@ -548,11 +640,11 @@ ggplot(data = exam,
     height = 0.3, 
     width = 0.05), 
     size = 0.4, 
-    color = "#0072B2", 
+    color = "grey40", 
     alpha = 1/2) +
   geom_hpline(data = sampler(25, group = RACE), 
               height = 0.6, 
-              color = "#D55E00") +
+              color = "#D9A4C3") +
   theme_bw() + 
   transition_states(.draw, 1, 3)+
   labs(x="Race",y="Math Score")+
@@ -573,11 +665,11 @@ ggplot(data = exam,
     height = 0.3, 
     width = 0.05), 
     size = 0.4, 
-    color = "#0072B2", 
+    color = "grey40", 
     alpha = 1/2) +
   geom_hpline(data = sampler(25, group = RACE), 
               height = 0.6, 
-              color = "#D55E00") +
+              color = "#D9A4C3") +
   theme_bw() + 
   transition_states(.draw, 1, 3)+
   labs(x="Race",y="Math Score")+
