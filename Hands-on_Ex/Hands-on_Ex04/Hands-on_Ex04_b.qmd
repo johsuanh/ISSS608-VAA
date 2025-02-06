@@ -1,7 +1,7 @@
 ---
 title: "Hands-on Exercise 04.b"
 author: Johsuan Huang
-date: 2024-02-02
+date: 2024-02-03
 date-modified: "last-modified"
 description: "Visual Statistical Analysis"
 categories: [ggplot2,ggstatsplot, nortest, performance, parameters, see]
@@ -471,7 +471,7 @@ ggbetweenstats(
 
 ```
 
-### 3.4 Significant Test of Correlation: *ggscatterstats()**
+### 3.4 Significant Test of Correlation: \*ggscatterstats()\*\*
 
 In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html) is used to build a visual for Significant Test of Correlation between Maths scores and English scores.
 

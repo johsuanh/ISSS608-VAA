@@ -1,7 +1,7 @@
 ---
 title: "Hands-on Exercise 04.c"
 author: Johsuan Huang
-date: 2024-02-02
+date: 2024-02-05
 date-modified: "last-modified"
 description: "Visualising Uncertainty"
 categories: [ggplot2,ggdist, ungeviz]
@@ -37,7 +37,7 @@ pacman::p_load(plotly, crosstalk, DT, gganimate,
 ```
 
 | **Library** | **Description** |
-|------------------|------------------------------------------------------|
+|------------------------------------|------------------------------------|
 | ggdist | a ggplot2 extension spacially desgin for visualising distribution and uncertainty |
 | tidyverse | a family of R packages for data processing |
 | crosstalk | for implementing cross-widget interactions (currently, linked brushing and filtering) |
@@ -210,8 +210,8 @@ ggplot(my_sum) +
   theme_wsj(base_size = 9)+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(hjust=0, face="bold", size = 11.5),
-        axis.title.y = element_text(size = 14))
+        plot.title = element_text(hjust=0, face="bold", size = 14),
+        axis.title.y = element_text(size = 10))
 ```
 
 </details>
@@ -236,8 +236,8 @@ ggplot(my_sum) +
   theme_wsj(base_size = 9)+
   theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        plot.title = element_text(hjust=0, face="bold", size = 11.5),
-        axis.title.y = element_text(size = 14))
+        plot.title = element_text(hjust=0, face="bold", size = 14),
+        axis.title.y = element_text(size = 10))
 
 ```
 
@@ -340,7 +340,7 @@ bscols(
 
     -   for Bayesian models, one visualises probability distributions (see the tidybayes package, which builds on top of ggdist).
 
-### 4.1 **Visualizing the uncertainty of point estimates: ggdist methods**
+### 4.1 Visualizing the uncertainty of point estimates: ggdist methods
 
 In the code chunk below, [`stat_pointinterval()`](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html) of **ggdist** is used to build a visual for displaying distribution of maths scores by race.
 
@@ -383,9 +383,9 @@ exam %>%
 Below are some stat_pointinterval() argument
 
 | Argument | Description |
-|------------------|------------------------------------------------------|
+|------------------------------------|------------------------------------|
 | **.width** | a vector of probabilities to use that determine the widths of the resulting intervals. The default setting is .width = c(0.66, 0.95), meaning plotting 66% CI and 95% CI |
-| .point | This argument determines the point summary (typically mean, median, or mode) |
+| **.point** | This argument determines the point summary (typically mean, median, or mode) |
 | **.interval** | It decides the interval type (quantile interval, `qi`; highest-density interval, `hdi`; or highest-density continuous interval, `hdci`). |
 | **orientation** | Whether this geom is drawn horizontally or vertically: `"horizontal"` (or `"y"`), `"vertical"` (or `"x"`), NA |
 
@@ -476,7 +476,7 @@ exam %>%
         plot.title = element_text(face = "bold"))
 ```
 
-### 4.3 **Visualizing the uncertainty of point estimates: ggdist methods**
+### 4.2 Visualizing the uncertainty of point estimates: ggdist methods
 
 In the code chunk below, [`stat_gradientinterval()`](https://mjskay.github.io/ggdist/reference/stat_gradientinterval.html) of **ggdist** is used to build a visual for displaying distribution of maths scores by race.
 
@@ -519,20 +519,19 @@ exam %>%
   
 ```
 
-### 4.4 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)
+### 4.3 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)
 
-### 4.4.1 **Install and launch the ungeviz package**
+### 4.3.1 Install and launch the ungeviz package
 
 ```{r}
 devtools::install_github("wilkelab/ungeviz")
-1
 ```
 
 ```{r}
 library(ungeviz)
 ```
 
-### 4.4.2 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)
+### 4.3.2 Visualising Uncertainty with Hypothetical Outcome Plots (HOPs)
 
 Next, the code chunk below will be used to build the HOPs.
 

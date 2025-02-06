@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Johsuan Huang">
-<meta name="dcterms.date" content="2024-02-02">
+<meta name="dcterms.date" content="2024-02-03">
 <meta name="description" content="Visual Statistical Analysis">
 
-<title>Hands-on Exercise 04 – ISSS608-VAA</title>
+<title>Hands-on Exercise 04.b – ISSS608-VAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -159,6 +159,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html">
  <span class="dropdown-text">04.c: Visualising Uncertainty</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html">
+ <span class="dropdown-text">04.d: Funnel Plots for Fair Comparisons</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -219,22 +223,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#one-sample-test-gghistostats-method" id="toc-one-sample-test-gghistostats-method" class="nav-link" data-scroll-target="#one-sample-test-gghistostats-method">3.1 One-sample test:&nbsp;<em>gghistostats()</em>&nbsp;method</a></li>
   <li><a href="#two-sample-mean-test-ggbetweenstats-method" id="toc-two-sample-mean-test-ggbetweenstats-method" class="nav-link" data-scroll-target="#two-sample-mean-test-ggbetweenstats-method">3.2 Two-sample mean test: <strong><em>ggbetweenstats()</em></strong> <strong>method</strong></a></li>
-  <li><a href="#oneway-anova-test-ggbetweenstats-method" id="toc-oneway-anova-test-ggbetweenstats-method" class="nav-link" data-scroll-target="#oneway-anova-test-ggbetweenstats-method">3.3 <strong>Oneway ANOVA Test:&nbsp;<em>ggbetweenstats()</em> method</strong></a></li>
-  <li><a href="#significant-test-of-correlation-ggscatterstats" id="toc-significant-test-of-correlation-ggscatterstats" class="nav-link" data-scroll-target="#significant-test-of-correlation-ggscatterstats">3.4 <strong>Significant Test of Correlation:&nbsp;<em>ggscatterstats()</em></strong></a></li>
+  <li><a href="#oneway-anova-test-ggbetweenstats-method" id="toc-oneway-anova-test-ggbetweenstats-method" class="nav-link" data-scroll-target="#oneway-anova-test-ggbetweenstats-method">3.3 Oneway ANOVA Test:&nbsp;<em>ggbetweenstats()</em> method</a></li>
+  <li><a href="#significant-test-of-correlation-ggscatterstats" id="toc-significant-test-of-correlation-ggscatterstats" class="nav-link" data-scroll-target="#significant-test-of-correlation-ggscatterstats">3.4 Significant Test of Correlation:&nbsp;*ggscatterstats()**</a></li>
   <li><a href="#significant-test-of-association-depedence-ggbarstats-methods" id="toc-significant-test-of-association-depedence-ggbarstats-methods" class="nav-link" data-scroll-target="#significant-test-of-association-depedence-ggbarstats-methods">3.5 Significant Test of Association (Depedence):&nbsp;<em>ggbarstats()</em>&nbsp;methods</a></li>
   </ul></li>
-  <li><a href="#visualizing-models" id="toc-visualizing-models" class="nav-link" data-scroll-target="#visualizing-models">4 <strong>Visualizing Models</strong></a>
+  <li><a href="#visualizing-models" id="toc-visualizing-models" class="nav-link" data-scroll-target="#visualizing-models">4 Visualizing Models</a>
   <ul class="collapse">
   <li><a href="#getting-started-1" id="toc-getting-started-1" class="nav-link" data-scroll-target="#getting-started-1">4.1 Getting Started</a></li>
-  <li><a href="#multiple-regression-model-using-lm" id="toc-multiple-regression-model-using-lm" class="nav-link" data-scroll-target="#multiple-regression-model-using-lm">4.2 <strong>Multiple Regression Model using lm()</strong></a></li>
+  <li><a href="#multiple-regression-model-using-lm" id="toc-multiple-regression-model-using-lm" class="nav-link" data-scroll-target="#multiple-regression-model-using-lm">4.2 Multiple Regression Model using lm()</a></li>
   <li><a href="#model-diagnostic-checking-for-multicolinearity" id="toc-model-diagnostic-checking-for-multicolinearity" class="nav-link" data-scroll-target="#model-diagnostic-checking-for-multicolinearity">4.3 Model Diagnostic: checking for multicolinearity:</a></li>
   <li><a href="#model-diagnostic-checking-normality-assumption" id="toc-model-diagnostic-checking-normality-assumption" class="nav-link" data-scroll-target="#model-diagnostic-checking-normality-assumption">4.4 Model Diagnostic: checking normality assumption</a></li>
-  <li><a href="#model-diagnostic-check-model-for-homogeneity-of-variances" id="toc-model-diagnostic-check-model-for-homogeneity-of-variances" class="nav-link" data-scroll-target="#model-diagnostic-check-model-for-homogeneity-of-variances">4.5 <strong>Model Diagnostic: Check model for homogeneity of variances</strong></a></li>
-  <li><a href="#model-diagnostic-complete-check" id="toc-model-diagnostic-complete-check" class="nav-link" data-scroll-target="#model-diagnostic-complete-check"><strong>4.6 Model Diagnostic: Complete check</strong></a></li>
-  <li><a href="#visualising-regression-parameters-see-methods" id="toc-visualising-regression-parameters-see-methods" class="nav-link" data-scroll-target="#visualising-regression-parameters-see-methods">4.7 <strong>Visualising Regression Parameters: see methods</strong></a></li>
-  <li><a href="#visualising-regression-parameters-ggcoefstats-methods" id="toc-visualising-regression-parameters-ggcoefstats-methods" class="nav-link" data-scroll-target="#visualising-regression-parameters-ggcoefstats-methods">4.8 <strong>Visualising Regression Parameters:&nbsp;<em>ggcoefstats()</em>&nbsp;methods</strong></a></li>
+  <li><a href="#model-diagnostic-check-model-for-homogeneity-of-variances" id="toc-model-diagnostic-check-model-for-homogeneity-of-variances" class="nav-link" data-scroll-target="#model-diagnostic-check-model-for-homogeneity-of-variances">4.5 Model Diagnostic: Check model for homogeneity of variances</a></li>
+  <li><a href="#model-diagnostic-complete-check" id="toc-model-diagnostic-complete-check" class="nav-link" data-scroll-target="#model-diagnostic-complete-check">4.6 Model Diagnostic: Complete check</a></li>
+  <li><a href="#visualising-regression-parameters-see-methods" id="toc-visualising-regression-parameters-see-methods" class="nav-link" data-scroll-target="#visualising-regression-parameters-see-methods">4.7 Visualising Regression Parameters: see methods</a></li>
+  <li><a href="#visualising-regression-parameters-ggcoefstats-methods" id="toc-visualising-regression-parameters-ggcoefstats-methods" class="nav-link" data-scroll-target="#visualising-regression-parameters-ggcoefstats-methods">4.8 Visualising Regression Parameters:&nbsp;<em>ggcoefstats()</em>&nbsp;methods</a></li>
   </ul></li>
-  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">5 <strong>Reference</strong></a></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">5 Reference</a></li>
   </ul>
 </nav>
     </div>
@@ -243,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hands-on Exercise 04</h1>
+<h1 class="title">Hands-on Exercise 04.b</h1>
   <div class="quarto-categories">
     <div class="quarto-category">ggplot2</div>
     <div class="quarto-category">ggstatsplot</div>
@@ -273,14 +277,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 2, 2024</p>
+      <p class="date">February 3, 2024</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 5, 2025</p>
+      <p class="date-modified">February 6, 2025</p>
     </div>
   </div>
     
@@ -312,8 +316,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 10%">
-<col style="width: 89%">
+<col style="width: 9%">
+<col style="width: 90%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -756,7 +760,7 @@ Conclusion
 </div>
 </section>
 <section id="oneway-anova-test-ggbetweenstats-method" class="level3">
-<h3 class="anchored" data-anchor-id="oneway-anova-test-ggbetweenstats-method">3.3 <strong>Oneway ANOVA Test:&nbsp;<em>ggbetweenstats()</em> method</strong></h3>
+<h3 class="anchored" data-anchor-id="oneway-anova-test-ggbetweenstats-method">3.3 Oneway ANOVA Test:&nbsp;<em>ggbetweenstats()</em> method</h3>
 <p><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html"><em>ggbetweenstats()</em></a>&nbsp;can also be used to build a visual for One-way ANOVA test on English score by race.</p>
 <p>Before testing, we use Shapiro-Wilk normality test to check if math scores for both genders follow normal distribution:</p>
 <p><strong>Hypothesis</strong></p>
@@ -851,7 +855,7 @@ Conclusion
 </section>
 </section>
 <section id="significant-test-of-correlation-ggscatterstats" class="level3">
-<h3 class="anchored" data-anchor-id="significant-test-of-correlation-ggscatterstats">3.4 <strong>Significant Test of Correlation:&nbsp;<em>ggscatterstats()</em></strong></h3>
+<h3 class="anchored" data-anchor-id="significant-test-of-correlation-ggscatterstats">3.4 Significant Test of Correlation:&nbsp;*ggscatterstats()**</h3>
 <p>In the code chunk below,&nbsp;<a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html"><em>ggscatterstats()</em></a>&nbsp;is used to build a visual for Significant Test of Correlation between Maths scores and English scores.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -944,7 +948,7 @@ Conclusion
 </section>
 </section>
 <section id="visualizing-models" class="level2">
-<h2 class="anchored" data-anchor-id="visualizing-models">4 <strong>Visualizing Models</strong></h2>
+<h2 class="anchored" data-anchor-id="visualizing-models">4 Visualizing Models</h2>
 <p>In this section, Toyota Corolla case study will be used. We will learn how to visualize model diagnostic and model parameters by using parameters package.</p>
 <section id="getting-started-1" class="level3">
 <h3 class="anchored" data-anchor-id="getting-started-1">4.1 Getting Started</h3>
@@ -954,9 +958,13 @@ Conclusion
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <p>Use the <strong>pacman</strong> package <code>p_load()</code> to check, install and launch the following R packages:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(readxl, performance, parameters, see,qqplotr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(readxl, performance, parameters, see, qqplotr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 91%">
+</colgroup>
 <thead>
 <tr class="header">
 <th><strong>Library</strong></th>
@@ -966,15 +974,15 @@ Conclusion
 <tbody>
 <tr class="odd">
 <td>performance</td>
-<td></td>
+<td>This package provides tools to evaluate and check the performance of regression models</td>
 </tr>
 <tr class="even">
 <td>parameters</td>
-<td></td>
+<td>This package is used to extract and interpret parameters from regression models, e.g., coefficients, standard errors, p-values in an easy-to-interpret format</td>
 </tr>
 <tr class="odd">
-<td>see</td>
-<td></td>
+<td>see &amp; qqplotr</td>
+<td>The&nbsp;<code>see</code>&nbsp;package is designed for visualizing the results of statistical models and model diagnostics. <code>qqplotr()</code>: Plots a QQ plot of the residuals to check for normality.</td>
 </tr>
 </tbody>
 </table>
@@ -1064,7 +1072,7 @@ Conclusion
 </div>
 </section>
 <section id="multiple-regression-model-using-lm" class="level3">
-<h3 class="anchored" data-anchor-id="multiple-regression-model-using-lm">4.2 <strong>Multiple Regression Model using lm()</strong></h3>
+<h3 class="anchored" data-anchor-id="multiple-regression-model-using-lm">4.2 Multiple Regression Model using lm()</h3>
 <p>The code chunk below is used to calibrate a multiple linear regression model by using&nbsp;<em>lm()</em>&nbsp;of Base Stats of R.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Price <span class="sc">~</span> Age_08_04 <span class="sc">+</span> Mfg_Year <span class="sc">+</span> KM <span class="sc">+</span> </span>
@@ -1148,7 +1156,7 @@ High Correlation
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(check_n)<span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(check_n,<span class="at">type=</span><span class="st">"qq"</span>)<span class="sc">+</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>),</span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f3f1e9"</span>,<span class="at">color =</span> <span class="cn">NA</span></span>
@@ -1164,7 +1172,7 @@ High Correlation
 <p>The QQ-plot above shows the regression model <strong>does not follow a normal distribution.</strong> The data may have skewness, outliers or heteroscedasticity.</p>
 </section>
 <section id="model-diagnostic-check-model-for-homogeneity-of-variances" class="level3">
-<h3 class="anchored" data-anchor-id="model-diagnostic-check-model-for-homogeneity-of-variances">4.5 <strong>Model Diagnostic: Check model for homogeneity of variances</strong></h3>
+<h3 class="anchored" data-anchor-id="model-diagnostic-check-model-for-homogeneity-of-variances">4.5 Model Diagnostic: Check model for homogeneity of variances</h3>
 <p>In the code chunk,&nbsp;<a href="https://easystats.github.io/performance/reference/check_heteroscedasticity.html"><em>check_heteroscedasticity()</em></a>&nbsp;of&nbsp;<a href="https://easystats.github.io/performance/index.html"><strong>performance</strong></a>&nbsp;package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>check_h <span class="ot">&lt;-</span> <span class="fu">check_heteroscedasticity</span>(model1)</span>
@@ -1190,7 +1198,7 @@ High Correlation
 <p>The plot and the check_heteroscedasticity(model1) result show the model having heteroscedasticity issue. It is possible the model is misspecified, such as not capturing the true relationship between the dependent and independent variables.</p>
 </section>
 <section id="model-diagnostic-complete-check" class="level3">
-<h3 class="anchored" data-anchor-id="model-diagnostic-complete-check"><strong>4.6 Model Diagnostic: Complete check</strong></h3>
+<h3 class="anchored" data-anchor-id="model-diagnostic-complete-check">4.6 Model Diagnostic: Complete check</h3>
 <p>We can also perform the complete by using&nbsp;<a href="https://easystats.github.io/performance/reference/check_model.html"><em>check_model()</em></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">check_model</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1204,7 +1212,7 @@ High Correlation
 </div>
 </section>
 <section id="visualising-regression-parameters-see-methods" class="level3">
-<h3 class="anchored" data-anchor-id="visualising-regression-parameters-see-methods">4.7 <strong>Visualising Regression Parameters: see methods</strong></h3>
+<h3 class="anchored" data-anchor-id="visualising-regression-parameters-see-methods">4.7 Visualising Regression Parameters: see methods</h3>
 <p>In the code below,&nbsp;<code>plot()</code>&nbsp;of&nbsp;<strong>see</strong>&nbsp;package and&nbsp;<code>parameters()</code>&nbsp;of&nbsp;<strong>parameters</strong>&nbsp;package are used to visualise the parameters of a regression model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">parameters</span>(model1))<span class="sc">+</span></span>
@@ -1222,7 +1230,7 @@ High Correlation
 </div>
 </section>
 <section id="visualising-regression-parameters-ggcoefstats-methods" class="level3">
-<h3 class="anchored" data-anchor-id="visualising-regression-parameters-ggcoefstats-methods">4.8 <strong>Visualising Regression Parameters:&nbsp;<em>ggcoefstats()</em>&nbsp;methods</strong></h3>
+<h3 class="anchored" data-anchor-id="visualising-regression-parameters-ggcoefstats-methods">4.8 Visualising Regression Parameters:&nbsp;<em>ggcoefstats()</em>&nbsp;methods</h3>
 <p>In the code below,&nbsp;<a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggcoefstats.html"><em>ggcoefstats()</em></a>&nbsp;of ggstatsplot package to visualise the parameters of a regression model.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcoefstats</span>(model1, <span class="at">output =</span> <span class="st">"plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1237,7 +1245,7 @@ High Correlation
 </section>
 </section>
 <section id="reference" class="level2">
-<h2 class="anchored" data-anchor-id="reference">5 <strong>Reference</strong></h2>
+<h2 class="anchored" data-anchor-id="reference">5 Reference</h2>
 <ul>
 <li>Kam, T.S. (2025).&nbsp;<a href="https://r4va.netlify.app/chap10">Visual Statistical Analysis</a>.</li>
 </ul>
