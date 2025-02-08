@@ -178,6 +178,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex02_17377898724670/Dashboard1">
  <span class="dropdown-text">In-class Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -637,7 +641,10 @@ data:  dd[x, ]
 W = 0.91268, p-value = 6.269e-08</code></pre>
 </div>
 </div>
-<p>Results from Shapiro-Wilk test shows significant evidence (p-value &lt;0.05) to reject the null hypothesis and conclude that the math scores for both gender do not&nbsp;follow normal distribution . Thus <strong>non parametric: Mann-Whitney&nbsp;<em>U</em>&nbsp;test</strong> is used in the following two-sample test model.</p>
+<p>Results from Shapiro-Wilk test shows significant evidence (p-value &lt;0.05) to reject the null hypothesis and conclude that the math scores for both gender do not&nbsp;follow normal distribution . Thus <strong>non-parametric: Mann-Whitney&nbsp;<em>U</em>&nbsp;test</strong> is used in the following two-sample test model.</p>
+<ul>
+<li>non-parametric test use “median” value as parameter, while parametric test use “mean” value as parameter.</li>
+</ul>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Two Sample plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Argument</a></li></ul>
 <div class="tab-content">
@@ -710,7 +717,7 @@ Conclusion
 <ul>
 <li><p><code>"parametric"</code> or <code>"p"</code>: Fisher’s or Welch’s one-way ANOVA (<a href="https://rdrr.io/r/stats/oneway.test.html">stats::oneway.test()</a>)</p></li>
 <li><p><code>"nonparametric"</code> or <code>"np"</code>: Kruskal-Wallis one-way ANOVA (<a href="https://rdrr.io/r/stats/kruskal.test.html">stats::kruskal.test()</a>)</p></li>
-<li><p><code>"robust"</code> or <code>"r":</code> Heteroscedastic one-way ANOVA for trimmed means (<a href="https://rdrr.io/pkg/WRS2/man/t1way.html">WRS2::t1way()</a>)</p></li>
+<li><p><code>"robust"</code> or <code>"r":</code> Heteroscedastic one-way ANOVA for trimmed means (<a href="https://rdrr.io/pkg/WRS2/man/t1way.html">WRS2::t1way()</a>) &gt;&gt; remove all the outliers globally.</p></li>
 <li><p><code>"bayes"</code>: Fisher’s ANOVA (<a href="https://rdrr.io/pkg/BayesFactor/man/anovaBF.html">BayesFactor::anovaBF()</a>)</p></li>
 </ul></td>
 </tr>
@@ -719,9 +726,9 @@ Conclusion
 (ANOVA)</strong></td>
 <td><p>Decides&nbsp;<em>which</em>&nbsp;pairwise comparisons to display. Available options are:</p>
 <ul>
-<li><p><code>"significant"</code>&nbsp;(abbreviation accepted:&nbsp;<code>"s"</code>) &gt;&gt;&gt; only significant</p></li>
-<li><p><code>"non-significant"</code>&nbsp;(abbreviation accepted:&nbsp;<code>"ns"</code>) &gt;&gt;&gt; only non-significant</p></li>
-<li><p><code>"all"</code>&gt;&gt;&gt; everything</p></li>
+<li><p><code>"significant"</code>&nbsp;(abbreviation accepted:&nbsp;<code>"s"</code>) &gt;&gt;&gt; display only significant</p></li>
+<li><p><code>"non-significant"</code>&nbsp;(abbreviation accepted:&nbsp;<code>"ns"</code>) &gt;&gt;&gt; display only non-significant</p></li>
+<li><p><code>"all"</code>&gt;&gt;&gt; display everything</p></li>
 <li><p>If set to&nbsp;<code>"none"</code>, no pairwise comparisons will be displayed.</p></li>
 </ul></td>
 </tr>
@@ -834,7 +841,7 @@ Conclusion
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"p"</span>, <span class="co"># parametric</span></span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean.ci =</span> <span class="cn">TRUE</span>, </span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pairwise.comparisons =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pairwise.display =</span> <span class="st">"s"</span>, <span class="co"># display significant one</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pairwise.display =</span> <span class="st">"s"</span>, <span class="co"># display only significant one</span></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"fdr"</span>, <span class="co"># False Discovery Rate</span></span>
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">messages =</span> <span class="cn">FALSE</span></span>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>)<span class="sc">+</span></span>
@@ -911,6 +918,7 @@ Conclusion
 6 Student306 3I    Female Malay        31    16      16 (0,60]    </code></pre>
 </div>
 </div>
+<p>Since ggplot2 doesn’t provide mosaic plot, we can use <code>ggbarstats()</code> to create stacked bar chart to simulate it.</p>
 <p>In this code chunk below&nbsp;<a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html"><em>ggbarstats()</em></a>&nbsp;is used to build a visual for Significant Test of Association.</p>
 <p><strong>Hypothesis</strong></p>
 <p>H0: There is no association between math_bin and gender.</p>

@@ -28,13 +28,19 @@ pacman::p_load(ggdist, ggridges, ggthemes,
                colorspace, tidyverse, patchwork)
 ```
 
-| **Library** | **Description** |
-|----|----|
-| ggridges | a ggplot2 extension specially designed for plotting ridgeline plots |
-| ggdist | a ggplot2 extension spacially desgin for visualising distribution and uncertainty |
-| tidyverse | a family of R packages for data processing |
-| ggthemes | a ggplot extension for ggplots, providing additional themes, scales, and geoms |
-| colorspace | a R package provides a broad toolbox for selecting individual colors or color palettes, manipulating and employing these colors in various kinds of visualisations. |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Library**                       | **Description**                                                                                                                                                     |
++===================================+=====================================================================================================================================================================+
+| ggridges                          | a ggplot2 extension specially designed for plotting ridgeline plots                                                                                                 |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ggdist                            | a ggplot2 extension spacially desgin for visualising distribution and uncertainty. (\*dist stands for distribution)                                                 |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| tidyverse                         | a family of R packages for data processing                                                                                                                          |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ggthemes                          | a ggplot extension for ggplots, providing additional themes, scales, and geoms                                                                                      |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| colorspace                        | a R package provides a broad toolbox for selecting individual colors or color palettes, manipulating and employing these colors in various kinds of visualisations. |
++-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ## Importing the data
 
@@ -536,6 +542,12 @@ ggplot(exam,
 ### 4.3 Adding the Dot Plots with `stat_dots()`
 
 Next, we will add the third geometry layer using [`stat_dots()`](https://mjskay.github.io/ggdist/reference/stat_dots.html) of ggdist package. This produces a half-dotplot, which is similar to a histogram that indicates the number of samples (number of dots) in each bin. We select side = “left” to indicate we want it on the left-hand side.
+
+-   Density cloud: `stat_halfeye()` provides the overall probability distribution of observations
+
+-   Dots plot: `stat_dots()` provides details on numbers of observations
+
+-   Box plot: `geom_boxplot()` provides statistic information of observations
 
 ::: toggle
 <details>

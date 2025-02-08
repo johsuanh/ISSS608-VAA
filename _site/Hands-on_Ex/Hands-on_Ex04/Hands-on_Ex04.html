@@ -178,6 +178,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="https://public.tableau.com/app/profile/johsuan.huang7500/viz/In-class_Ex02_17377898724670/Dashboard1">
  <span class="dropdown-text">In-class Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -276,7 +280,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 6, 2025</p>
+      <p class="date-modified">February 8, 2025</p>
     </div>
   </div>
     
@@ -304,8 +308,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 17%">
+<col style="width: 82%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -320,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td>ggdist</td>
-<td>a ggplot2 extension spacially desgin for visualising distribution and uncertainty</td>
+<td>a ggplot2 extension spacially desgin for visualising distribution and uncertainty. (*dist stands for distribution)</td>
 </tr>
 <tr class="odd">
 <td>tidyverse</td>
@@ -805,6 +809,11 @@ Insights
 <section id="adding-the-dot-plots-with-stat_dots" class="level3">
 <h3 class="anchored" data-anchor-id="adding-the-dot-plots-with-stat_dots">4.3 Adding the Dot Plots with&nbsp;<code>stat_dots()</code></h3>
 <p>Next, we will add the third geometry layer using&nbsp;<a href="https://mjskay.github.io/ggdist/reference/stat_dots.html"><code>stat_dots()</code></a>&nbsp;of ggdist package. This produces a half-dotplot, which is similar to a histogram that indicates the number of samples (number of dots) in each bin. We select side = “left” to indicate we want it on the left-hand side.</p>
+<ul>
+<li><p>Density cloud: <code>stat_halfeye()</code> provides the overall probability distribution of observations</p></li>
+<li><p>Dots plot: <code>stat_dots()</code> provides details on numbers of observations</p></li>
+<li><p>Box plot: <code>geom_boxplot()</code> provides statistic information of observations</p></li>
+</ul>
 <div class="toggle">
 <details>
 <summary>

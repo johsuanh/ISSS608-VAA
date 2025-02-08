@@ -1,0 +1,36 @@
+---
+title: "In-class Ex04"
+author: "Johsuan Huang"
+date: 2024-02-08
+date-modified: "last-modified"
+description: "Funnel Plots for Fair Comparisons"
+categories: [ggplot2,FunnelPlotR]
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+### 1 Installing and Importing the data
+
+```{r}
+pacman::p_load(haven, tidyverse, SmartEDA, tidymodels)
+```
+
+```{r}
+exam <- read_csv("data/Exam_data.csv")
+```
+
+### 2 Draw a boxplot
+
+```{r}
+ggplot(exam, aes(x=ENGLISH, y=CLASS))+
+  geom_boxplot()+
+  labs(title ="English Score by Class")+
+  theme_classic()+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+```
+
+

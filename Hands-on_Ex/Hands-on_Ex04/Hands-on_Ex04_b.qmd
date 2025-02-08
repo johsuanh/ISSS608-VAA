@@ -285,7 +285,9 @@ by(exam$MATHS, exam$GENDER, shapiro.test)
 
 ```
 
-Results from Shapiro-Wilk test shows significant evidence (p-value \<0.05) to reject the null hypothesis and conclude that the math scores for both gender do not follow normal distribution . Thus **non parametric: Mann-Whitney *U* test** is used in the following two-sample test model.
+Results from Shapiro-Wilk test shows significant evidence (p-value \<0.05) to reject the null hypothesis and conclude that the math scores for both gender do not follow normal distribution . Thus **non-parametric: Mann-Whitney *U* test** is used in the following two-sample test model.
+
+-   non-parametric test use "median" value as parameter, while parametric test use "mean" value as parameter.
 
 ::::: panel-tabset
 ## Two Sample plot
@@ -361,17 +363,17 @@ ggbetweenstats() includes below arguments:
 |                                                  |                                                                                                                                                                                                                                                                                        |
 |                                                  | -   `"nonparametric"` or `"np"`: Kruskal-Wallis one-way ANOVA ([stats::kruskal.test()](https://rdrr.io/r/stats/kruskal.test.html))                                                                                                                                                     |
 |                                                  |                                                                                                                                                                                                                                                                                        |
-|                                                  | -   `"robust"` or `"r":` Heteroscedastic one-way ANOVA for trimmed means ([WRS2::t1way()](https://rdrr.io/pkg/WRS2/man/t1way.html))                                                                                                                                                    |
+|                                                  | -   `"robust"` or `"r":` Heteroscedastic one-way ANOVA for trimmed means ([WRS2::t1way()](https://rdrr.io/pkg/WRS2/man/t1way.html)) \>\> remove all the outliers globally.                                                                                                             |
 |                                                  |                                                                                                                                                                                                                                                                                        |
 |                                                  | -   `"bayes"`: Fisher's ANOVA ([BayesFactor::anovaBF()](https://rdrr.io/pkg/BayesFactor/man/anovaBF.html))                                                                                                                                                                             |
 +--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **pairwise.display\                              | Decides *which* pairwise comparisons to display. Available options are:                                                                                                                                                                                                                |
 | (ANOVA)**                                        |                                                                                                                                                                                                                                                                                        |
-|                                                  | -   `"significant"` (abbreviation accepted: `"s"`) \>\>\> only significant                                                                                                                                                                                                             |
+|                                                  | -   `"significant"` (abbreviation accepted: `"s"`) \>\>\> display only significant                                                                                                                                                                                                     |
 |                                                  |                                                                                                                                                                                                                                                                                        |
-|                                                  | -   `"non-significant"` (abbreviation accepted: `"ns"`) \>\>\> only non-significant                                                                                                                                                                                                    |
+|                                                  | -   `"non-significant"` (abbreviation accepted: `"ns"`) \>\>\> display only non-significant                                                                                                                                                                                            |
 |                                                  |                                                                                                                                                                                                                                                                                        |
-|                                                  | -   `"all"`\>\>\> everything                                                                                                                                                                                                                                                           |
+|                                                  | -   `"all"`\>\>\> display everything                                                                                                                                                                                                                                                   |
 |                                                  |                                                                                                                                                                                                                                                                                        |
 |                                                  | -   If set to `"none"`, no pairwise comparisons will be displayed.                                                                                                                                                                                                                     |
 +--------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -441,7 +443,7 @@ ggbetweenstats(
   type = "p", # parametric
   mean.ci = TRUE, 
   pairwise.comparisons = TRUE, 
-  pairwise.display = "s", # display significant one
+  pairwise.display = "s", # display only significant one
   p.adjust.method = "fdr", # False Discovery Rate
   messages = FALSE
 )+
@@ -506,6 +508,8 @@ exam1 <- exam %>%
 ```{r}
 head(exam1)
 ```
+
+Since ggplot2 doesn't provide mosaic plot, we can use `ggbarstats()` to create stacked bar chart to simulate it.
 
 In this code chunk below [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association.
 

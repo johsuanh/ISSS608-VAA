@@ -37,7 +37,7 @@ pacman::p_load(plotly, crosstalk, DT, gganimate,
 ```
 
 | **Library** | **Description** |
-|------------------------------------|------------------------------------|
+|----|----|
 | ggdist | a ggplot2 extension spacially desgin for visualising distribution and uncertainty |
 | tidyverse | a family of R packages for data processing |
 | crosstalk | for implementing cross-widget interactions (currently, linked brushing and filtering) |
@@ -457,7 +457,7 @@ exam %>%
 Below are some stat_pointinterval() argument
 
 | Argument | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | **.width** | a vector of probabilities to use that determine the widths of the resulting intervals. The default setting is .width = c(0.66, 0.95), meaning plotting 66% CI and 95% CI |
 | **.point** | This argument determines the point summary (typically mean, median, or mode) |
 | **.interval** | It decides the interval type (quantile interval, `qi`; highest-density interval, `hdi`; or highest-density continuous interval, `hdci`). |

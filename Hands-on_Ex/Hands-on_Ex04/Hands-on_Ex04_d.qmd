@@ -169,6 +169,8 @@ funnel_plot(
 
 ```
 
+We observe KAPUK district has higher fatal rate comparing others.
+
 ## 4 Funnel Plot for Fair Visual Comparison: ggplot2 methods
 
 ### 4.1 Computing the basic derived fields
@@ -258,6 +260,8 @@ p
 ```
 
 ### 4.4 Interactive Funnel Plot: plotly + ggplot2
+
+Since funnel plot cannot work with plotly, we first create the satatic ggplot2 version graph and then combine with plotly:
 
 The funnel plot created using ggplot2 functions can be made interactive with `ggplotly()` of **plotly** r package.
 
