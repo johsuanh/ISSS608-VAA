@@ -224,7 +224,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#one-sample-test-gghistostats-method" id="toc-one-sample-test-gghistostats-method" class="nav-link" data-scroll-target="#one-sample-test-gghistostats-method">3.1 One-sample test:&nbsp;<em>gghistostats()</em>&nbsp;method</a></li>
   <li><a href="#two-sample-mean-test-ggbetweenstats-method" id="toc-two-sample-mean-test-ggbetweenstats-method" class="nav-link" data-scroll-target="#two-sample-mean-test-ggbetweenstats-method">3.2 Two-sample mean test: <strong><em>ggbetweenstats()</em></strong> <strong>method</strong></a></li>
   <li><a href="#oneway-anova-test-ggbetweenstats-method" id="toc-oneway-anova-test-ggbetweenstats-method" class="nav-link" data-scroll-target="#oneway-anova-test-ggbetweenstats-method">3.3 Oneway ANOVA Test:&nbsp;<em>ggbetweenstats()</em> method</a></li>
-  <li><a href="#significant-test-of-correlation-ggscatterstats" id="toc-significant-test-of-correlation-ggscatterstats" class="nav-link" data-scroll-target="#significant-test-of-correlation-ggscatterstats">3.4 Significant Test of Correlation:&nbsp;*ggscatterstats()**</a></li>
+  <li><a href="#significant-test-of-correlation-ggscatterstats" id="toc-significant-test-of-correlation-ggscatterstats" class="nav-link" data-scroll-target="#significant-test-of-correlation-ggscatterstats">3.4 Significant Test of Correlation:&nbsp;<em>ggscatterstats()</em></a></li>
   <li><a href="#significant-test-of-association-depedence-ggbarstats-methods" id="toc-significant-test-of-association-depedence-ggbarstats-methods" class="nav-link" data-scroll-target="#significant-test-of-association-depedence-ggbarstats-methods">3.5 Significant Test of Association (Depedence):&nbsp;<em>ggbarstats()</em>&nbsp;methods</a></li>
   </ul></li>
   <li><a href="#visualizing-models" id="toc-visualizing-models" class="nav-link" data-scroll-target="#visualizing-models">4 Visualizing Models</a>
@@ -284,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 6, 2025</p>
+      <p class="date-modified">February 8, 2025</p>
     </div>
   </div>
     
@@ -316,8 +316,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 9%">
+<col style="width: 90%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -619,14 +619,14 @@ Conclusion
 <p>H1: Math scores for male / female don’t follow the normal distribution</p>
 <p>alpha = 0.05</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by</span>(exam<span class="sc">$</span>ENGLISH, exam<span class="sc">$</span>GENDER, shapiro.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by</span>(exam<span class="sc">$</span>MATHS, exam<span class="sc">$</span>GENDER, shapiro.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>exam$GENDER: Female
 
     Shapiro-Wilk normality test
 
 data:  dd[x, ]
-W = 0.95337, p-value = 2.026e-05
+W = 0.92752, p-value = 1.604e-07
 
 ------------------------------------------------------------ 
 exam$GENDER: Male
@@ -634,7 +634,7 @@ exam$GENDER: Male
     Shapiro-Wilk normality test
 
 data:  dd[x, ]
-W = 0.95485, p-value = 7.564e-05</code></pre>
+W = 0.91268, p-value = 6.269e-08</code></pre>
 </div>
 </div>
 <p>Results from Shapiro-Wilk test shows significant evidence (p-value &lt;0.05) to reject the null hypothesis and conclude that the math scores for both gender do not&nbsp;follow normal distribution . Thus <strong>non parametric: Mann-Whitney&nbsp;<em>U</em>&nbsp;test</strong> is used in the following two-sample test model.</p>
@@ -708,10 +708,10 @@ Conclusion
 </ul>
 <p><strong>No.&nbsp;of groups &gt; 2:</strong></p>
 <ul>
-<li><p>Parametric: Fisher’s or Welch’s one-way ANOVA (<a href="https://rdrr.io/r/stats/oneway.test.html">stats::oneway.test()</a>)</p></li>
-<li><p>Non-parametric: Kruskal-Wallis one-way ANOVA (<a href="https://rdrr.io/r/stats/kruskal.test.html">stats::kruskal.test()</a>)</p></li>
-<li><p>Robust: Heteroscedastic one-way ANOVA for trimmed means (<a href="https://rdrr.io/pkg/WRS2/man/t1way.html">WRS2::t1way()</a>)</p></li>
-<li><p>Bayes Factor: Fisher’s ANOVA (<a href="https://rdrr.io/pkg/BayesFactor/man/anovaBF.html">BayesFactor::anovaBF()</a>)</p></li>
+<li><p><code>"parametric"</code> or <code>"p"</code>: Fisher’s or Welch’s one-way ANOVA (<a href="https://rdrr.io/r/stats/oneway.test.html">stats::oneway.test()</a>)</p></li>
+<li><p><code>"nonparametric"</code> or <code>"np"</code>: Kruskal-Wallis one-way ANOVA (<a href="https://rdrr.io/r/stats/kruskal.test.html">stats::kruskal.test()</a>)</p></li>
+<li><p><code>"robust"</code> or <code>"r":</code> Heteroscedastic one-way ANOVA for trimmed means (<a href="https://rdrr.io/pkg/WRS2/man/t1way.html">WRS2::t1way()</a>)</p></li>
+<li><p><code>"bayes"</code>: Fisher’s ANOVA (<a href="https://rdrr.io/pkg/BayesFactor/man/anovaBF.html">BayesFactor::anovaBF()</a>)</p></li>
 </ul></td>
 </tr>
 <tr class="even">
@@ -764,8 +764,8 @@ Conclusion
 <p><a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html"><em>ggbetweenstats()</em></a>&nbsp;can also be used to build a visual for One-way ANOVA test on English score by race.</p>
 <p>Before testing, we use Shapiro-Wilk normality test to check if math scores for both genders follow normal distribution:</p>
 <p><strong>Hypothesis</strong></p>
-<p>H0: Math scores for races follow the normal distribution</p>
-<p>H1: Math scores for races don’t follow the normal distribution</p>
+<p>H0: English scores for races follow the normal distribution</p>
+<p>H1: English scores for races don’t follow the normal distribution</p>
 <p>alpha = 0.05</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">by</span>(exam<span class="sc">$</span>ENGLISH, exam<span class="sc">$</span>RACE, shapiro.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -802,7 +802,7 @@ data:  dd[x, ]
 W = 0.93378, p-value = 0.5182</code></pre>
 </div>
 </div>
-<p>Results from Shapiro-Wilk test doesn’t show significant evidence (p-value &gt;0.05)and fail to reject the null hypothesis. Thus <strong>parametric test</strong> is used in the following onw-way ANOVA model.</p>
+<p>Results from Shapiro-Wilk test doesn’t show significant evidence (p-value &gt;0.05) for all races and fail to reject the null hypothesis. Thus <strong>parametric test</strong> is used in the following onw-way ANOVA model.</p>
 <section id="hypothesis-2" class="level4">
 <h4 class="anchored" data-anchor-id="hypothesis-2">Hypothesis</h4>
 <p>H0: There is no difference in English scores among races.</p>
@@ -855,7 +855,7 @@ Conclusion
 </section>
 </section>
 <section id="significant-test-of-correlation-ggscatterstats" class="level3">
-<h3 class="anchored" data-anchor-id="significant-test-of-correlation-ggscatterstats">3.4 Significant Test of Correlation:&nbsp;*ggscatterstats()**</h3>
+<h3 class="anchored" data-anchor-id="significant-test-of-correlation-ggscatterstats">3.4 Significant Test of Correlation:&nbsp;<em>ggscatterstats()</em></h3>
 <p>In the code chunk below,&nbsp;<a href="https://indrajeetpatil.github.io/ggstatsplot/reference/ggscatterstats.html"><em>ggscatterstats()</em></a>&nbsp;is used to build a visual for Significant Test of Correlation between Maths scores and English scores.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -962,8 +962,8 @@ Conclusion
 </div>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 8%">
+<col style="width: 91%">
 </colgroup>
 <thead>
 <tr class="header">

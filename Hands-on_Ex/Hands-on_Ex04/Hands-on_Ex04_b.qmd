@@ -281,7 +281,7 @@ H1: Math scores for male / female don't follow the normal distribution
 alpha = 0.05
 
 ```{r}
-by(exam$ENGLISH, exam$GENDER, shapiro.test)
+by(exam$MATHS, exam$GENDER, shapiro.test)
 
 ```
 
@@ -399,9 +399,9 @@ Before testing, we use Shapiro-Wilk normality test to check if math scores for b
 
 **Hypothesis**
 
-H0: Math scores for races follow the normal distribution
+H0: English scores for races follow the normal distribution
 
-H1: Math scores for races don't follow the normal distribution
+H1: English scores for races don't follow the normal distribution
 
 alpha = 0.05
 
@@ -410,7 +410,7 @@ by(exam$ENGLISH, exam$RACE, shapiro.test)
 
 ```
 
-Results from Shapiro-Wilk test doesn't show significant evidence (p-value \>0.05)and fail to reject the null hypothesis. Thus **parametric test** is used in the following onw-way ANOVA model.
+Results from Shapiro-Wilk test doesn't show significant evidence (p-value \>0.05) for all races and fail to reject the null hypothesis. Thus **parametric test** is used in the following onw-way ANOVA model.
 
 #### Hypothesis
 
