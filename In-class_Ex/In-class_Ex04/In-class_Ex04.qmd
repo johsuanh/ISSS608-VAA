@@ -3,8 +3,6 @@ title: "In-class Ex04"
 author: "Johsuan Huang"
 date: 2024-02-08
 date-modified: "last-modified"
-description: "Funnel Plots for Fair Comparisons"
-categories: [ggplot2,FunnelPlotR]
 execute:
   echo: true
   eval: true

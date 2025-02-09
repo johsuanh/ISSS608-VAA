@@ -3,7 +3,7 @@ title: "Hands-on Exercise 03.a"
 date: 2024-01-25
 date-modified: "last-modified"
 description: "Programming Interactive Data Visualisation with R"
-categories: [ggplot2,ggiraph,plotly]
+categories: [ggplot2,ggiraph,plotly,DT]
 execute:
   echo: true
   eval: true

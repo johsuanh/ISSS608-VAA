@@ -3,7 +3,7 @@ title: "Take Home Exercise 1"
 author: Johsuan Huang
 date: "Febuary 1, 2025"
 date-modified: "last modified"
-description: "pending revision"
+description: "Ship performance Analysis"
 categories: []
 execute:
   echo: true
@@ -11,3 +11,177 @@ execute:
   warning: false
   freeze: true
 ---
+
+# 1 Setting the scene
+
+## 1.1 Background
+
+As a graphical editor at an international media company, we publish weekly content on digital platforms. Next week's theme will focus on "Ship performance".
+
+Our target audience consists of general readers who are interested in the maritime sector and would like to gain insights into shipping performance, global trade, and fuel efficiency through data analysis.
+
+## 1.2 Data
+
+The data we used is from Kaggle. This dataset consists of 2,736 observations with 18 attributes.
+
+[**The Ship Performance Dataset**](https://www.kaggle.com/datasets/jeleeladekunlefijabi/ship-performance-clustering-dataset) is a synthetic collection of data including key operational metrics and attributes of various ship types in the Gulf of Guinea. This dataset aims to provide a platform for exploring ship performance trends, identifying patterns, and solving real-world maritime challenges through data-driven approaches.
+
+# 2 Getting Started
+
+## 2.1 Load packages
+
+We load the following R packages using the `pacman::p_load()` function:
+
+::: {.callout-note appearance="simple"}
+**p_load()** function allow us to load required packages that are already installed or install it first and then load if not locally available.
+:::
+
+```{r}
+pacman::p_load(tidyverse, patchwork,
+               ggrepel, ggthemes, ggridges, 
+               ggdist, ggiraph, plotly, DT,
+               hrbrthemes, ggiraph)
+```
+
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| **Library**                                                                                  | **Description**                                                                                                                         |
++==============================================================================================+=========================================================================================================================================+
+| [**tidyverse**](https://www.tidyverse.org/)                                                  | A collection of core packages designed for data science.                                                                                |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**patchwork**](https://patchwork.data-imaginist.com/)                                       | Prepare composite figure created using **ggplot2**                                                                                      |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**ggthemes**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)       | Extra themes, geoms, and scales for ggplot2.                                                                                            |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) | A ggplot2 extension specially designed for plotting ridgeline plots                                                                     |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**gganimate**](https://gganimate.com/)                                                      | An ggplot extension for creating animated statistical graphs.                                                                           |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**ggdist**](https://mjskay.github.io/ggdist/)                                               | A ggplot2 extension spacially desgin for visualising distribution and uncertainty.                                                      |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**plotly**](https://plotly.com/r/)                                                          | R library for plotting interactive statistical graphs.                                                                                  |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**DT**](https://rstudio.github.io/DT/)                                                      | provides an R interface to the JavaScript library [**DataTables**](https://datatables.net/) that create interactive table on html page. |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| [**ggiraph**](https://davidgohel.github.io/ggiraph/)                                         | For making ‘ggplot’ graphics interactive.                                                                                               |
++----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+
+## 2.2 Data Import, Observation and Pre-processing
+
+::: panel-tabset
+## Data Import
+
+We use **`read_csv()`** of readr to import data and **`datatable()`** of DT to display it:
+
+```{r}
+ship <- read_csv("data/Ship_Performance_Dataset.csv")
+
+```
+
+```{r}
+#| echo: false
+DT::datatable(ship, class= "display",
+              caption = "Table 1: Ship Performance Data") %>%
+  formatStyle(
+    columns = colnames(ship), 
+    fontSize = '12px', 
+    fontFamily = 'Helvetica', 
+    lineHeight = '1.2'
+  )
+```
+
+## Data Observation
+
+We use **`str()`** function of R to check the internal structure of the data frame:
+
+```{r}
+str(ship)
+```
+
+The code chunk below uses R's **`summary()`** function to display statistical summaries of our data frame.
+
+```{r}
+summary(ship)
+```
+
+## Meta Data
+
+Since the imported data types are not fully correct, we will handle them in the next tab "Data Preprocessing". The data contain 5 categorical attributes, 1 temporal attribute, 11 decimal attributes, and 1 integer attributes:
+
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Attribute                   | Data type     | Description                                                                                                                                                                                                   |
++=============================+===============+===============================================================================================================================================================================================================+
+| **Date**                    | *Date*        | Timestamp of the data entry from 2023/6/4 to 2023/6/30                                                                                                                                                        |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Ship_Type**               | *Categorical* | Type of ship (e.g., Tanker, Container Ship, Fish Carrier, Bulk Carrier).                                                                                                                                      |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Route_Type**              | *Categorical* | Shipping route type (e.g., Short-haul, Long-haul, Transoceanic).                                                                                                                                              |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Engine_Type**             | *Categorical* | Type of engine (e.g., Diesel, Heavy Fuel Oil).                                                                                                                                                                |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Maintenance_Status**      | *Categorical* | Maintenance condition of the ship (e.g., Fair, Critical, Good).                                                                                                                                               |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Weather_Condition**       | *Categorical* | Prevailing weather conditions during voyages (e.g., Calm, Moderate, Rough)                                                                                                                                    |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Speed_Over_Ground_knots** | *Decimal*     | Average speed of the ship over water (in knots).                                                                                                                                                              |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Engine_Power_kW**         | *Decimal*     | Engine power output (in kilowatts).                                                                                                                                                                           |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Distance_Traveled_nm**    | *Decimal*     | Total distance traveled by the ship (in nautical miles).                                                                                                                                                      |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Draft_meters**            | *Decimal*     | It represents how deep the ship sits in the water and is a key measurement for navigation (in meters).                                                                                                        |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Cargo_Weight_tons**       | *Decimal*     | Total cargo weight per voyage (in tons)                                                                                                                                                                       |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Operational_Cost_USD**    | *Decimal*     | Total operational cost per voyage (in USD).                                                                                                                                                                   |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Revenue_per_Voyage_USD**  | *Decimal*     | Revenue generated per voyage (in USD).                                                                                                                                                                        |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Turnaround_Time_hours**   | *Decimal*     | Total time required to complete all activities necessary for a vessel to be ready for its next journey or task, including docking, unloading packages, refueling and other necessary maintainance (in hours). |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Efficiency_nm_per_kWh**   | *Decimal*     | Measureing how efficiently a vessel uses energy to travel in nautical miles per kilowatt-hour.                                                                                                                |
+|                             |               |                                                                                                                                                                                                               |
+|                             |               | -   A higher value means the vessel is more energy efficient                                                                                                                                                  |
+|                             |               | -   1 nm ≈ 1.852 km                                                                                                                                                                                           |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Seasonal_Impact_Score**   | *Decimal*     | Measures how seasonal factors (e.g., monsoons, winter storms, ice conditions) impact vessel efficiency, turnaround time, or fuel consumption.                                                                 |
+|                             |               |                                                                                                                                                                                                               |
+|                             |               | -   A higher score indicates greater disruptions due to seasonal changes.                                                                                                                                     |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Weekly_Voyage_Count**     | *Integer*     | The number of voyages a vessel completes within a week.                                                                                                                                                       |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Average_Load_Percentage** | *Decimal*     | The average percentage of capacity utilized by a vessel, vehicle, or transportation system over a week. Average Load Percentage = Actual Cargo Weight / Maximum Capacity \* 100                               |
+|                             |               |                                                                                                                                                                                                               |
+|                             |               | -   A low percentage may indicate **inefficient routing or underutilized capacity**.                                                                                                                          |
++-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## Data Pre-processing
+
+As part of data wrangling, we begin by checking for missing values and duplicate records:
+
+```{r}
+# check missing value 
+any(is.na(ship))
+```
+
+-    **`distinct()`** function of dplyr package is used to identify the unique values within categorical attributes. The dataset contains 2,736 observations, matching the raw data count, which confirms there are no duplicate records.
+
+```{r}
+# check duplicate records
+distinct(ship)
+```
+
+We then convert the data type for 5 categorical attributes from \<chr\> to \<fctr\> and 1 integer attribute from \<dbl\> to \<int\> by using **`mutate()`** of dplyr package.
+
+```{r}
+# mutate data type
+ship <- ship %>% 
+  mutate_if(is.character, as.factor) %>%
+  mutate(Weekly_Voyage_Count = as.integer(Weekly_Voyage_Count))
+
+#check the revised data type
+head(ship)
+
+```
+:::
+
+# 3 Data Wrangling
