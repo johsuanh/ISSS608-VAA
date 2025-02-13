@@ -1,7 +1,7 @@
 ---
 title: "Hands-on Exercise 05.a"
 author: Johsuan Huang
-date: 2024-02-11
+date: 2024-02-10
 date-modified: "last-modified"
 description: "Creating Ternary Plot with R"
 categories: [tidyverse, ggtern, plotly]
@@ -28,7 +28,7 @@ pacman::p_load(tidyverse, ggtern, plotly)
 ```
 
 | **Library** | **Description** |
-|---------------------|---------------------------------------------------|
+|----------------------|--------------------------------------------------|
 | [**ggtern**](http://www.ggtern.com/) | a ggplot extension specially designed to plot ternary diagrams. The package will be used to plot static ternary plots. |
 | tidyverse | a family of R packages for data processing |
 | [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |

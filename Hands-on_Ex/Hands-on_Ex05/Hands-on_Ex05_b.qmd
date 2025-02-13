@@ -26,11 +26,11 @@ In this hands-on exercise, we will learn using R to plot static and interactive 
 Use the **pacman** package `p_load()` to check, install and launch the following R packages:
 
 ```{r}
-pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
+pacman::p_load(seriation, dendextend, heatmaply, tidyverse, plotly)
 ```
 
 | **Library** | **Description** |
-|----|----|
+|------------------------------------|------------------------------------|
 | seriation | It provides the infrastructure for ordering objects with an implementation of several[**seriation**](https://en.wikipedia.org/wiki/Seriation_(archaeology))/sequencing/[**ordination**](https://en.wikipedia.org/wiki/Ordination_(statistics)) techniques to reorder matrices |
 | tidyverse | a family of R packages for data processing |
 | dendextend | It offers a set of functions for extending dendrogram objects in R, letting you **visualize**and **compare** trees of hierarchical clusterings |
@@ -253,7 +253,7 @@ heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
 **heatmaply** supports a variety of hierarchical clustering algorithm. The main arguments provided are:
 
 | Argument | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | *distfun* | function used to compute the distance (dissimilarity) between both rows and columns. |
 | *hclustfun* | function used to compute the hierarchical clustering when *Rowv* or *Colv* are not dendrograms. Defaults to *hclust*. |
 | *dist_method* | default is NULL, which results in “euclidean” to be used. It can accept alternative character strings indicating the method to be passed to distfun. By default *distfun* is “dist” hence this can be one of “euclidean”, “maximum”, “manhattan”, “canberra”, “binary” or “minkowski”. |
@@ -278,7 +278,6 @@ In order to determine the best clustering method and number of cluster the `den
 First, the `dend_expend()` will be used to determine the recommended clustering method to be used.
 
 ```{r}
-par(bg = "#f3f1e9")
 wh_d <- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]), method = "euclidean")
 dend_expend(wh_d)[[3]]
 ```
@@ -288,6 +287,8 @@ The output table shows that **“average” method (optim = 0.6701688) should be
 Next, *find_k()* is used to determine the **optimal number of cluster**:
 
 ```{r}
+par(bg = "#f3f1e9")
+
 wh_clust <- hclust(wh_d, method = "average")
 num_k <- find_k(wh_clust)
 plot(num_k)
@@ -360,7 +361,7 @@ In the code chunk below the following arguments are used:
 
 -   *k_row* is used to produce 5 groups.
 
--   *margins* is used to change the top margin to 60 and row margin to 200.
+-   *margins* = c (bottom, left, top, right), change the margin to make space for plot and text element
 
 -   *fontsizw_row* and *fontsize_col* are used to change the font size for row and column labels to 4.
 
@@ -368,22 +369,29 @@ In the code chunk below the following arguments are used:
 
 -   *xlab* and *ylab* are used to write the x-axis and y-axis labels respectively.
 
+-   *width* and *height* are used to set plot size
+
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           Colv=NA,
           seriate = "none",
           colors = Blues,
           k_row = 5,
-          margins = c(NA,200,60,NA),
+          margins = c(100,150,100,100), #bottom, left, top, right
           fontsize_row = 4,
           fontsize_col = 5,
-          main="World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+          main="",
           xlab = "World Happiness Indicators",
           ylab = "World Countries",
           width = 600,
           height = 1200
           ) %>%
-  layout(margin = list(l = 250, r = 50, t = 50, b = 100)) 
+  layout(plot_bgcolor = "#f3f1e9",paper_bgcolor = "#f3f1e9",
+         legend = list(bgcolor = "#f3f1e9"),
+         title = list(
+      text = "World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+      font = list(size = 18, face = "bold")
+    ))
 ```
 
 ## 5 Reference
