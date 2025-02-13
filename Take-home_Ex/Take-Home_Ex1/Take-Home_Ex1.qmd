@@ -40,7 +40,7 @@ We load the following R packages using the `pacman::p_load()` function:
 pacman::p_load(tidyverse, patchwork,
                ggrepel, ggthemes, ggridges, 
                ggdist, ggiraph, plotly, DT,
-               hrbrthemes, ggiraph)
+               hrbrthemes, ggiraph,ggmosaic)
 ```
 
 +----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
@@ -65,7 +65,7 @@ pacman::p_load(tidyverse, patchwork,
 | [**ggiraph**](https://davidgohel.github.io/ggiraph/)                                         | For making ‘ggplot’ graphics interactive.                                                                                               |
 +----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
 
-## 2.2 Data Import, Observation and Pre-processing
+## 2.2 Data Import, Overview and Pre-processing
 
 ::: panel-tabset
 ## Data Import
@@ -89,7 +89,9 @@ DT::datatable(ship, class= "display",
   )
 ```
 
-## Data Observation
+## Data Overview
+
+### Check data structure
 
 We use **`str()`** function of R to check the internal structure of the data frame:
 
@@ -97,10 +99,35 @@ We use **`str()`** function of R to check the internal structure of the data fra
 str(ship)
 ```
 
+### Check data summary
+
 The code chunk below uses R's **`summary()`** function to display statistical summaries of our data frame.
 
 ```{r}
 summary(ship)
+```
+
+### Check Unique Values for Categorical Attribute
+
+As shown in the data summary above, we have categorical data that I want to examine for unique values. The code below uses **map_chr** from the **purrr** package to map the function across the character vector:
+
+```{r}
+# define a function called get_unique_var:
+get_unique_var <- function(column) {
+  unique_vals <- unique(ship[[column]])
+  unique_count <- length(unique_vals)
+  paste("Column Name:", column,
+         "| Unique Count:", unique_count,
+         "| Unique Values:", paste(unique_vals, collapse = ", "))
+}
+
+# select specific columns
+selected_var <- ship %>% select(Route_Type, Ship_Type, Engine_Type, Maintenance_Status, Weather_Condition)
+
+# apply the function to each column and store the results
+unique_var <- map_chr(names(selected_var), get_unique_var)
+
+unique_var
 ```
 
 ## Meta Data
@@ -119,6 +146,8 @@ Since the imported data types are not fully correct, we will handle them in the 
 | **Engine_Type**             | *Categorical* | Type of engine (e.g., Diesel, Heavy Fuel Oil).                                                                                                                                                                |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Maintenance_Status**      | *Categorical* | Maintenance condition of the ship (e.g., Fair, Critical, Good).                                                                                                                                               |
+|                             |               |                                                                                                                                                                                                               |
+|                             |               | -   Level: Good \> Fair \> Critical                                                                                                                                                                           |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Weather_Condition**       | *Categorical* | Prevailing weather conditions during voyages (e.g., Calm, Moderate, Rough)                                                                                                                                    |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -156,6 +185,8 @@ Since the imported data types are not fully correct, we will handle them in the 
 
 ## Data Pre-processing
 
+### Check missing values 
+
 As part of data wrangling, we begin by checking for missing values and duplicate records:
 
 ```{r}
@@ -163,12 +194,46 @@ As part of data wrangling, we begin by checking for missing values and duplicate
 any(is.na(ship))
 ```
 
--    **`distinct()`** function of dplyr package is used to identify the unique values within categorical attributes. The dataset contains 2,736 observations, matching the raw data count, which confirms there are no duplicate records.
+Although there are no missing values, but from the observation tab, we can see there are "None"s appearing in the dataset. The result of the code below showing each of the categorical attribute containing 136 "None" values.
+
+```{r}
+# check None value
+cat_var <- c('Route_Type', 'Ship_Type', 'Engine_Type', 'Maintenance_Status', 'Weather_Condition')
+
+#check "None" value in cat variables
+none_counts <- ship %>%
+  select(all_of(cat_var)) %>%
+  summarise(across(everything(), ~ sum(. == "None")))
+  
+none_counts
+```
+
+```{r}
+#| echo: false
+
+records_with_none <- ship %>%
+  filter(if_any(all_of(cat_var), ~ . == "None"))
+
+DT::datatable(records_with_none, class= "display",
+              caption = "Table 1: Ship Performance Data") %>%
+  formatStyle(
+    columns = colnames(ship), 
+    fontSize = '12px', 
+    fontFamily = 'Helvetica', 
+    lineHeight = '1.2'
+  )
+```
+
+### Check duplicate records
+
+-   **`distinct()`** function of dplyr package is used to identify the unique values within categorical attributes. The dataset contains 2,736 observations, matching the raw data count, which confirms there are no duplicate records.
 
 ```{r}
 # check duplicate records
 distinct(ship)
 ```
+
+### Transform data type
 
 We then convert the data type for 5 categorical attributes from \<chr\> to \<fctr\> and 1 integer attribute from \<dbl\> to \<int\> by using **`mutate()`** of dplyr package.
 
@@ -184,4 +249,59 @@ head(ship)
 ```
 :::
 
-# 3 Data Wrangling
+# 3 **Univariate Analysis**
+
+```{r}
+plot_histogram <- function(df, column) {
+ggplot(df, aes_string(x = column)) +
+geom_histogram( fill = "grey30",
+color = "black", alpha = 0.7) +
+labs(x = column, y = "Frequency") +
+theme_classic()+
+theme(panel.background = element_rect(fill = "#f3f1e9"),
+plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+}
+
+
+num_var <- c("Speed_Over_Ground_knots", "Engine_Power_kW", "Distance_Traveled_nm", "Draft_meters",
+"Cargo_Weight_tons", "Operational_Cost_USD", "Revenue_per_Voyage_USD", "Turnaround_Time_hours",
+"Efficiency_nm_per_kWh", "Seasonal_Impact_Score", "Weekly_Voyage_Count", "Average_Load_Percentage")
+
+
+histograms <- lapply(num_var, function(col) plot_histogram(ship, col))
+
+combined_plot <- wrap_plots(histograms, ncol = 4)
+print(combined_plot)
+```
+
+```{r}
+plot_bar <- function(df, column) {
+  ggplot(df, aes_string(x = column)) +
+    geom_bar( fill = "grey30", 
+								   color = "black", alpha = 0.7) +
+    labs(x = column, y = "Frequency") +
+    theme_classic()+
+    theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        axis.text.x = element_text(angle = 45, hjust = 1)
+        )
+    
+}
+
+
+
+cat_var <- c ("Route_Type", "Ship_Type", "Engine_Type", "Maintenance_Status", 
+					"Weather_Condition")
+
+bars <- lapply(cat_var, function(col) plot_bar(ship, col))
+
+combined_plot_bar <- wrap_plots(bars, ncol = 3)+ plot_layout(guides = "collect")
+
+print(combined_plot_bar)
+```
+
+```{r}
+ggplot(ship, aes(x=Revenue_per_Voyage_USD, y= Operational_Cost_USD, color = Ship_Type))+
+ geom_point()
+```

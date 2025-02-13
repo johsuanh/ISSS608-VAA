@@ -26,6 +26,14 @@ website:
             href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html
           - text: "04.d: Funnel Plots for Fair Comparisons"
             href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html
+          - text: "05.a: Creating Ternary Plot with R"
+            href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_a.html
+          - text: "05.b: Heatmap for Visualising and Analysing Multivariate Data"
+            href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html
+          - text: "05.c: Visual Multivariate Analysis with Parallel Coordinates Plot"
+            href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html
+          - text: "05.d: Creating Ternary Plot with R"
+            href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html
       - text: "In-class Exercise"
         menu:
           - text: "In-class Exercise 1"

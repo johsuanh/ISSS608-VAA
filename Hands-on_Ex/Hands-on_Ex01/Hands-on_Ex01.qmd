@@ -757,6 +757,7 @@ ggplot(data = exam_data,
 ```
 
 #### theme_dark()
+
 ```{r}
 ggplot(data = exam_data,
        aes(x = RACE))+
@@ -772,6 +773,7 @@ ggplot(data = exam_data,
 ```
 
 #### theme_linedraw()
+
 ```{r}
 ggplot(data = exam_data,
        aes(x = RACE))+
@@ -788,6 +790,7 @@ ggplot(data = exam_data,
 ```
 
 #### theme_void()
+
 ```{r}
 ggplot(data = exam_data,
        aes(x = RACE))+

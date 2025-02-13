@@ -28,19 +28,13 @@ pacman::p_load(ggdist, ggridges, ggthemes,
                colorspace, tidyverse, patchwork)
 ```
 
-+-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Library**                       | **Description**                                                                                                                                                     |
-+===================================+=====================================================================================================================================================================+
-| ggridges                          | a ggplot2 extension specially designed for plotting ridgeline plots                                                                                                 |
-+-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ggdist                            | a ggplot2 extension spacially desgin for visualising distribution and uncertainty. (\*dist stands for distribution)                                                 |
-+-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| tidyverse                         | a family of R packages for data processing                                                                                                                          |
-+-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ggthemes                          | a ggplot extension for ggplots, providing additional themes, scales, and geoms                                                                                      |
-+-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| colorspace                        | a R package provides a broad toolbox for selecting individual colors or color palettes, manipulating and employing these colors in various kinds of visualisations. |
-+-----------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Library** | **Description** |
+|----|----|
+| ggridges | a ggplot2 extension specially designed for plotting ridgeline plots |
+| ggdist | a ggplot2 extension spacially desgin for visualising distribution and uncertainty. (\*dist stands for distribution) |
+| tidyverse | a family of R packages for data processing |
+| ggthemes | a ggplot extension for ggplots, providing additional themes, scales, and geoms |
+| colorspace | a R package provides a broad toolbox for selecting individual colors or color palettes, manipulating and employing these colors in various kinds of visualisations. |
 
 ## Importing the data
 

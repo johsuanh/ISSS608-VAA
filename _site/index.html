@@ -80,7 +80,8 @@ ul.task-list li input[type="checkbox"] {
 
     const options = {
       valueNames: ['listing-title','listing-date','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
+      page: 9,
+    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
       searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
@@ -186,6 +187,22 @@ window.Quarto = {
     <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html">
  <span class="dropdown-text">04.d: Funnel Plots for Fair Comparisons</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_a.html">
+ <span class="dropdown-text">05.a: Creating Ternary Plot with R</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html">
+ <span class="dropdown-text">05.b: Heatmap for Visualising and Analysing Multivariate Data</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html">
+ <span class="dropdown-text">05.c: Visual Multivariate Analysis with Parallel Coordinates Plot</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html">
+ <span class="dropdown-text">05.d: Creating Ternary Plot with R</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -241,7 +258,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(8)</span></div><div class="category" data-category="RFQ=">DT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RnVubmVsUGxvdFI=">FunnelPlotR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZHBseXI=">dplyr <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dhbmltYXRl">gganimate <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dkaXN0">ggdist <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Z2dpcmFwaA==">ggiraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dwbG90Mg==">ggplot2 <span class="quarto-category-count">(8)</span></div><div class="category" data-category="Z2dyZXBlbA==">ggrepel <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dyaWRnZXM=">ggridges <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dzdGF0c3Bsb3Q=">ggstatsplot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bm9ydGVzdA==">nortest <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYW1ldGVycw==">parameters <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGF0Y2h3b3Jr">patchwork <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGVyZm9ybWFuY2U=">performance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGxvdGx5">plotly <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2Vl">see <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGhlbWVz">themes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dW5nZXZpeg==">ungeviz <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(12)</span></div><div class="category" data-category="RFQ=">DT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RnVubmVsUGxvdFI=">FunnelPlotR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0dhbGx5">GGally <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGVuZGV4dGVuZA==">dendextend <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZHBseXI=">dplyr <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dhbmltYXRl">gganimate <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dkaXN0">ggdist <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Z2dpcmFwaA==">ggiraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dwbG90Mg==">ggplot2 <span class="quarto-category-count">(8)</span></div><div class="category" data-category="Z2dyZXBlbA==">ggrepel <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dyaWRnZXM=">ggridges <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dzdGF0c3Bsb3Q=">ggstatsplot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2d0ZXJu">ggtern <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aGVhdG1hcGx5">heatmaply <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bm9ydGVzdA==">nortest <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYWxsZWxQbG90">parallelPlot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYW1ldGVycw==">parameters <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGF0Y2h3b3Jr">patchwork <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGVyZm9ybWFuY2U=">performance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGxvdGx5">plotly <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c2Vl">see <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2VyaWF0aW9u">seriation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGhlbWVz">themes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGlkeXZlcnNl">tidyverse <span class="quarto-category-count">(4)</span></div><div class="category" data-category="dHJlZW1hcA==">treemap <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dHJlZW1hcGlmeQ==">treemapify <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dW5nZXZpeg==">ungeviz <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -274,7 +291,83 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="Z2dwbG90MiUyQ0Z1bm5lbFBsb3RS" data-listing-date-sort="1707148800000" data-listing-file-modified-sort="1738994040287" data-listing-date-modified-sort="1738994040000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1476">
+<div class="g-col-1" data-index="0" data-categories="R0dhbGx5JTJDcGFyYWxsZWxQbG90JTJDdGlkeXZlcnNl" data-listing-date-sort="1707667200000" data-listing-file-modified-sort="1739375542393" data-listing-date-modified-sort="1739375542000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1549">
+<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hands-on Exercise 05.c
+</h5>
+<div class="card-text listing-description">
+Visual Multivariate Analysis with Parallel Coordinates Plot
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Feb 12, 2024
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="dHJlZW1hcCUyQ3RyZWVtYXBpZnklMkN0aWR5dmVyc2U=" data-listing-date-sort="1707667200000" data-listing-file-modified-sort="1739405476310" data-listing-date-modified-sort="1739405476000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2860">
+<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hands-on Exercise 05.d
+</h5>
+<div class="card-text listing-description">
+Treemap Visualisation with R
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Feb 12, 2024
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="dGlkeXZlcnNlJTJDZ2d0ZXJuJTJDcGxvdGx5" data-listing-date-sort="1707580800000" data-listing-file-modified-sort="1739370582281" data-listing-date-modified-sort="1739370582000" data-listing-reading-time-sort="5" data-listing-word-count-sort="925">
+<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_a.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hands-on Exercise 05.a
+</h5>
+<div class="card-text listing-description">
+Creating Ternary Plot with R
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Feb 11, 2024
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="c2VyaWF0aW9uJTJDZGVuZGV4dGVuZCUyQ2hlYXRtYXBseSUyQ3RpZHl2ZXJzZQ==" data-listing-date-sort="1707580800000" data-listing-file-modified-sort="1739376771579" data-listing-date-modified-sort="1739376771000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2505">
+<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Hands-on Exercise 05.b
+</h5>
+<div class="card-text listing-description">
+Heatmap for Visualising and Analysing Multivariate Data
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Feb 11, 2024
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="4" data-categories="Z2dwbG90MiUyQ0Z1bm5lbFBsb3RS" data-listing-date-sort="1707148800000" data-listing-file-modified-sort="1738994040287" data-listing-date-modified-sort="1738994040000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1476">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -293,7 +386,7 @@ Feb 06, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="Z2dwbG90MiUyQ2dnZGlzdCUyQ3VuZ2V2aXo=" data-listing-date-sort="1707062400000" data-listing-file-modified-sort="1739000290020" data-listing-date-modified-sort="1739000290000" data-listing-reading-time-sort="23" data-listing-word-count-sort="4564">
+<div class="g-col-1" data-index="5" data-categories="Z2dwbG90MiUyQ2dnZGlzdCUyQ3VuZ2V2aXo=" data-listing-date-sort="1707062400000" data-listing-file-modified-sort="1739000290020" data-listing-date-modified-sort="1739000290000" data-listing-reading-time-sort="23" data-listing-word-count-sort="4564">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -312,7 +405,7 @@ Feb 05, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="Z2dwbG90MiUyQ2dnc3RhdHNwbG90JTJDbm9ydGVzdCUyQ3BlcmZvcm1hbmNlJTJDcGFyYW1ldGVycyUyQ3NlZQ==" data-listing-date-sort="1706889600000" data-listing-file-modified-sort="1739105943055" data-listing-date-modified-sort="1739105943000" data-listing-reading-time-sort="76" data-listing-word-count-sort="15024">
+<div class="g-col-1" data-index="6" data-categories="Z2dwbG90MiUyQ2dnc3RhdHNwbG90JTJDbm9ydGVzdCUyQ3BlcmZvcm1hbmNlJTJDcGFyYW1ldGVycyUyQ3NlZQ==" data-listing-date-sort="1706889600000" data-listing-file-modified-sort="1739105943055" data-listing-date-modified-sort="1739105943000" data-listing-reading-time-sort="76" data-listing-word-count-sort="15024">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_b.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -331,7 +424,7 @@ Feb 03, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="Z2dwbG90MiUyQ2dncmlkZ2VzJTJDZ2dkaXN0" data-listing-date-sort="1706803200000" data-listing-file-modified-sort="1738998221358" data-listing-date-modified-sort="1738998221000" data-listing-reading-time-sort="40" data-listing-word-count-sort="7886">
+<div class="g-col-1" data-index="7" data-categories="Z2dwbG90MiUyQ2dncmlkZ2VzJTJDZ2dkaXN0" data-listing-date-sort="1706803200000" data-listing-file-modified-sort="1739380927364" data-listing-date-modified-sort="1739380927000" data-listing-reading-time-sort="37" data-listing-word-count-sort="7242">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -350,7 +443,7 @@ Feb 02, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="Z2dwbG90MiUyQ2RwbHlyJTJDZ2dhbmltYXRlJTJDcGxvdGx5" data-listing-date-sort="1706371200000" data-listing-file-modified-sort="1738855890364" data-listing-date-modified-sort="1738855890000" data-listing-reading-time-sort="17" data-listing-word-count-sort="3326">
+<div class="g-col-1" data-index="8" data-categories="Z2dwbG90MiUyQ2RwbHlyJTJDZ2dhbmltYXRlJTJDcGxvdGx5" data-listing-date-sort="1706371200000" data-listing-file-modified-sort="1738855890364" data-listing-date-modified-sort="1738855890000" data-listing-reading-time-sort="17" data-listing-word-count-sort="3326">
 <a href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -369,7 +462,7 @@ Jan 28, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="5" data-categories="Z2dwbG90MiUyQ2dnaXJhcGglMkNwbG90bHklMkNEVA==" data-listing-date-sort="1706112000000" data-listing-file-modified-sort="1739108451137" data-listing-date-modified-sort="1739108451000" data-listing-reading-time-sort="27" data-listing-word-count-sort="5250">
+<div class="g-col-1" data-index="9" data-categories="Z2dwbG90MiUyQ2dnaXJhcGglMkNwbG90bHklMkNEVA==" data-listing-date-sort="1706112000000" data-listing-file-modified-sort="1739108451137" data-listing-date-modified-sort="1739108451000" data-listing-reading-time-sort="27" data-listing-word-count-sort="5250">
 <a href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -388,7 +481,7 @@ Jan 25, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="6" data-categories="Z2dwbG90MiUyQ2dncmVwZWwlMkNwYXRjaHdvcmslMkN0aGVtZXM=" data-listing-date-sort="1705507200000" data-listing-file-modified-sort="1738038100206" data-listing-date-modified-sort="1738038100000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3015">
+<div class="g-col-1" data-index="10" data-categories="Z2dwbG90MiUyQ2dncmVwZWwlMkNwYXRjaHdvcmslMkN0aGVtZXM=" data-listing-date-sort="1705507200000" data-listing-file-modified-sort="1738038100206" data-listing-date-modified-sort="1738038100000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3015">
 <a href="./Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -407,7 +500,7 @@ Jan 18, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="7" data-categories="Z2dwbG90Mg==" data-listing-date-sort="1704902400000" data-listing-file-modified-sort="1737771093007" data-listing-date-modified-sort="1737771093000" data-listing-reading-time-sort="24" data-listing-word-count-sort="4715">
+<div class="g-col-1" data-index="11" data-categories="Z2dwbG90Mg==" data-listing-date-sort="1704902400000" data-listing-file-modified-sort="1739359914367" data-listing-date-modified-sort="1739359914000" data-listing-reading-time-sort="24" data-listing-word-count-sort="4715">
 <a href="./Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -430,6 +523,9 @@ Jan 11, 2024
 <div class="listing-no-matching d-none">
 No matching items
 </div>
+<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
+  <ul class="pagination"></ul>
+</nav>
 </div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {

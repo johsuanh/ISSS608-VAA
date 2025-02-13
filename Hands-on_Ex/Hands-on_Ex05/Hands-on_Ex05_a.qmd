@@ -1,0 +1,230 @@
+---
+title: "Hands-on Exercise 05.a"
+author: Johsuan Huang
+date: 2024-02-11
+date-modified: "last-modified"
+description: "Creating Ternary Plot with R"
+categories: [tidyverse, ggtern, plotly]
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+## 1 Overview
+
+Ternary plots are a way of displaying the distribution and variability of three-part compositional data. (For example, the proportion of aged, economy active and young population or sand, silt, and clay in soil.) It’s display is a triangle with sides scaled from 0 to 1. Each side represents one of the three components. A point is plotted so that a line drawn perpendicular from the point to each leg of the triangle intersect at the component values of the point.
+
+## 2 Getting Started
+
+::: panel-tabset
+## Loading the packages
+
+Use the **pacman** package `p_load()` to check, install and launch the following R packages:
+
+```{r}
+pacman::p_load(tidyverse, ggtern, plotly)
+```
+
+| **Library** | **Description** |
+|---------------------|---------------------------------------------------|
+| [**ggtern**](http://www.ggtern.com/) | a ggplot extension specially designed to plot ternary diagrams. The package will be used to plot static ternary plots. |
+| tidyverse | a family of R packages for data processing |
+| [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |
+
+## Import data
+
+In this exercise, the  [Singapore Residents by Planning AreaSubzone, Age Group, Sex and Type of Dwelling, June 2000-2018](https://www.singstat.gov.sg/find-data/search-by-theme/population/geographic-distribution/latest-data) will be used. We use `read_csv()` of **readr** to import the data:
+
+```{r}
+pop_data <- read_csv("data/respopagsex2000to2018_tidy.csv")
+```
+
+## Observe data
+
+After importing the data, let's examine it to understand its data structure:
+
+The dataset contains 5 attributes and 108,126 observations with no missing values:
+
+```{r}
+head(pop_data)
+```
+
+```{r}
+str(pop_data)
+```
+
+```{r}
+summary(pop_data)
+```
+
+```{r}
+any(is.na(pop_data))
+```
+
+## Prepare data
+
+From the "Observe data" tab, we can see that age is a categorical variable. For better analysis, we should transpose this variable and group the ages into young, active, and old categories to make the data more interpretable:
+
+There are 10 age groups in this dataset:
+
+```{r}
+pop_data %>% distinct(AG)
+```
+
+```{r}
+# Adding new derived variables for the young, economy active and old age group
+agpop_mutated <- pop_data %>%
+  mutate(`Year` = as.character(Year)) %>%
+  spread(AG, Population) %>% 
+  mutate(YOUNG = rowSums(.[4:8])) %>%     # Ages 0-24
+  mutate(ACTIVE = rowSums(.[9:16]))  %>%  # Ages 25-64
+  mutate(OLD = rowSums(.[17:21])) %>%     # Above 65
+  mutate(TOTAL = rowSums(.[22:24])) %>%   # All
+  filter(Year == 2018)%>%
+  filter(TOTAL > 0)
+
+head(agpop_mutated)
+
+```
+:::
+
+## 3 Plotting Ternary Diagram with R
+
+### 3.1 Plotting a static ternary diagram
+
+Use `ggtern()` function of **ggtern** package to create a simple ternary plot.
+
+#### 3.1.1 Basic plot
+
+```{r}
+#Building the static ternary plot
+ggtern(data = agpop_mutated,
+       aes(x = YOUNG,
+           y = ACTIVE, 
+           z = OLD)) +
+  geom_point() +
+  theme_classic()+
+  ggtitle("Basic static ternary plot")+
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        panel.background = element_rect(colour ="#f3f1e9",fill = "#f3f1e9"),
+        plot.background = element_rect(colour ="#f3f1e9",fill = "#f3f1e9")) 
+```
+
+#### **3.1.2 Adding colour and title**
+
+```{r}
+#Building the static ternary plot
+ggtern(data = agpop_mutated, 
+       aes(x = YOUNG,
+           y = ACTIVE, 
+           z = OLD)) +
+  geom_point() +
+  labs(title="Population structure, 2015") +
+  theme_rgbw() +
+  theme(plot.title = element_text(hjust = 0.5, face="bold"),
+        panel.background = element_rect(colour ="#f3f1e9",fill = "#f3f1e9"),
+        plot.background = element_rect(colour ="#f3f1e9",fill = "#f3f1e9")) 
+```
+
+### 3.2 Plotting an interative ternary diagram with Plot_ly()
+
+The code below create an interactive ternary plot using ***plot_ly()*** function of **Plotly R**.
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+# reusable function for creating annotation object
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+
+# reusable function for axis formatting
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Economically Active"), 
+  caxis = axis("Aged")
+)
+
+# Initiating a plotly visualization 
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("black"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  ) 
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+# reusable function for creating annotation object
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+
+# reusable function for axis formatting
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Economically Active"), 
+  caxis = axis("Aged")
+)
+
+# Initiating a plotly visualization 
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("black"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  ) 
+```
+
+## 4 Reference
+
+-   Kam, T.S. (2025). [Creating Ternary Plot with R](https://r4va.netlify.app/chap13)
