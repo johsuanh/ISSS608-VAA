@@ -28,7 +28,7 @@ pacman::p_load(treemap, treemapify, tidyverse)
 ```
 
 | **Library** | **Description**                                              |
-|------------------------|------------------------------------------------|
+|-------------|--------------------------------------------------------------|
 | tidyverse   | a family of R packages for data processing                   |
 | treemapify  | The *treemapify* package allows creating treemaps in ggplot2 |
 

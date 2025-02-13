@@ -40,7 +40,7 @@ We load the following R packages using the `pacman::p_load()` function:
 pacman::p_load(tidyverse, patchwork,
                ggrepel, ggthemes, ggridges, 
                ggdist, ggiraph, plotly, DT,
-               hrbrthemes, ggiraph,ggmosaic)
+               hrbrthemes, ggiraph,ggstatsplot,parallelPlot,GGally)
 ```
 
 +----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
@@ -137,7 +137,7 @@ Since the imported data types are not fully correct, we will handle them in the 
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Attribute                   | Data type     | Description                                                                                                                                                                                                   |
 +=============================+===============+===============================================================================================================================================================================================================+
-| **Date**                    | *Date*        | Timestamp of the data entry from 2023/6/4 to 2023/6/30                                                                                                                                                        |
+| **Date**                    | *Date*        | Timestamp of the data entry from 2023/6/4 to 2024/6/30 (weekly data)                                                                                                                                          |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Ship_Type**               | *Categorical* | Type of ship (e.g., Tanker, Container Ship, Fish Carrier, Bulk Carrier).                                                                                                                                      |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -153,9 +153,9 @@ Since the imported data types are not fully correct, we will handle them in the 
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Speed_Over_Ground_knots** | *Decimal*     | Average speed of the ship over water (in knots).                                                                                                                                                              |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Engine_Power_kW**         | *Decimal*     | Engine power output (in kilowatts).                                                                                                                                                                           |
+| **Engine_Power_kW**         | *Decimal*     | Total weekly Engine power output (in kilowatts).                                                                                                                                                              |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Distance_Traveled_nm**    | *Decimal*     | Total distance traveled by the ship (in nautical miles).                                                                                                                                                      |
+| **Distance_Traveled_nm**    | *Decimal*     | Total weekly distance traveled by the ship (in nautical miles).                                                                                                                                               |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Draft_meters**            | *Decimal*     | It represents how deep the ship sits in the water and is a key measurement for navigation (in meters).                                                                                                        |
 +-----------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -185,7 +185,7 @@ Since the imported data types are not fully correct, we will handle them in the 
 
 ## Data Pre-processing
 
-### Check missing values 
+### Check missing values
 
 As part of data wrangling, we begin by checking for missing values and duplicate records:
 
@@ -194,7 +194,7 @@ As part of data wrangling, we begin by checking for missing values and duplicate
 any(is.na(ship))
 ```
 
-Although there are no missing values, but from the observation tab, we can see there are "None"s appearing in the dataset. The result of the code below showing each of the categorical attribute containing 136 "None" values.
+Although there are no missing values, but from the observation tab, we can see there are "None"s appearing in the dataset. The result of the code below showing each of the categorical attribute containing 136 "None" values and the related 609 records.
 
 ```{r}
 # check None value
@@ -233,7 +233,7 @@ DT::datatable(records_with_none, class= "display",
 distinct(ship)
 ```
 
-### Transform data type
+### Convert data type
 
 We then convert the data type for 5 categorical attributes from \<chr\> to \<fctr\> and 1 integer attribute from \<dbl\> to \<int\> by using **`mutate()`** of dplyr package.
 
@@ -249,59 +249,589 @@ head(ship)
 ```
 :::
 
-# 3 **Univariate Analysis**
+# 3 Data Exploration and Data Wrangling
 
-```{r}
-plot_histogram <- function(df, column) {
-ggplot(df, aes_string(x = column)) +
-geom_histogram( fill = "grey30",
-color = "black", alpha = 0.7) +
-labs(x = column, y = "Frequency") +
-theme_classic()+
-theme(panel.background = element_rect(fill = "#f3f1e9"),
-plot.background = element_rect(fill = "#f3f1e9",color = NA))
+Before variable selection, let's visualize all numeric and categorical data, and see if there's any insight we can get:
 
-}
+## 3.1 Numeric Variables
 
+The numeric variables display multimodal or uniform distributions (particularly for operational cost and revenue) rather than normal distributions. This pattern likely results from different ship types and route types creating distinct peaks in the distribution. Since this dataset contains weekly ship data, with ships making varying numbers of voyages, we should normalize all numeric variables to a per-voyage basis rather than using total amounts like "Distance_Traveled_nm".
 
-num_var <- c("Speed_Over_Ground_knots", "Engine_Power_kW", "Distance_Traveled_nm", "Draft_meters",
-"Cargo_Weight_tons", "Operational_Cost_USD", "Revenue_per_Voyage_USD", "Turnaround_Time_hours",
-"Efficiency_nm_per_kWh", "Seasonal_Impact_Score", "Weekly_Voyage_Count", "Average_Load_Percentage")
+Also, we can clearly observe that the scale of ***Operational_Cost_USD*** and ***Revenue_per_Voyage_USD*** have different scale comparing to others, which need further adjusted.
 
+::: toggle
+<details>
 
-histograms <- lapply(num_var, function(col) plot_histogram(ship, col))
+<summary>**Display Code**</summary>
 
-combined_plot <- wrap_plots(histograms, ncol = 4)
-print(combined_plot)
-```
+``` r
+# select numeric variables
+ship_numeric <- ship %>% select_if(is.numeric)
 
-```{r}
-plot_bar <- function(df, column) {
-  ggplot(df, aes_string(x = column)) +
-    geom_bar( fill = "grey30", 
-								   color = "black", alpha = 0.7) +
-    labs(x = column, y = "Frequency") +
-    theme_classic()+
-    theme(panel.background = element_rect(fill = "#f3f1e9"),
+# unpivot the data from wide to long format
+ship_long <- ship_numeric %>% 
+  pivot_longer(cols = everything(), # select all num variables
+               names_to = "variable", 
+               values_to = "value")
+
+# Plot histograms for all numeric variables with facets
+ggplot(ship_long, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "grey70", color = "grey30") +
+  facet_wrap(~ variable, scales = "free") +
+  labs(title = "Histograms of All Numeric Variables",
+       x = "", y = "Frequency") +
+  theme_minimal()+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
-        axis.text.x = element_text(angle = 45, hjust = 1)
+        panel.grid = element_blank())
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+
+# select numeric variables
+ship_numeric <- ship %>% select_if(is.numeric)
+
+# unpivot the data from wide to long format
+ship_long <- ship_numeric %>% 
+  pivot_longer(cols = everything(), # select all num variables
+               names_to = "variable", 
+               values_to = "value")
+
+# Plot histograms for all numeric variables with facets
+ggplot(ship_long, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "grey70", color = "grey30") +
+  facet_wrap(~ variable, scales = "free") +
+  labs(title = "Histograms of All Numeric Variables",
+       x = "", y = "Frequency") +
+  theme_minimal()+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        panel.grid = element_blank(),
         )
-    
-}
+```
+
+## 3.2 Categorical Variables
+
+To understand the marine sector, we should examine the characteristics of different ship types, engine types, and route types for better analysis:
+
+### 3.2.1 Ship Type
+
+-   **Bulk Carrier**: Carry dry raw mateials like coal, grain and iron ore. The cargo normally holds with hatch covers with large quantity, following long-haul trade routes
+
+-   **Container Ship**: Carry standardized constainers, designed with flat deck with container slots and securing mechanisms. It's suitable for efficient global trade.
+
+-   **Fish Carrier**: It is used to ship live or frozen fish from fishing vessels to processing facilities or markets, equipped with water tanks (for live fish) or refrigerated holds (for frozen fish)
+
+-   **Taker**: Carry liquid cargo like crude oil and petroleum products, equipped with large cylindrical tanks, reinforced hulls, following strict environmental regulations.
+
+### 3.2.2 Route Type
+
+Based on ship distance: **Transoceanic Routes\>Long-Haul Routes\>Short-Haul Routes\>Coastal Routes**
+
+-   **Coastal Routes**: Ships operate **close to the coast** or within a specific region, often moving between ports in the same country or nearby nations. Normally focus on frequent trips rather than high cargo volume.
+
+-   **Short-Haul Routes:** Routes that connect **medium-distance** destinations (typically within a continent or between neighboring regions). Medium-sized vessels for balanced capacity and speed.
+
+-   **Long-Haul Routes:** Ships travel **between continents(international trade)**, connecting major industrial and commercial centers. Larger ships designed for fuel efficiency and maximum cargo capacity.
+
+-   **Transoceanic Routes:** Ships cross **entire oceans(Global Trade)**, linking distant global markets (e.g., Asia to Europe, North America to Australia). **Largest** ships with ultra-long-range fuel capacity.
+
+### 3.2.3 Engine Type
+
+**Fuel efficeincy: Diesel \> HFO \> Stream Turbine**
+
+-   **Heavy Fuel Oil (HFO) Engines**: These engines use **Heavy Fuel Oil (HFO)**, which is a low-cost but highly polluting fuel, common **in large commercial ships and long-haul or** **Transoceanic Routes** due to cost efficiency.
+
+-   **Steam Turbine Engines**: These engines uses **steam to drive a turbine**, typically powered by **boilers burning HFO or LNG.** Ships with these engines supposed to be aged, for its a technology old goods. It is less fuel-efficient compared to diesel engines.
+
+-   Diesel Engines: It is the **most common** engine type today, which is **more fuel-efficient** and meets modern environmental regulations.
+
+### 3.2.4 Visualization
+
+As for categorical variables, the distributions are also quite even, except for:
+
+-   The number of ship with **diesel engines** is slightly higher than others
+
+-   The count of **long-haul** slightly higher
+
+-   The count of "rough" weather condition is slightly lower than others
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+# select only char variables
+ship_factors <- ship %>% select_if(is.factor)  
+
+# unpivot the data from wide to long format
+ship_long_factors <- ship_factors %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "variable", 
+               values_to = "value")
 
 
+# plot bar charts for all categorical variables
+ggplot(ship_long_factors, aes(x = value, fill = variable)) +
+  geom_bar() +
+  facet_wrap(~ variable, scales = "free") +  # Facet by variable name
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Bar Plots of All Categorical Variables",
+       x = "", y = "Count") +
+  theme_minimal() +
+    theme(plot.title = element_text(size=13, hjust=0),
+        legend.background = element_rect(fill = "#f3f1e9"),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.position = "none",
+        axis.text.x = element_text(angle=20, hjust=1, size= 7),
+        axis.text.y = element_text(size=6),
+        panel.grid = element_blank())
+```
 
-cat_var <- c ("Route_Type", "Ship_Type", "Engine_Type", "Maintenance_Status", 
-					"Weather_Condition")
+</details>
+:::
 
-bars <- lapply(cat_var, function(col) plot_bar(ship, col))
+```{r}
+#| echo: false
 
-combined_plot_bar <- wrap_plots(bars, ncol = 3)+ plot_layout(guides = "collect")
 
-print(combined_plot_bar)
+# select only char variables
+ship_factors <- ship %>% select_if(is.factor)  
+
+# unpivot the data from wide to long format
+ship_long_factors <- ship_factors %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "variable", 
+               values_to = "value")
+
+# customized palette
+my_palette <- c("#D989AE", "#96C6D9", "#F2CD88", "#D9725B", "#468C6C", "grey60")
+
+
+# plot bar charts for all categorical variables
+ggplot(ship_long_factors, aes(x = value, fill = variable)) +
+  geom_bar() +
+  facet_wrap(~ variable, scales = "free") +  # Facet by variable name
+  scale_fill_manual(values = my_palette) +
+  labs(title = "Bar Plots of All Categorical Variables",
+       x = "", y = "Count") +
+  theme_minimal() +
+    theme(plot.title = element_text(size=13, hjust=0),
+        legend.background = element_rect(fill = "#f3f1e9"),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.position = "none",
+        axis.text.x = element_text(angle=20, hjust=1, size= 7),
+        axis.text.y = element_text(size=6),
+        panel.grid = element_blank())
+
+
+```
+
+## 3.3 Data Wrangling
+
+After checking all variables, I identified several of them that need to be derived, transformed, or dropped:
+
+### Transform Data Unit
+
+-   **Operational_Cost_USD** & **Revenue_per_Voyage_USD**: Both variables are in USD, we should divide them by 1,000 to make them more comparable
+
+```{r}
+
+# divide Operational cost and revenue by 1000
+
+ship_cleaned <- ship %>%
+  mutate(Cost_per_Voyage_k = Operational_Cost_USD/1000)
+
+ship_cleaned <- ship_cleaned %>%
+  mutate(Revenue_per_Voyage_k = Revenue_per_Voyage_USD/1000)
+
+
+```
+
+### Derive New Variables
+
+-   **Date**: Since weekly data is too granular for our analysis, I'll derive "**New_Date**" for monthly data and "**Season**" variables based on Date
+
+-   **Net_margin_per_Voyage(%):** Once we have operational cost per voyage, we can calculate net margin(%) per voyage for analysis
+
+-   **Distance travel & Engine_Power_kW** **per Voyage**: As stated in kaggle, "**Engine_Power_kW**" and "**Distance_Traveled_nm"** istotal engine power and distance traveled by the ship. We should divide them by weekly_voyage_count.
+
+```{r}
+# create New_date (monthly)
+ship_cleaned <- ship_cleaned %>%
+  mutate(New_Date = as.Date(paste(format(Date, "%Y"),
+                                  format(Date, "%m"), 
+                                  "01", sep = "-"), 
+                            format = "%Y-%m-%d"))
+
+# create season var
+ship_cleaned <- ship_cleaned %>%
+  mutate(Season = case_when(
+    month(Date) %in% 3:5 ~ "Spring",
+    month(Date) %in% 6:8 ~ "Summer",
+    month(Date) %in% 9:11 ~ "Fall",
+    month(Date) %in% c(12, 1, 2) ~ "Winter"
+  ))
+
+# create profit per voyage
+ship_cleaned <- ship_cleaned %>%
+  mutate(Net_margin_per_Voyage = ((Revenue_per_Voyage_k - Cost_per_Voyage_k) / Revenue_per_Voyage_k) * 100)
+
+# create distance travel per voyage
+ship_cleaned <- ship_cleaned %>%
+  mutate(distance_travel_per_V = Distance_Traveled_nm / Weekly_Voyage_Count)
+
+# create Engine_Power_kW per voyage
+ship_cleaned <- ship_cleaned %>%
+  mutate(Engine_Power_kW_per_V = Engine_Power_kW / Weekly_Voyage_Count)
+
+```
+
+### Drop Variables and None Values
+
+Based on the previous univariate and correlation analysis, we will retain only the relevant variables for further analysis. Though missing values in Categorical data didn't affect much, but it's quite annoying when visualization, since all catgorical data include missing values
+
+```{r}
+# These variables are dropped
+ship_cleaned <- ship_cleaned %>% select (-c('Operational_Cost_USD','Revenue_per_Voyage_USD','Draft_meters','Speed_Over_Ground_knots','Engine_Power_kW','Distance_Traveled_nm','Date'))
+
+# retain all the data is not "None"
+
+ship_cleaned <- ship_cleaned %>%
+  filter(if_all(all_of(cat_var), ~ . != "None"))
+
+```
+
+### Check New Summary and Distribution
+
+After transformation, we can see Net_margin_per_Voyage shows extreme values, with a minimum of -842.56%, maximum of 98.73%, and median of 50.56%, indicating significant variation in profit margins across different ships.
+
+```{r}
+summary(ship_cleaned)
+```
+
+### Correlation Matrix
+
+We then use `ggcorrmat`examine the correlation matrix of numerical variables.
+
+Based on the results below, only three pairs of variables show significant correlations:
+
+-   Net_margin_per_Voyage vs Revenue_per_Voyage (r=0.59)
+
+-   Net_margin_per_Voyage vs Cost_per_Voyage (r=-0.43)
+
+-   Engine_Power_kW_per_V vs distance_travel_per_V (r=0.65)
+
+These correlations indicate that Net margin increases with higher Revenue and decreases with higher Cost. Additionally, ships traveling longer distances tend to use more engine power.
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric) 
+
+ggcorrmat(
+  data = ship_cleaned_num, 
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 8),
+  title    = "Correlogram for ship dataset",
+  subtitle = "None of pairs is significant at p < 0.05")+
+  theme(plot.title = element_text(size=13, hjust=0),
+        legend.background = element_rect(fill = "#f3f1e9"),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        axis.text.x = element_text(angle=30, hjust=1, size= 7),
+        axis.text.y = element_text(size=7),
+        panel.grid = element_blank())
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric) 
+
+ggcorrmat(
+  data = ship_cleaned_num, 
+  ggcorrplot.args = list(outline.color = "black", 
+                         hc.order = TRUE,
+                         tl.cex = 8),
+  title    = "Correlogram for ship dataset",
+  subtitle = "None of pairs is significant at p < 0.05")+
+  theme(plot.title = element_text(size=13, hjust=0),
+        legend.background = element_rect(fill = "#f3f1e9"),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        axis.text.x = element_text(angle=30, hjust=1, size= 7),
+        axis.text.y = element_text(size=7),
+        panel.grid = element_blank(),
+        plot.margin = margin(t = 15, r = 50, b = 15, l = 50, unit = "pt") )
+  
 ```
 
 ```{r}
-ggplot(ship, aes(x=Revenue_per_Voyage_USD, y= Operational_Cost_USD, color = Ship_Type))+
- geom_point()
+# Calculate the IQR for Net_margin_per_Voyage
+Q1 <- quantile(ship_cleaned$Net_margin_per_Voyage, 0.25, na.rm = TRUE)
+Q3 <- quantile(ship_cleaned$Net_margin_per_Voyage, 0.75, na.rm = TRUE)
+IQR_value <- Q3 - Q1
+
+# Define bounds for outliers
+lower_bound <- Q1 - 1.5 * IQR_value
+upper_bound <- Q3 + 1.5 * IQR_value
+
+# Filter out outliers
+ship_no_outliers <- ship_cleaned %>%
+  filter(Net_margin_per_Voyage >= lower_bound & Net_margin_per_Voyage <= upper_bound)
+
+ship_outliers <- ship_cleaned %>%
+  filter(Net_margin_per_Voyage <= lower_bound | Net_margin_per_Voyage >= upper_bound)
+
+```
+
+## EDA 1: Time Series - Average Revenue and Margin Rate by Ship Type
+
+The interactive below shows the average revenue and net Margin Rate over time. We can see that except for Oct
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+```r
+
+# calculate average revenue, cost, and profit margin per Ship_Type over time
+ship_avg <- ship_cleaned %>%
+  group_by(New_Date, Ship_Type) %>%
+  summarize(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_cost = mean(Cost_per_Voyage_k, na.rm = TRUE),
+    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE)) %>%
+  mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
+
+# calculate all ship's average revenue, cost, and profit margin over time
+avg <- ship_cleaned %>%
+  group_by(New_Date) %>%
+  summarize(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_cost = mean(Cost_per_Voyage_k, na.rm = TRUE),
+    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE)) %>%
+  mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
+
+# plot avg rev by ship type
+p1 <- ggplot() + 
+  geom_line_interactive(data = ship_avg, 
+                        aes(x = New_Date, y = avg_revenue,
+                            color = Ship_Type, tooltip = round(avg_revenue,2),
+                            data_id = Ship_Type), size = 1) +
+  geom_line(data = avg, aes(x = New_Date, y = avg_revenue), 
+            size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_color_manual(values = my_palette)+
+  labs(x = "",
+       y = "Revenue per Voyage ($000s)",
+       title = "Avergae Revenue and Net Margin by Ship Type",
+       color = "Legend") +
+  theme_minimal() +
+  theme(plot.title = element_text(size=12, face='bold', hjust=0.5),
+        axis.title.y = element_text(size=7),
+        axis.text = element_text(size = 6),
+        legend.position = 'top',
+        legend.key.size = unit(0.2,"cm"),
+        legend.text = element_text(size=8),
+        panel.grid= element_line(color='grey60',size=0.1),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+
+# plot avg profit margin by ship type
+
+p2 <- ggplot() + 
+  geom_line_interactive(data = ship_avg, 
+                        aes(x = New_Date, y = avg_profit_margin,
+                            color = Ship_Type,tooltip = round(avg_profit_margin,2),
+                            data_id = Ship_Type), size = 1) +
+  geom_line(data = avg, aes(x = New_Date, y = avg_profit_margin),
+            size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_color_manual(values = my_palette)+
+  labs(x = "",
+       y = "Profit Margin %",
+       color = "Legend") +
+  theme_minimal() +
+  theme(
+        axis.title.y = element_text(size=7),
+        axis.text = element_text(size = 6),
+        legend.position = 'none',
+        panel.background = element_rect(fill = "#f3f1e9"),
+        panel.grid= element_line(color='grey60',size=0.1),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+p3 <- ggplot() + 
+  geom_line_interactive(data = ship_avg, 
+                        aes(x = New_Date, y = avg_impact,
+                            color = Ship_Type,tooltip = round(avg_impact,2),
+                            data_id = Ship_Type), size = 1) +
+  geom_line(data = avg, aes(x = New_Date, y = avg_impact),
+            size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_color_manual(values = my_palette)+
+  labs(x = "",
+       y = "Seasonal impact",
+       color = "Legend") +
+  theme_minimal() +
+  theme(
+        axis.title.y = element_text(size=7),
+        axis.text = element_text(size = 6),
+        legend.position = 'none',
+        panel.background = element_rect(fill = "#f3f1e9"),
+        panel.grid= element_line(color='grey60',size=0.1),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+# combine two plots
+patch <- p1/p2
+
+# giraffe interactive graph
+girafe(
+  code = print(patch), 
+  width_svg = 6,
+  height_svg = 4,
+  options = list(
+    opts_hover(css = "stroke-width:3px; opacity: 1;"),
+    opts_hover_inv(css = "opacity: 0.2;")
+  ))
+```
+
+</details>
+:::
+
+
+```{r}
+#| echo: false
+
+# calculate average revenue, cost, and profit margin per Ship_Type over time
+ship_avg <- ship_cleaned %>%
+  group_by(New_Date, Ship_Type) %>%
+  summarize(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_cost = mean(Cost_per_Voyage_k, na.rm = TRUE),
+    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE),
+    avg_load = mean(Average_Load_Percentage,a.rm = TRUE))%>%
+  mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
+
+# calculate all ship's average revenue, cost, and profit margin over time
+avg <- ship_cleaned %>%
+  group_by(New_Date) %>%
+  summarize(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_cost = mean(Cost_per_Voyage_k, na.rm = TRUE),
+    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE),
+    avg_load = mean(Average_Load_Percentage,a.rm = TRUE))%>%
+
+  mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
+
+# plot avg rev by ship type
+p1 <- ggplot() + 
+  geom_line_interactive(data = ship_avg, 
+                        aes(x = New_Date, y = avg_revenue,
+                            color = Ship_Type, tooltip = round(avg_revenue,2),
+                            data_id = Ship_Type), size = 1) +
+  geom_line(data = avg, aes(x = New_Date, y = avg_revenue), 
+            size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_color_manual(values = my_palette)+
+  labs(x = "",
+       y = "Revenue per Voyage ($000s)",
+       title = "Avergae Revenue and Net Margin by Ship Type",
+       color = "Legend") +
+  theme_minimal() +
+  theme(plot.title = element_text(size=12, face='bold', hjust=0.5),
+        axis.title.y = element_text(size=7),
+        axis.text = element_text(size = 6),
+        legend.position = 'top',
+        legend.key.size = unit(0.2,"cm"),
+        legend.text = element_text(size=8),
+        panel.grid= element_line(color='grey60',size=0.1),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+
+# plot avg profit margin by ship type
+
+p2 <- ggplot() + 
+  geom_line_interactive(data = ship_avg, 
+                        aes(x = New_Date, y = avg_profit_margin,
+                            color = Ship_Type,tooltip = round(avg_profit_margin,2),
+                            data_id = Ship_Type), size = 1) +
+  geom_line(data = avg, aes(x = New_Date, y = avg_profit_margin),
+            size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_color_manual(values = my_palette)+
+  labs(x = "",
+       y = "Profit Margin %",
+       color = "Legend") +
+  theme_minimal() +
+  theme(
+        axis.title.y = element_text(size=7),
+        axis.text = element_text(size = 6),
+        legend.position = 'none',
+        panel.background = element_rect(fill = "#f3f1e9"),
+        panel.grid= element_line(color='grey60',size=0.1),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA))
+
+
+# combine two plots
+patch <- p1/p2
+
+# giraffe interactive graph
+girafe(
+  code = print(patch), 
+  width_svg = 6,
+  height_svg = 4,
+  options = list(
+    opts_hover(css = "stroke-width:3px; opacity: 1;"),
+    opts_hover_inv(css = "opacity: 0.2;")
+  ))
+```
+
+```{r}
+
+
+```
+
+## 3.4 Bivariate Analysis
+
+```{r}
+
+Cost <- ggplot(ship_cleaned, 
+               aes(x = Season, y = Net_margin_per_Voyage,
+                   fill = Ship_Type)) +
+  geom_boxplot() +
+  scale_fill_manual(values = my_palette) +
+  labs(title = "Profit over Time by Ship Type",
+       x = "", y = "US)") +
+  theme_minimal() +
+  theme(legend.position = "None")
+Rev <- ggplot(ship_cleaned, aes(x = Season, y = Revenue_per_Voyage_k, fill = Ship_Type)) +
+  geom_boxplot() +
+  scale_fill_manual(values = my_palette) +
+  labs(title = "Revenue over Time by Ship Type",
+       x = "Date", y = "USD") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+Cost/Rev
+```
+
+```{r}
+
+
+RevVsOp <- ggplot(ship_cleaned, aes(x=Net_margin_per_Voyage, y=Revenue_per_Voyage_k, color = Ship_Type))+geom_point()
+
+RevVsOp
 ```
