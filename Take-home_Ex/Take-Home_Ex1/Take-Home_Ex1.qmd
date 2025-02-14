@@ -40,7 +40,7 @@ We load the following R packages using the `pacman::p_load()` function:
 pacman::p_load(tidyverse, patchwork,
                ggrepel, ggthemes, ggridges, 
                ggdist, ggiraph, plotly, DT,
-               hrbrthemes, ggiraph,ggstatsplot,parallelPlot,GGally)
+               hrbrthemes, ggiraph,ggstatsplot)
 ```
 
 +----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
@@ -316,7 +316,7 @@ ggplot(ship_long, aes(x = value)) +
 
 ## 3.2 Categorical Variables
 
-To understand the marine sector, we should examine the characteristics of different ship types, engine types, and route types for better analysis:
+To understand the marine sector, we need to research and understand the characteristics of different ship types, engine types, and route types for better analysis:
 
 ### 3.2.1 Ship Type
 
@@ -411,7 +411,7 @@ ship_long_factors <- ship_factors %>%
                values_to = "value")
 
 # customized palette
-my_palette <- c("#D989AE", "#96C6D9", "#F2CD88", "#D9725B", "#468C6C", "grey60")
+my_palette <- c("#D989AE99", "#96C6D999", "#F2CD8899", "#D9725B99", "#468C6C99", "grey60")
 
 
 # plot bar charts for all categorical variables
@@ -438,7 +438,7 @@ ggplot(ship_long_factors, aes(x = value, fill = variable)) +
 
 After checking all variables, I identified several of them that need to be derived, transformed, or dropped:
 
-### Transform Data Unit
+### 3.3.1 Transform Data Unit
 
 -   **Operational_Cost_USD** & **Revenue_per_Voyage_USD**: Both variables are in USD, we should divide them by 1,000 to make them more comparable
 
@@ -455,7 +455,7 @@ ship_cleaned <- ship_cleaned %>%
 
 ```
 
-### Derive New Variables
+### 3.3.2 Derive New Variables
 
 -   **Date**: Since weekly data is too granular for our analysis, I'll derive "**New_Date**" for monthly data and "**Season**" variables based on Date
 
@@ -484,6 +484,10 @@ ship_cleaned <- ship_cleaned %>%
 ship_cleaned <- ship_cleaned %>%
   mutate(Net_margin_per_Voyage = ((Revenue_per_Voyage_k - Cost_per_Voyage_k) / Revenue_per_Voyage_k) * 100)
 
+# create profit per voyage
+ship_cleaned <- ship_cleaned %>%
+  mutate(Net_profit_per_Voyage = Revenue_per_Voyage_k - Cost_per_Voyage_k)
+
 # create distance travel per voyage
 ship_cleaned <- ship_cleaned %>%
   mutate(distance_travel_per_V = Distance_Traveled_nm / Weekly_Voyage_Count)
@@ -494,7 +498,7 @@ ship_cleaned <- ship_cleaned %>%
 
 ```
 
-### Drop Variables and None Values
+### 3.3.3 Drop Variables and None Values
 
 Based on the previous univariate and correlation analysis, we will retain only the relevant variables for further analysis. Though missing values in Categorical data didn't affect much, but it's quite annoying when visualization, since all catgorical data include missing values
 
@@ -509,19 +513,11 @@ ship_cleaned <- ship_cleaned %>%
 
 ```
 
-### Check New Summary and Distribution
-
-After transformation, we can see Net_margin_per_Voyage shows extreme values, with a minimum of -842.56%, maximum of 98.73%, and median of 50.56%, indicating significant variation in profit margins across different ships.
-
-```{r}
-summary(ship_cleaned)
-```
-
-### Correlation Matrix
+### 3.3.5 Check Correlation Matrix
 
 We then use `ggcorrmat`examine the correlation matrix of numerical variables.
 
-Based on the results below, only three pairs of variables show significant correlations:
+Based on the results below, only five pairs of variables show significant correlations:
 
 -   Net_margin_per_Voyage vs Revenue_per_Voyage (r=0.59)
 
@@ -529,7 +525,11 @@ Based on the results below, only three pairs of variables show significant corre
 
 -   Engine_Power_kW_per_V vs distance_travel_per_V (r=0.65)
 
-These correlations indicate that Net margin increases with higher Revenue and decreases with higher Cost. Additionally, ships traveling longer distances tend to use more engine power.
+-   Weekly_voyage_count vs Engine_Power_kW_per_V (r=-0.69)
+
+-   Weekly_voyage_count vs distance travel_per_V (r=-0.62)
+
+These correlations indicate that Net margin increases with higher Revenue and decreases with higher Cost. Ships traveling longer distances tend to use more engine power with fewer voyage.
 
 ::: toggle
 <details>
@@ -580,6 +580,76 @@ ggcorrmat(
   
 ```
 
+### 3.3.4 Check New Summary and Variable Distribution
+
+After transformation, we can see Net_margin_per_Voyage shows extreme values, with a minimum of -842.56%, maximum of 98.73%, and median of 50.56%, indicating significant variation in profit margins across different ships.
+
+:::: panel-tabset
+## New Summary
+
+```{r}
+summary(ship_cleaned)
+```
+
+## Data Distribution
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+# select numeric variables
+ship_cleaned_num<- ship_cleaned %>% select_if(is.numeric)
+
+# unpivot the data from wide to long format
+ship_long <- ship_cleaned_num %>% 
+  pivot_longer(cols = everything(), # select all num variables
+               names_to = "variable", 
+               values_to = "value")
+
+# Plot histograms for all numeric variables with facets
+ggplot(ship_long, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "grey70", color = "grey30") +
+  facet_wrap(~ variable, scales = "free") +
+  labs(title = "Histograms of All Numeric Variables",
+       x = "", y = "Frequency") +
+  theme_minimal()+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        panel.grid = element_blank(),
+        )
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+
+# select numeric variables
+ship_cleaned_num<- ship_cleaned %>% select_if(is.numeric)
+
+# unpivot the data from wide to long format
+ship_long <- ship_cleaned_num %>% 
+  pivot_longer(cols = everything(), # select all num variables
+               names_to = "variable", 
+               values_to = "value")
+
+# Plot histograms for all numeric variables with facets
+ggplot(ship_long, aes(x = value)) +
+  geom_histogram(bins = 30, fill = "grey70", color = "grey30") +
+  facet_wrap(~ variable, scales = "free") +
+  labs(title = "Histograms of All Numeric Variables",
+       x = "", y = "Frequency") +
+  theme_minimal()+
+  theme(panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        panel.grid = element_blank(),
+        )
+```
+::::
+
 ```{r}
 # Calculate the IQR for Net_margin_per_Voyage
 Q1 <- quantile(ship_cleaned$Net_margin_per_Voyage, 0.25, na.rm = TRUE)
@@ -599,16 +669,18 @@ ship_outliers <- ship_cleaned %>%
 
 ```
 
-## EDA 1: Time Series - Average Revenue and Margin Rate by Ship Type
+# 4 Insights
 
-The interactive below shows the average revenue and net Margin Rate over time. We can see that except for Oct
+## 4.1 Exploring Average Revenue and Net Margin Across Ship Types
+
+The interactive below shows the average revenue and net margin Rate over time. We can see the average of reve
 
 ::: toggle
 <details>
 
 <summary>**Display Code**</summary>
 
-```r
+``` r
 
 # calculate average revenue, cost, and profit margin per Ship_Type over time
 ship_avg <- ship_cleaned %>%
@@ -616,7 +688,8 @@ ship_avg <- ship_cleaned %>%
   summarize(
     avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
     avg_cost = mean(Cost_per_Voyage_k, na.rm = TRUE),
-    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE)) %>%
+    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE),
+    avg_load = mean(Average_Load_Percentage,a.rm = TRUE))%>%
   mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
 
 # calculate all ship's average revenue, cost, and profit margin over time
@@ -625,28 +698,51 @@ avg <- ship_cleaned %>%
   summarize(
     avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
     avg_cost = mean(Cost_per_Voyage_k, na.rm = TRUE),
-    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE)) %>%
+    avg_impact = mean(Seasonal_Impact_Score, na.rm = TRUE),
+    avg_load = mean(Average_Load_Percentage,a.rm = TRUE))%>%
+
   mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
+
+
+# compute yearly average per Ship_Type
+yearly_avg <- ship_cleaned %>%
+  group_by(Ship_Type) %>%
+  summarize(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_profit_margin = mean((Revenue_per_Voyage_k - Cost_per_Voyage_k) / Revenue_per_Voyage_k * 100, na.rm = TRUE)
+  )
+
+ship_avg <- ship_avg %>%
+  left_join(yearly_avg, by = "Ship_Type", suffix = c("", "_yearly"))
+
 
 # plot avg rev by ship type
 p1 <- ggplot() + 
   geom_line_interactive(data = ship_avg, 
-                        aes(x = New_Date, y = avg_revenue,
-                            color = Ship_Type, tooltip = round(avg_revenue,2),
+                        aes(x = New_Date, 
+                            y = avg_revenue,
+                            color = Ship_Type, 
+                            tooltip = round(avg_revenue_yearly,2),
                             data_id = Ship_Type), size = 1) +
-  geom_line(data = avg, aes(x = New_Date, y = avg_revenue), 
-            size = 0.8, linetype = "dashed", color='grey40') + 
+  geom_line(data = avg, 
+            aes(x = New_Date, y = avg_revenue), 
+            size = 0.8, 
+            linetype = "dashed", 
+            color='grey40') +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b\n%Y")+
   scale_color_manual(values = my_palette)+
   labs(x = "",
        y = "Revenue per Voyage ($000s)",
-       title = "Avergae Revenue and Net Margin by Ship Type",
+       title = "Exploring Average Revenue and Net Margin Across Ship Types",
        color = "Legend") +
-  theme_minimal() +
-  theme(plot.title = element_text(size=12, face='bold', hjust=0.5),
+  theme_classic() +
+  theme(plot.title = element_text(size=12, hjust=0,face='bold'),
         axis.title.y = element_text(size=7),
         axis.text = element_text(size = 6),
         legend.position = 'top',
+        legend.background = element_rect(fill = "#f3f1e9"),
         legend.key.size = unit(0.2,"cm"),
+        legend.title = element_text(size=9),
         legend.text = element_text(size=8),
         panel.grid= element_line(color='grey60',size=0.1),
         panel.background = element_rect(fill = "#f3f1e9"),
@@ -658,45 +754,33 @@ p1 <- ggplot() +
 p2 <- ggplot() + 
   geom_line_interactive(data = ship_avg, 
                         aes(x = New_Date, y = avg_profit_margin,
-                            color = Ship_Type,tooltip = round(avg_profit_margin,2),
+                            color = Ship_Type,tooltip = round(avg_profit_margin_yearly,2),
                             data_id = Ship_Type), size = 1) +
   geom_line(data = avg, aes(x = New_Date, y = avg_profit_margin),
             size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_x_date(date_breaks = "1 month", date_labels = "%b\n%Y")+
   scale_color_manual(values = my_palette)+
   labs(x = "",
        y = "Profit Margin %",
        color = "Legend") +
-  theme_minimal() +
+  theme_classic() +
   theme(
         axis.title.y = element_text(size=7),
         axis.text = element_text(size = 6),
         legend.position = 'none',
+        legend.justification = c(0, 1),
+        legend.background = element_rect(fill = "#f3f1e9"),
         panel.background = element_rect(fill = "#f3f1e9"),
         panel.grid= element_line(color='grey60',size=0.1),
         plot.background = element_rect(fill = "#f3f1e9",color = NA))
 
-p3 <- ggplot() + 
-  geom_line_interactive(data = ship_avg, 
-                        aes(x = New_Date, y = avg_impact,
-                            color = Ship_Type,tooltip = round(avg_impact,2),
-                            data_id = Ship_Type), size = 1) +
-  geom_line(data = avg, aes(x = New_Date, y = avg_impact),
-            size = 0.8, linetype = "dashed", color='grey40') + 
-  scale_color_manual(values = my_palette)+
-  labs(x = "",
-       y = "Seasonal impact",
-       color = "Legend") +
-  theme_minimal() +
-  theme(
-        axis.title.y = element_text(size=7),
-        axis.text = element_text(size = 6),
-        legend.position = 'none',
-        panel.background = element_rect(fill = "#f3f1e9"),
-        panel.grid= element_line(color='grey60',size=0.1),
-        plot.background = element_rect(fill = "#f3f1e9",color = NA))
 
 # combine two plots
-patch <- p1/p2
+patch <- p1/p2  &
+  theme(
+    plot.margin = margin(0, 0, 0, 0),  # Removes extra space around the combined plots
+    plot.background = element_rect(fill = "#f3f1e9", color = NA) 
+  )
 
 # giraffe interactive graph
 girafe(
@@ -712,9 +796,12 @@ girafe(
 </details>
 :::
 
-
 ```{r}
 #| echo: false
+#| fig-height: 6
+#| fig-width: 12
+#| out-extra: "style='max-width:100%; display: block;'"
+#| out-width: 100%
 
 # calculate average revenue, cost, and profit margin per Ship_Type over time
 ship_avg <- ship_cleaned %>%
@@ -737,25 +824,46 @@ avg <- ship_cleaned %>%
 
   mutate(avg_profit_margin = (avg_revenue - avg_cost) / avg_revenue * 100)
 
+
+# compute yearly average per Ship_Type
+yearly_avg <- ship_cleaned %>%
+  group_by(Ship_Type) %>%
+  summarize(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_profit_margin = mean((Revenue_per_Voyage_k - Cost_per_Voyage_k) / Revenue_per_Voyage_k * 100, na.rm = TRUE)
+  )
+
+ship_avg <- ship_avg %>%
+  left_join(yearly_avg, by = "Ship_Type", suffix = c("", "_yearly"))
+
+
 # plot avg rev by ship type
 p1 <- ggplot() + 
   geom_line_interactive(data = ship_avg, 
-                        aes(x = New_Date, y = avg_revenue,
-                            color = Ship_Type, tooltip = round(avg_revenue,2),
+                        aes(x = New_Date, 
+                            y = avg_revenue,
+                            color = Ship_Type, 
+                            tooltip = round(avg_revenue_yearly,2),
                             data_id = Ship_Type), size = 1) +
-  geom_line(data = avg, aes(x = New_Date, y = avg_revenue), 
-            size = 0.8, linetype = "dashed", color='grey40') + 
+  geom_line(data = avg, 
+            aes(x = New_Date, y = avg_revenue), 
+            size = 0.8, 
+            linetype = "dashed", 
+            color='grey40') +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b\n%Y")+
   scale_color_manual(values = my_palette)+
   labs(x = "",
        y = "Revenue per Voyage ($000s)",
-       title = "Avergae Revenue and Net Margin by Ship Type",
+       title = "Exploring Average Revenue and Net Margin Across Ship Types",
        color = "Legend") +
-  theme_minimal() +
-  theme(plot.title = element_text(size=12, face='bold', hjust=0.5),
+  theme_classic() +
+  theme(plot.title = element_text(size=11, hjust=0.5,face='bold'),
         axis.title.y = element_text(size=7),
         axis.text = element_text(size = 6),
         legend.position = 'top',
+        legend.background = element_rect(fill = "#f3f1e9"),
         legend.key.size = unit(0.2,"cm"),
+        legend.title = element_text(size=9),
         legend.text = element_text(size=8),
         panel.grid= element_line(color='grey60',size=0.1),
         panel.background = element_rect(fill = "#f3f1e9"),
@@ -767,26 +875,33 @@ p1 <- ggplot() +
 p2 <- ggplot() + 
   geom_line_interactive(data = ship_avg, 
                         aes(x = New_Date, y = avg_profit_margin,
-                            color = Ship_Type,tooltip = round(avg_profit_margin,2),
+                            color = Ship_Type,tooltip = round(avg_profit_margin_yearly,2),
                             data_id = Ship_Type), size = 1) +
   geom_line(data = avg, aes(x = New_Date, y = avg_profit_margin),
             size = 0.8, linetype = "dashed", color='grey40') + 
+  scale_x_date(date_breaks = "1 month", date_labels = "%b\n%Y")+
   scale_color_manual(values = my_palette)+
   labs(x = "",
        y = "Profit Margin %",
        color = "Legend") +
-  theme_minimal() +
+  theme_classic() +
   theme(
         axis.title.y = element_text(size=7),
         axis.text = element_text(size = 6),
         legend.position = 'none',
+        legend.justification = c(0, 1),
+        legend.background = element_rect(fill = "#f3f1e9"),
         panel.background = element_rect(fill = "#f3f1e9"),
         panel.grid= element_line(color='grey60',size=0.1),
         plot.background = element_rect(fill = "#f3f1e9",color = NA))
 
 
 # combine two plots
-patch <- p1/p2
+patch <- p1/p2  &
+  theme(
+    plot.margin = margin(0, 0, 0, 0),  # Removes extra space around the combined plots
+    plot.background = element_rect(fill = "#f3f1e9", color = NA) 
+  )
 
 # giraffe interactive graph
 girafe(
@@ -799,39 +914,394 @@ girafe(
   ))
 ```
 
+## 4.2 Seasonal Profit Trends by Ship Type: A Closer Look
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+```         
+# calculate average profit per season
+season_avg <- ship_cleaned %>%
+  group_by(Season) %>%
+  summarise(avg_profit = mean(Net_profit_per_Voyage, na.rm = TRUE))
+
+
+            
+ggplot(ship_cleaned, aes(x = Net_profit_per_Voyage, 
+                              y = interaction(Route_Type, Engine_Type, Ship_Type),
+                              fill = Ship_Type)) +  
+  geom_boxplot(outlier.shape = 16, 
+               outlier.colour = "black",  
+               outlier.size = 0.5,
+               position = position_dodge(width = 0.7)) +  
+  scale_fill_manual(values = my_palette) +
+  # set facet title order
+  facet_wrap(~ factor(Season, levels = c("Spring", "Summer", "Fall", "Winter")), ncol = 4) +
+  theme_classic() +  
+  labs(title = "Seasonal Profit Trends by Ship Type: A Closer Look",
+       x = "Net Profit ('000 USD)", 
+       y = "Route, Engine & Ship Type") +
+  theme(
+    axis.text.y = element_text(size = 6), 
+    axis.text.x = element_text(size = 6),  
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    strip.text = element_text(size = 7, face = "bold"),  # Facet title size
+    legend.position = "top",
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size = 6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.title = element_text(size = 12,hjust = 0.5,face='bold'),
+    plot.margin = margin(10, 50, 10 ,20), 
+    panel.spacing = unit(1, "lines"),
+    strip.placement = "outside",  # Places strip above the panel
+    strip.switch.pad.wrap = unit(1, "cm") 
+  )+
+  geom_vline(data = season_avg, 
+             aes(xintercept = avg_profit), 
+             color = "white", linetype = "dashed", size = 0.4)
+```
+
+</details>
+:::
+
 ```{r}
+#| echo: false
+
+
+# calculate average profit per season
+season_avg <- ship_cleaned %>%
+  group_by(Season) %>%
+  summarise(avg_profit = mean(Net_profit_per_Voyage, na.rm = TRUE))
+
+
+            
+ggplot(ship_cleaned, aes(x = Net_profit_per_Voyage, 
+                              y = interaction(Route_Type, Engine_Type, Ship_Type),
+                              fill = Ship_Type)) +   
+  geom_boxplot(outlier.shape = 16, 
+               outlier.colour = "black",  
+               outlier.size = 0.5,
+               position = position_dodge(width = 0.7)) +  
+  scale_fill_manual(values = my_palette) +
+  # set facet title order
+  facet_wrap(~ factor(Season, levels = c("Spring", "Summer", "Fall", "Winter")), ncol = 4) +
+  theme_classic() +  
+  labs(title = "Seasonal Profit Trends by Ship Type: A Closer Look",
+       x = "Net Profit ('000 USD)", 
+       y = "Route, Engine & Ship Type") +
+  theme(
+    axis.text.y = element_text(size = 6), 
+    axis.text.x = element_text(size = 6),  
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
+    strip.text = element_text(size = 7, face = "bold"),  # Facet title size
+    legend.position = "top",
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size = 6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.title = element_text(size = 15,hjust = 0.5,face='bold'),
+    plot.margin = margin(10, 50, 10 ,20), 
+    panel.spacing = unit(1, "lines"),
+    strip.placement = "outside",  # Places strip above the panel
+    strip.switch.pad.wrap = unit(1, "cm") 
+  )+
+  geom_vline(data = season_avg, 
+             aes(xintercept = avg_profit), 
+             color = "white", linetype = "dashed", size = 0.4)
+```
+
+::: panel-tabset
+## Normality Test
+
+```{r}
+shapiro.test(ship_cleaned$Net_profit_per_Voyage)
+```
+
+## Kruskal-Wallis test
+
+-   Test
+
+```{r}
+grouped_ggbetweenstats(
+  data = ship_cleaned,  
+  x = Ship_Type,
+  y = Net_profit_per_Voyage,
+  grouping.var = Engine_Type,
+  type = "np", 
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s", 
+  p.adjust.method = "fdr", 
+  messages = FALSE
+)
+```
+:::
+
+## 4.3 Does Maintenance x Engine Type Influence Cost?
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+```         
+# Create the plot
+ggplot(ship_cleaned, aes(x = Cost_per_Voyage_k, 
+                                  y =  Maintenance_Status,
+                                  fill = Engine_Type)) +   
+  geom_density_ridges(geom = "density_ridges_gradient", 
+                      calc_ecdf = TRUE,
+                      quantiles = 4,
+                      alpha = 0.6,
+                      scale = 0.8) +
+  geom_boxplot(aes(x = Cost_per_Voyage_k), 
+               width = 0.2, 
+               position = position_dodge(width = 0.8), 
+               alpha = 0.6,
+               outliers = TRUE) +
+  coord_flip()+
+  scale_fill_manual(values = my_palette) +
+  facet_grid(~Engine_Type)+
+  theme_ridges() +
+  labs(title = "Does Maintenance x Engine Type Influence Cost?",
+       subtitle = "Yes, it does affect. The Kruskal-Wallis tests show there's an interaction effect (p-value = 0.001) \nbetween Maintenance Status and Engine Type on Operational Cost.",
+       x="Maintenance\n Status" ,
+       y="Operational Cost ('000USD)")+
+  theme(
+    axis.text.y = element_text(size = 6), 
+    axis.text.x = element_text(size = 6),  
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    strip.text = element_text(size = 9, face = "bold"),  # Facet title size
+    plot.margin = margin(10, 20, 10, 20),  
+    legend.position = "none",
+    legend.title = element_text(size=8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size=6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.title = element_text(size=13,hjust=0),
+    plot.subtitle = element_text(size=8,hjust=0),
+    plot.background = element_rect(fill = "#f3f1e9",color = NA)
+    )
+    
+
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+
+
+
+# Create the plot
+p <- ggplot(ship_cleaned, aes(x = Cost_per_Voyage_k, 
+                                  y =  Maintenance_Status,
+                                  fill = Engine_Type)) +   
+  geom_density_ridges(geom = "density_ridges_gradient", 
+                      calc_ecdf = TRUE,
+                      quantiles = 4,
+                      alpha = 0.6,
+                      scale = 0.8) +
+  geom_boxplot(aes(x = Cost_per_Voyage_k), 
+               width = 0.2, 
+               position = position_dodge(width = 0.8), 
+               alpha = 0.6,
+               outliers = TRUE) +
+  coord_flip()+
+  scale_fill_manual(values = my_palette) +
+  facet_grid(~Engine_Type)+
+  theme_ridges() +
+  labs(title = "Does Maintenance x Engine Type Influence Cost?",
+       subtitle = "Yes, it does affect. The Kruskal-Wallis tests show there's an interaction effect (p-value = 0.001) \nbetween Maintenance Status and Engine Type on Operational Cost.",
+       x="Maintenance\n Status" ,
+       y="Operational Cost ('000USD)")+
+  theme(
+    axis.text.y = element_text(size = 7), 
+    axis.text.x = element_text(size = 7),  
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    strip.text = element_text(size = 9, face = "bold"),  # Facet title size
+    plot.margin = margin(10, 20, 10, 20),  
+    legend.position = "none",
+    legend.title = element_text(size=8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size=6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.title = element_text(size=13,hjust=0),
+    plot.subtitle = element_text(size=8,hjust=0),
+    plot.background = element_rect(fill = "#f3f1e9",color = NA)
+    )
+    
+
+
+plot(p)
+```
+
+```{r}
+shapiro.test(ship_cleaned$Cost_per_Voyage_k)
+```
+
+```{r}
+
+# Kruskal-Wallis test with both Route_Type and Ship_Type
+kruskal_test_engine <- kruskal.test(Cost_per_Voyage_k ~ Engine_Type, data = ship_cleaned)
+kruskal_test_maintain <- kruskal.test(Cost_per_Voyage_k ~ Maintenance_Status, data = ship_cleaned)
+
+# Create a new interaction factor
+ship_cleaned$Interaction <- interaction(ship_cleaned$Maintenance_Status, ship_cleaned$Engine_Type)
+
+# Kruskal-Wallis test on the interaction factor
+kruskal_interaction <- kruskal.test(Cost_per_Voyage_k ~ Interaction, data = ship_cleaned)
+
+print(kruskal_test_engine)
+print(kruskal_test_maintain)
+print(kruskal_interaction)
 
 
 ```
 
-## 3.4 Bivariate Analysis
+## 4.4 Which Ship & Route Types Have the Most Turnaround Time
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+```         
+# reorder factor level
+ship_cleaned$Route_Type <- factor(ship_cleaned$Route_Type, 
+                                  levels = c("Coastal", "Short-haul",
+                                             "Long-haul", "Transoceanic"))
+
+ggplot(ship_cleaned, aes(x = Turnaround_Time_hours,
+                          y = Route_Type,
+                          fill = Ship_Type,
+                          color = Ship_Type)) +   
+  geom_boxplot(aes(x = Turnaround_Time_hours), 
+               width = 0.2, 
+               position = position_dodge(width = 1), 
+               alpha = 0.6,
+               outliers = TRUE) +
+  stat_dots(
+            side = "left",
+            justification = 1.2, 
+            binwidth = NA,
+            dotsize = 1
+            )+
+  coord_flip()+
+  scale_fill_manual(values = my_palette) +
+  facet_wrap(~Ship_Type)+
+  theme_ridges() +
+  labs(title = "Which Ship & Route Types Have the Most Turnaround Time?",
+       subtitle = "",
+       x="Turnaround Time\n(Hours)" ,
+       y="Route Type")+
+  theme(
+    axis.text.y = element_text(size = 6), 
+    axis.text.x = element_text(size = 6),  
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    strip.text = element_text(size = 9, face = "bold"), # Facet title size
+    plot.margin = margin(10, 20, 10, 20),  
+    legend.position = "none",
+    legend.title = element_text(size=8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size=6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.title = element_text(size=12,hjust=0),
+    plot.subtitle = element_text(size=8,hjust=0),
+    plot.background = element_rect(fill = "#f3f1e9",color = NA)
+    )
+```
+
+</details>
+:::
 
 ```{r}
+#| echo: false
 
-Cost <- ggplot(ship_cleaned, 
-               aes(x = Season, y = Net_margin_per_Voyage,
-                   fill = Ship_Type)) +
-  geom_boxplot() +
-  scale_fill_manual(values = my_palette) +
-  labs(title = "Profit over Time by Ship Type",
-       x = "", y = "US)") +
-  theme_minimal() +
-  theme(legend.position = "None")
-Rev <- ggplot(ship_cleaned, aes(x = Season, y = Revenue_per_Voyage_k, fill = Ship_Type)) +
-  geom_boxplot() +
-  scale_fill_manual(values = my_palette) +
-  labs(title = "Revenue over Time by Ship Type",
-       x = "Date", y = "USD") +
-  theme_minimal() +
-  theme(legend.position = "bottom")
+# reorder factor level
+ship_cleaned$Route_Type <- factor(ship_cleaned$Route_Type, 
+                                  levels = c("Coastal", "Short-haul",
+                                             "Long-haul", "Transoceanic"))
 
-Cost/Rev
+p <- ggplot(ship_cleaned, aes(x = Turnaround_Time_hours, 
+                                  y = Route_Type,
+                                  fill = Ship_Type,
+                              color = Ship_Type)) +   
+  geom_boxplot(aes(x = Turnaround_Time_hours), 
+               width = 0.2, 
+               position = position_dodge(width = 1), 
+               alpha = 0.6,
+               outliers = TRUE) +
+  stat_dots(
+            side = "left",
+            justification = 1.2, 
+            binwidth = NA,
+            dotsize = 1
+            )+
+  coord_flip()+
+  scale_fill_manual(values = my_palette) +
+  facet_wrap(~Ship_Type)+
+  theme_ridges() +
+  labs(title = "Which Ship and Route Types Have the Most Turnaround Time?",
+       subtitle = "",
+       x="Turnaround Time\n(Hours)" ,
+       y="Route Type")+
+  theme(
+    axis.text.y = element_text(size = 7), 
+    axis.text.x = element_text(size = 7),  
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    strip.text = element_text(size = 9, face = "bold"), # Facet title size
+    plot.margin = margin(10, 20, 10, 20),  
+    legend.position = "none",
+    legend.title = element_text(size=8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size=6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.title = element_text(size=12,hjust=0),
+    plot.subtitle = element_text(size=8,hjust=0),
+    plot.background = element_rect(fill = "#f3f1e9",color = NA)
+    )
+    
+
+
+plot(p)
+```
+
+```{r}
+shapiro.test(ship_cleaned$Turnaround_Time_hours)
 ```
 
 ```{r}
 
+# Kruskal-Wallis test with both Route_Type and Ship_Type
+kruskal_test_route <- kruskal.test(Turnaround_Time_hours ~ Route_Type, data = ship_cleaned)
+kruskal_test_ship <- kruskal.test(Turnaround_Time_hours ~ Ship_Type, data = ship_cleaned)
 
-RevVsOp <- ggplot(ship_cleaned, aes(x=Net_margin_per_Voyage, y=Revenue_per_Voyage_k, color = Ship_Type))+geom_point()
+# Create a new interaction factor
+ship_cleaned$interaction_factor <- interaction(ship_cleaned$Route_Type, ship_cleaned$Ship_Type)
 
-RevVsOp
+# Kruskal-Wallis test on the interaction factor
+kruskal_interaction <- kruskal.test(Turnaround_Time_hours ~ interaction_factor, data = ship_cleaned)
+
+print(kruskal_test_route)
+print(kruskal_test_ship)
+print(kruskal_interaction)
 ```
