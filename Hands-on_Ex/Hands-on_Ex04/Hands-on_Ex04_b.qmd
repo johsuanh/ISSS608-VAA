@@ -33,11 +33,15 @@ Use the **pacman** package `p_load()` to check, install and launch the following
 pacman::p_load(ggstatsplot, tidyverse, nortest)
 ```
 
-| **Library** | **Description** |
-|----|----|
-| ggstatsplot | a ggplot2 extension for creating graphics with details from statistical tests included in the information-rich plots themselves. |
-| tidyverse | a family of R packages for data processing |
-| nortest | a package for normality test |
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
+| **Library**                      | **Description**                                                                                                                  |
++==================================+==================================================================================================================================+
+| ggstatsplot                      | a ggplot2 extension for creating graphics with details from statistical tests included in the information-rich plots themselves. |
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
+| tidyverse                        | a family of R packages for data processing                                                                                       |
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
+| nortest                          | a package for normality test                                                                                                     |
++----------------------------------+----------------------------------------------------------------------------------------------------------------------------------+
 
 ## Importing the data
 
@@ -549,11 +553,15 @@ Use the **pacman** package `p_load()` to check, install and launch the following
 pacman::p_load(readxl, performance, parameters, see, qqplotr)
 ```
 
-| **Library** | **Description** |
-|----|----|
-| performance | This package provides tools to evaluate and check the performance of regression models |
-| parameters | This package is used to extract and interpret parameters from regression models, e.g., coefficients, standard errors, p-values in an easy-to-interpret format |
-| see & qqplotr | The `see` package is designed for visualizing the results of statistical models and model diagnostics. `qqplotr()`: Plots a QQ plot of the residuals to check for normality. |
++----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Library**                      | **Description**                                                                                                                                                              |
++==================================+==============================================================================================================================================================================+
+| performance                      | This package provides tools to evaluate and check the performance of regression models                                                                                       |
++----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| parameters                       | This package is used to extract and interpret parameters from regression models, e.g., coefficients, standard errors, p-values in an easy-to-interpret format                |
++----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| see & qqplotr                    | The `see` package is designed for visualizing the results of statistical models and model diagnostics. `qqplotr()`: Plots a QQ plot of the residuals to check for normality. |
++----------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ## Importing the data
 
@@ -675,6 +683,9 @@ The plot and the check_heteroscedasticity(model1) result show the model having h
 We can also perform the complete by using [*check_model()*](https://easystats.github.io/performance/reference/check_model.html).
 
 ```{r}
+#| fig-width: 12
+#| fig-height: 10
+
 check_model(model1)
 ```
 

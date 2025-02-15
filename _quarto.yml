@@ -32,7 +32,7 @@ website:
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html
           - text: "05.c: Visual Multivariate Analysis with Parallel Coordinates Plot"
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html
-          - text: "05.d: Creating Ternary Plot with R"
+          - text: "05.d: Treemap Visualisation with R"
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html
           - text: "05.e: Visual Correlation Analysis"
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.html
