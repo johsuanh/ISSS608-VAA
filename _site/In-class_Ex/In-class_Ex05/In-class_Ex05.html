@@ -176,7 +176,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html">
- <span class="dropdown-text">05.d: Creating Ternary Plot with R</span></a>
+ <span class="dropdown-text">05.d: Treemap Visualisation with R</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.html">
@@ -200,6 +200,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html">
  <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex05.html">
+ <span class="dropdown-text">In-class Exercise 5</span></a>
   </li>  
     </ul>
   </li>
@@ -244,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#data-overview" id="toc-data-overview" class="nav-link" data-scroll-target="#data-overview">2 Data Overview</a>
   <ul class="collapse">
   <li><a href="#check-data-with-r-packages" id="toc-check-data-with-r-packages" class="nav-link" data-scroll-target="#check-data-with-r-packages">2.1 Check Data with R packages</a></li>
-  <li><a href="#check-data-using-expdata" id="toc-check-data-using-expdata" class="nav-link" data-scroll-target="#check-data-using-expdata">2.2 Check Data Using <code>ExpData()</code></a></li>
+  <li><a href="#check-data-using-expdata" id="toc-check-data-using-expdata" class="nav-link" data-scroll-target="#check-data-using-expdata">2.2 Check Data Using ExpData()</a></li>
   <li><a href="#re-import-data-again-and-transform-data-type" id="toc-re-import-data-again-and-transform-data-type" class="nav-link" data-scroll-target="#re-import-data-again-and-transform-data-type">2.3 Re-Import Data Again and Transform Data Type</a></li>
   </ul></li>
   <li><a href="#explore-data-using-smarteda-packages" id="toc-explore-data-using-smarteda-packages" class="nav-link" data-scroll-target="#explore-data-using-smarteda-packages">3 Explore Data Using SmartEDA Packages</a>
@@ -258,7 +262,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#check-collinearity-with-parameters-package" id="toc-check-collinearity-with-parameters-package" class="nav-link" data-scroll-target="#check-collinearity-with-parameters-package">4.2 Check Collinearity with Parameters package</a></li>
   </ul></li>
   <li><a href="#remove-mfg_year-and-fit-the-model-again" id="toc-remove-mfg_year-and-fit-the-model-again" class="nav-link" data-scroll-target="#remove-mfg_year-and-fit-the-model-again">5 Remove “Mfg_Year” and fit the model again</a></li>
-  <li><a href="#gtsummary-packages" id="toc-gtsummary-packages" class="nav-link" data-scroll-target="#gtsummary-packages">6 <code>gtsummary</code> Packages</a>
+  <li><a href="#gtsummary-packages" id="toc-gtsummary-packages" class="nav-link" data-scroll-target="#gtsummary-packages">6 gtsummary Packages</a>
   <ul class="collapse">
   <li><a href="#default-summary-of-r" id="toc-default-summary-of-r" class="nav-link" data-scroll-target="#default-summary-of-r">6.1 Default summary of R</a></li>
   <li><a href="#use-gtsummary-to-format-the-layout-of-the-summary" id="toc-use-gtsummary-to-format-the-layout-of-the-summary" class="nav-link" data-scroll-target="#use-gtsummary-to-format-the-layout-of-the-summary">6.2 Use gtsummary to format the layout of the summary</a></li>
@@ -309,7 +313,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-and-importing-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="installing-and-importing-the-data">1 Installing and Importing the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, readxl, SmartEDA,easystats, gtsummary,ggthemes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, readxl, SmartEDA,easystats,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               gtsummary,ggthemes, ggstatsplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import "data" sheet only</span></span>
@@ -497,7 +502,7 @@ $ Tow_Bar          &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 </div>
 </section>
 <section id="check-data-using-expdata" class="level3">
-<h3 class="anchored" data-anchor-id="check-data-using-expdata">2.2 Check Data Using <code>ExpData()</code></h3>
+<h3 class="anchored" data-anchor-id="check-data-using-expdata">2.2 Check Data Using ExpData()</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Type 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Type 2</a></li></ul>
 <div class="tab-content">
@@ -646,7 +651,7 @@ $ Tow_Bar          &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>car_resale <span class="sc">%&gt;%</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ExpNumViz</span>(<span class="at">target =</span> <span class="cn">NULL</span>,</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">nlim =</span> <span class="dv">10</span>,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">Page=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">Page=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$`0`</code></pre>
 </div>
@@ -654,6 +659,13 @@ $ Tow_Bar          &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 <div>
 <figure class="figure">
 <p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -775,7 +787,7 @@ High Correlation
 </div>
 </section>
 <section id="gtsummary-packages" class="level2">
-<h2 class="anchored" data-anchor-id="gtsummary-packages">6 <code>gtsummary</code> Packages</h2>
+<h2 class="anchored" data-anchor-id="gtsummary-packages">6 gtsummary Packages</h2>
 <section id="default-summary-of-r" class="level3">
 <h3 class="anchored" data-anchor-id="default-summary-of-r">6.1 Default summary of R</h3>
 <div class="cell">
@@ -818,23 +830,23 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                p.value,sigma)</span>
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="xiaazldpqt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#xiaazldpqt table {
+<div id="rleqzeexdy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rleqzeexdy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#xiaazldpqt thead, #xiaazldpqt tbody, #xiaazldpqt tfoot, #xiaazldpqt tr, #xiaazldpqt td, #xiaazldpqt th {
+#rleqzeexdy thead, #rleqzeexdy tbody, #rleqzeexdy tfoot, #rleqzeexdy tr, #rleqzeexdy td, #rleqzeexdy th {
   border-style: none;
 }
 
-#xiaazldpqt p {
+#rleqzeexdy p {
   margin: 0;
   padding: 0;
 }
 
-#xiaazldpqt .gt_table {
+#rleqzeexdy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -860,12 +872,12 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_caption {
+#rleqzeexdy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#xiaazldpqt .gt_title {
+#rleqzeexdy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -877,7 +889,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-bottom-width: 0;
 }
 
-#xiaazldpqt .gt_subtitle {
+#rleqzeexdy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -889,7 +901,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-top-width: 0;
 }
 
-#xiaazldpqt .gt_heading {
+#rleqzeexdy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -901,13 +913,13 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_bottom_border {
+#rleqzeexdy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_col_headings {
+#rleqzeexdy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -922,7 +934,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_col_heading {
+#rleqzeexdy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -942,7 +954,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   overflow-x: hidden;
 }
 
-#xiaazldpqt .gt_column_spanner_outer {
+#rleqzeexdy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -954,15 +966,15 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   padding-right: 4px;
 }
 
-#xiaazldpqt .gt_column_spanner_outer:first-child {
+#rleqzeexdy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xiaazldpqt .gt_column_spanner_outer:last-child {
+#rleqzeexdy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xiaazldpqt .gt_column_spanner {
+#rleqzeexdy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -974,11 +986,11 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   width: 100%;
 }
 
-#xiaazldpqt .gt_spanner_row {
+#rleqzeexdy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#xiaazldpqt .gt_group_heading {
+#rleqzeexdy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1004,7 +1016,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   text-align: left;
 }
 
-#xiaazldpqt .gt_empty_group_heading {
+#rleqzeexdy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1019,15 +1031,15 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   vertical-align: middle;
 }
 
-#xiaazldpqt .gt_from_md > :first-child {
+#rleqzeexdy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xiaazldpqt .gt_from_md > :last-child {
+#rleqzeexdy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xiaazldpqt .gt_row {
+#rleqzeexdy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1046,7 +1058,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   overflow-x: hidden;
 }
 
-#xiaazldpqt .gt_stub {
+#rleqzeexdy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1059,7 +1071,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-#xiaazldpqt .gt_stub_row_group {
+#rleqzeexdy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1073,15 +1085,15 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   vertical-align: top;
 }
 
-#xiaazldpqt .gt_row_group_first td {
+#rleqzeexdy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xiaazldpqt .gt_row_group_first th {
+#rleqzeexdy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#xiaazldpqt .gt_summary_row {
+#rleqzeexdy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1091,16 +1103,16 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-#xiaazldpqt .gt_first_summary_row {
+#rleqzeexdy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_first_summary_row.thick {
+#rleqzeexdy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xiaazldpqt .gt_last_summary_row {
+#rleqzeexdy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1110,7 +1122,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_grand_summary_row {
+#rleqzeexdy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1120,7 +1132,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-#xiaazldpqt .gt_first_grand_summary_row {
+#rleqzeexdy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1130,7 +1142,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_last_grand_summary_row_top {
+#rleqzeexdy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1140,11 +1152,11 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_striped {
+#rleqzeexdy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xiaazldpqt .gt_table_body {
+#rleqzeexdy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1153,7 +1165,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_footnotes {
+#rleqzeexdy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1167,7 +1179,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_footnote {
+#rleqzeexdy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1176,7 +1188,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-#xiaazldpqt .gt_sourcenotes {
+#rleqzeexdy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1190,7 +1202,7 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xiaazldpqt .gt_sourcenote {
+#rleqzeexdy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1198,72 +1210,72 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
   padding-right: 5px;
 }
 
-#xiaazldpqt .gt_left {
+#rleqzeexdy .gt_left {
   text-align: left;
 }
 
-#xiaazldpqt .gt_center {
+#rleqzeexdy .gt_center {
   text-align: center;
 }
 
-#xiaazldpqt .gt_right {
+#rleqzeexdy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xiaazldpqt .gt_font_normal {
+#rleqzeexdy .gt_font_normal {
   font-weight: normal;
 }
 
-#xiaazldpqt .gt_font_bold {
+#rleqzeexdy .gt_font_bold {
   font-weight: bold;
 }
 
-#xiaazldpqt .gt_font_italic {
+#rleqzeexdy .gt_font_italic {
   font-style: italic;
 }
 
-#xiaazldpqt .gt_super {
+#rleqzeexdy .gt_super {
   font-size: 65%;
 }
 
-#xiaazldpqt .gt_footnote_marks {
+#rleqzeexdy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#xiaazldpqt .gt_asterisk {
+#rleqzeexdy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xiaazldpqt .gt_indent_1 {
+#rleqzeexdy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xiaazldpqt .gt_indent_2 {
+#rleqzeexdy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xiaazldpqt .gt_indent_3 {
+#rleqzeexdy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xiaazldpqt .gt_indent_4 {
+#rleqzeexdy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xiaazldpqt .gt_indent_5 {
+#rleqzeexdy .gt_indent_5 {
   text-indent: 25px;
 }
 
-#xiaazldpqt .katex-display {
+#rleqzeexdy .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#xiaazldpqt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rleqzeexdy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1309,6 +1321,30 @@ F-statistic:  2005 on 4 and 1431 DF,  p-value: &lt; 2.2e-16</code></pre>
     </tr>
   </tfoot>
 </table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">parameters</span>(model1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">parameters</span>(model1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><code>ggcoefstats()</code> gives more information compared to <code>parameters()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcoefstats</span>(model1, <span class="at">output =</span> <span class="st">"plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="In-class_Ex05_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
 </div>
