@@ -326,7 +326,7 @@ To understand the marine sector, we need to research and understand the characte
 
 -   **Fish Carrier**: It is used to ship live or frozen fish from fishing vessels to processing facilities or markets, equipped with water tanks (for live fish) or refrigerated holds (for frozen fish)
 
--   **Taker**: Carry liquid cargo like crude oil and petroleum products, equipped with large cylindrical tanks, reinforced hulls, following strict environmental regulations.
+-   **Tanker**: Carry liquid cargo like crude oil and petroleum products, equipped with large cylindrical tanks, reinforced hulls, following strict environmental regulations.
 
 ### 3.2.2 Route Type
 
@@ -436,7 +436,7 @@ ggplot(ship_long_factors, aes(x = value, fill = variable)) +
 
 # 4 Data Wrangling
 
-After checking all variables, I identified several of them that need to be derived, transformed, or dropped:
+After reviewing all variables, I identified several that require derivation, transformation, or removal:
 
 ## 4.1 Transform Data Unit
 
@@ -457,7 +457,7 @@ ship_cleaned <- ship_cleaned %>%
 
 ## 4.2 Derive New Variables
 
--   **Date**: Weekly data is too granular for our analysis, so "**New_Date**" variable is created for monthly data and derive "**Season**" variables from the Date field.
+-   **Date**: Since weekly data is too granular for our analysis, "**New_Date**" variable is created to aggregate data monthly and "**Season**" variables are also created from the Date field.
 
     ```{r}
     # create New_date (monthly)
