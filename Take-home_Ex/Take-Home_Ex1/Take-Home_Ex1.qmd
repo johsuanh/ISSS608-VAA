@@ -560,7 +560,7 @@ ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric)
 
 ggcorrmat(
   data = ship_cleaned_num,
-  colors = c(  "#D989AE","white","#F2CD88ß"),
+  colors = c(  "#D989AE","white","#F2CD88"),
   ggcorrplot.args = list(outline.color = "black", 
                          hc.order = TRUE,
                          tl.cex = 8),
@@ -590,7 +590,7 @@ ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric)
 
 ggcorrmat(
   data = ship_cleaned_num,
-  colors = c(  "#D989AE","white","#F2CD88ß"),
+  colors = c(  "#D989AE","white","#F2CD88"),
   ggcorrplot.args = list(outline.color = "black", 
                          hc.order = TRUE,
                          tl.cex = 8),
@@ -603,7 +603,7 @@ ggcorrmat(
         axis.text.x = element_text(angle=30, hjust=1, size= 7),
         axis.text.y = element_text(size=7),
         panel.grid = element_blank(),
-        plot.margin = margin(t = 15, r = 50, b = 15, l = 50, unit = "pt") )
+        plot.margin = margin(t = 15, r = 50, b = 15, l = 50, unit = "pt"))
   
 ```
 
