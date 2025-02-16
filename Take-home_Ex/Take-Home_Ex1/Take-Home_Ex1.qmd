@@ -559,7 +559,8 @@ Among them, profit per voyage has a strong positive correlation with revenue (r 
 ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric) 
 
 ggcorrmat(
-  data = ship_cleaned_num, 
+  data = ship_cleaned_num,
+  colors = c(  "#D989AE","white","#F2CD88ß"),
   ggcorrplot.args = list(outline.color = "black", 
                          hc.order = TRUE,
                          tl.cex = 8),
@@ -571,7 +572,8 @@ ggcorrmat(
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
         axis.text.x = element_text(angle=30, hjust=1, size= 7),
         axis.text.y = element_text(size=7),
-        panel.grid = element_blank())
+        panel.grid = element_blank(),
+        plot.margin = margin(t = 15, r = 50, b = 15, l = 50, unit = "pt") )
 ```
 
 </details>
