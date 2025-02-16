@@ -1872,7 +1872,7 @@ p <- ggplot(ship_combined,
              scales = "free_x") + 
   labs(
     title = "Sailing Towards Profit: Which Route Types Lead the Way?",
-    subtitle = "The plot indicates that short-term routes generally yield higher profit margins and better cost efficiency.\nNotably, coastal routes achieve the highest profit margin of 25.12% while maintaining the lowest cost per nautical mile at 2",
+    subtitle = "The plot indicates that short-term routes generally yield higher profit margins and better cost efficiency.\nNotably, coastal routes achieve the highest profit margin of 23% while maintaining the lowest cost per nm at 1.95",
     x = "Route Type",
     y = "",
     fill = "Metric"
