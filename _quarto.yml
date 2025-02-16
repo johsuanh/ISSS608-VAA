@@ -48,7 +48,7 @@ website:
             href: In-class_Ex/In-class_Ex05/In-class_Ex05.html
       - text: "Take-home Exercise"
         menu:
-          - text: "Take-home Exercise 1"
+          - text: "Take-home Exercise 1: Ship performance Analysis"
             href: Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html
     right:
       - href: index.html
