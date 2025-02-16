@@ -44,27 +44,17 @@ pacman::p_load(tidyverse, patchwork,
                ggtext)
 ```
 
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| **Library**                                                                                  | **Description**                                                                                                                         |
-+==============================================================================================+=========================================================================================================================================+
-| [**tidyverse**](https://www.tidyverse.org/)                                                  | A collection of core packages designed for data science.                                                                                |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**patchwork**](https://patchwork.data-imaginist.com/)                                       | Prepare composite figure created using **ggplot2**                                                                                      |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**ggthemes**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)       | Extra themes, geoms, and scales for ggplot2.                                                                                            |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) | A ggplot2 extension specially designed for plotting ridgeline plots                                                                     |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**gganimate**](https://gganimate.com/)                                                      | An ggplot extension for creating animated statistical graphs.                                                                           |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**ggdist**](https://mjskay.github.io/ggdist/)                                               | A ggplot2 extension spacially desgin for visualising distribution and uncertainty.                                                      |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**plotly**](https://plotly.com/r/)                                                          | R library for plotting interactive statistical graphs.                                                                                  |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**DT**](https://rstudio.github.io/DT/)                                                      | provides an R interface to the JavaScript library [**DataTables**](https://datatables.net/) that create interactive table on html page. |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| [**ggiraph**](https://davidgohel.github.io/ggiraph/)                                         | For making ‘ggplot’ graphics interactive.                                                                                               |
-+----------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| **Library** | **Description** |
+|----|----|
+| [**tidyverse**](https://www.tidyverse.org/) | A collection of core packages designed for data science. |
+| [**patchwork**](https://patchwork.data-imaginist.com/) | Prepare composite figure created using **ggplot2** |
+| [**ggthemes**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) | Extra themes, geoms, and scales for ggplot2. |
+| [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) | A ggplot2 extension specially designed for plotting ridgeline plots |
+| [**gganimate**](https://gganimate.com/) | An ggplot extension for creating animated statistical graphs. |
+| [**ggdist**](https://mjskay.github.io/ggdist/) | A ggplot2 extension spacially desgin for visualising distribution and uncertainty. |
+| [**plotly**](https://plotly.com/r/) | R library for plotting interactive statistical graphs. |
+| [**DT**](https://rstudio.github.io/DT/) | provides an R interface to the JavaScript library [**DataTables**](https://datatables.net/) that create interactive table on html page. |
+| [**ggiraph**](https://davidgohel.github.io/ggiraph/) | For making ‘ggplot’ graphics interactive. |
 
 ## 2.2 Data Import, Overview and Pre-processing
 
