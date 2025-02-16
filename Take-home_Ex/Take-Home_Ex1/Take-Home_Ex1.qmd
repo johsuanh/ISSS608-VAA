@@ -108,29 +108,6 @@ The code chunk below uses R's **`summary()`** function to display statistical su
 summary(ship)
 ```
 
-### Check Unique Values for Categorical Attribute
-
-To analyze the categorical data in our summary, I'll examine its unique values using the **map_chr** function from the **purrr** package to iterate through the character vector:
-
-```{r}
-# define a function called get_unique_var:
-get_unique_var <- function(column) {
-  unique_vals <- unique(ship[[column]])
-  unique_count <- length(unique_vals)
-  paste("Column Name:", column,
-         "| Unique Count:", unique_count,
-         "| Unique Values:", paste(unique_vals, collapse = ", "))
-}
-
-# select specific columns
-selected_var <- ship %>% select(Route_Type, Ship_Type, Engine_Type, Maintenance_Status, Weather_Condition)
-
-# apply the function to each column and store the results
-unique_var <- map_chr(names(selected_var), get_unique_var)
-
-unique_var
-```
-
 ## Metadata
 
 Since the imported data types are not fully correct, we will handle them in the next tab "Data Preprocessing". The data contains 5 categorical attributes, 1 temporal attribute, 11 decimal attributes, and 1 integer attributes:
@@ -359,7 +336,9 @@ As for categorical variables, the distributions are also quite even, except for:
 
 -   The count of **long-haul** slightly higher
 
--   The count of "rough" weather condition is slightly lower than others
+-   The count of "**rough**" weather condition is slightly lower than others
+
+Additionally, during data preprocessing, we observed 136 null values for each category, which will be addressed in later steps.
 
 ::: toggle
 <details>
@@ -453,7 +432,6 @@ ship_cleaned <- ship %>%
 ship_cleaned <- ship_cleaned %>%
   mutate(Revenue_per_Voyage_k = Revenue_per_Voyage_USD/1000)
 
-
 ```
 
 ## 4.2 Derive New Variables
@@ -486,10 +464,9 @@ ship_cleaned <- ship_cleaned %>%
     ship_cleaned <- ship_cleaned %>%
       mutate(Profit_per_Voyage = Revenue_per_Voyage_k - Cost_per_Voyage_k)
 
-
     ```
 
--   **Distance travel & Cost per Nautical Mile** :According to Kaggle, "**Distance_Traveled_nm**" represent total engine power and distance traveled by the ship. These values will be divided by weekly_voyage_count. In addition, cost per Nautical Mile will be derived for performance evaluation.
+-   **Distance travel & Cost per Nautical Mile** :According to Kaggle, "**Distance_Traveled_nm**" represent total distance traveled by the ship. These values will be divided by weekly_voyage_count. In addition, cost per Nautical Mile will be derived for financial performance evaluation.
 
     ```{r}
     # create distance travel per voyage
@@ -499,8 +476,6 @@ ship_cleaned <- ship_cleaned %>%
     # create cost per nm
     ship_cleaned <- ship_cleaned %>%
       mutate(Cost_per_nm = Cost_per_Voyage_k / distance_travel_per_V)
-
-
 
     ```
 
@@ -525,7 +500,7 @@ ship_cleaned <- ship_cleaned %>%
 
 ## 4.3 Drop Variables and None Values
 
-Based on the previous univariate and correlation analysis, we will retain only the relevant variables for further analysis. Though missing values in Categorical data didn't affect much, but it's quite annoying when visualization, since all catgorical data include missing values
+Based on the previous univariate and correlation analysis, we will retain only the relevant variables for further analysis. While the missing values in categorical data have minimal impact on our analysis, they create visualization challenges since all categorical variables contain missing values.
 
 ```{r}
 # These variables are dropped
@@ -556,11 +531,12 @@ Among them, profit per voyage has a strong positive correlation with revenue (r 
 <summary>**Display Code**</summary>
 
 ``` r
+
 ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric) 
 
 ggcorrmat(
   data = ship_cleaned_num,
-  colors = c(  "#D989AE","white","#F2CD88"),
+  colors = c(  "#D989AE","white","#96C6D9"),
   ggcorrplot.args = list(outline.color = "black", 
                          hc.order = TRUE,
                          tl.cex = 8),
@@ -573,7 +549,7 @@ ggcorrmat(
         axis.text.x = element_text(angle=30, hjust=1, size= 7),
         axis.text.y = element_text(size=7),
         panel.grid = element_blank(),
-        plot.margin = margin(t = 15, r = 50, b = 15, l = 50, unit = "pt") )
+        plot.margin = margin(t = 15, r = 50, b = 15, l = 50, unit = "pt"))
 ```
 
 </details>
@@ -582,7 +558,7 @@ ggcorrmat(
 ```{r}
 #| echo: false
 #| fig-height: 6
-#| fig-width: 12
+#| fig-width: 8
 #| out-extra: "style='max-width:100%; display: block;'"
 #| out-width: 100%
 
@@ -590,7 +566,7 @@ ship_cleaned_num <- ship_cleaned %>% select_if(is.numeric)
 
 ggcorrmat(
   data = ship_cleaned_num,
-  colors = c(  "#D989AE","white","#F2CD88"),
+  colors = c(  "#D989AE","white","#96C6D9"),
   ggcorrplot.args = list(outline.color = "black", 
                          hc.order = TRUE,
                          tl.cex = 8),
@@ -611,7 +587,7 @@ ggcorrmat(
 
 After transformation, Profit_per_Voyage shows a normal distribution. However, Margin_per_Voyage displays extreme values—ranging from -842.56% to 98.73%, with a median of 50.56%—indicating substantial variation in profit margins across ships.
 
-:::: panel-tabset
+::::: panel-tabset
 ## Numerical Data Distribution
 
 ::: toggle
@@ -674,7 +650,12 @@ ggplot(ship_long, aes(x = value)) +
 
 ## Categorical Data Distribution
 
-```{r}
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
 ship_factors <- ship_cleaned %>% select_if(is.factor)  
 
 # unpivot the data from wide to long format
@@ -697,7 +678,39 @@ ggplot(ship_long_factors, aes(x = value, fill = variable)) +
         panel.background = element_rect(fill = "#f3f1e9"),
         plot.background = element_rect(fill = "#f3f1e9",color = NA),
         legend.position = "none",
-        axis.text.x = element_text(angle=20, hjust=1, size= 7),
+        axis.text.x = element_text(angle=30, hjust=1, size= 7),
+        axis.text.y = element_text(size=6),
+        panel.grid = element_blank())
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+ship_factors <- ship_cleaned %>% select_if(is.factor)  
+
+# unpivot the data from wide to long format
+ship_long_factors <- ship_factors %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "variable", 
+               values_to = "value")
+
+
+# plot bar charts for all categorical variables
+ggplot(ship_long_factors, aes(x = value, fill = variable)) +
+  geom_bar() +
+  facet_wrap(~ variable, scales = "free") +  # Facet by variable name
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "Bar Plots of All Categorical Variables",
+       x = "", y = "Count") +
+  theme_minimal() +
+    theme(plot.title = element_text(size=13, hjust=0),
+        legend.background = element_rect(fill = "#f3f1e9"),
+        panel.background = element_rect(fill = "#f3f1e9"),
+        plot.background = element_rect(fill = "#f3f1e9",color = NA),
+        legend.position = "none",
+        axis.text.x = element_text(angle=30, hjust=1, size= 7),
         axis.text.y = element_text(size=6),
         panel.grid = element_blank())
 ```
@@ -707,7 +720,7 @@ ggplot(ship_long_factors, aes(x = value, fill = variable)) +
 ```{r}
 summary(ship_cleaned)
 ```
-::::
+:::::
 
 # 5 Exploratory Data Analysis
 
@@ -937,6 +950,7 @@ p2 <- ggplot() +
   ) +
   labs(x = "",
        y = "Profit Margin %",
+       caption = "*The tooltips show annual average values by Ship Type",
        color = "Legend") +
   theme_classic() +
   theme(
@@ -946,6 +960,7 @@ p2 <- ggplot() +
         legend.justification = c(0, 1),
         legend.background = element_rect(fill = "#f3f1e9"),
         panel.background = element_rect(fill = "#f3f1e9"),
+        plot.caption = element_text(size = 6,hjust=0),
         plot.background = element_rect(fill = "#f3f1e9", color = NA)
   )
 
@@ -969,7 +984,7 @@ girafe(
 
 ## 5.2 **Financial Performance:** Seasonal Profit Trends by Ship Type
 
-Based on the previous **Plot 5.1**, we analyze operational profit by ship type. The "Average Load Percentage" tab suggests that lower profits may result from reduced load percentages, leading to decreased revenue and higher operational costs.
+Based on the previous **Plot 5.1**, we analyze operational profit by ship type among quaters. The "Average Load Percentage" tab suggests that lower profits may result from reduced load percentages, leading to decreased revenue and lower profit margins.
 
 The two plots show:
 
@@ -1131,11 +1146,15 @@ ggplot(ship_cleaned, aes(x = Profit_per_Voyage,
 
 ``` r
 # calculate average profit per quarter
-quarter_avg <- ship_cleaned %>%
+quarter_median <- ship_cleaned %>%
   group_by(Quarter) %>%
-  summarise(avg_profit = mean(Average_Load_Percentage, na.rm = TRUE))
+  summarise(median_lp = median(Average_Load_Percentage, na.rm = TRUE))
 
-
+# Create a dataframe for line reference with linetype mapping
+line_data <- bind_rows(
+  quarter_avg %>% mutate(linetype = "Mean"),
+  quarter_median %>% mutate(linetype = "Median")
+)
 
 ggplot(ship_cleaned, aes(x = Average_Load_Percentage, 
                               y = interaction(Ship_Size,Ship_Type),
@@ -1149,19 +1168,29 @@ ggplot(ship_cleaned, aes(x = Average_Load_Percentage,
                outlier.colour = "black",  
                outlier.size = 0.5,
                width = 0.2, 
-               position = position_dodge(width = 0.7)) +  
+               position = position_dodge(width = 0.7)) + 
+  geom_vline(data = line_data, 
+             aes(xintercept = median_lp, linetype = linetype), 
+             color = "white", size = 0.4)+
+  scale_fill_manual(values = my_palette) +
+  scale_linetype_manual(name = "Reference", values = c("Median" = "dashed")) +
+  guides(
+    fill = guide_legend(order = 1),
+    linetype = guide_legend(order = 2) # Adds linetype to the legend
+  ) +
   scale_fill_manual(values = my_palette) +
   # set facet title order
   facet_wrap(~ factor(Quarter, levels = c("Q1", "Q2", "Q3", "Q4")), ncol = 4) +
   theme_classic() +  
-  labs(title = "Lower Loading Percentage may be the culprit for lower Revenue?",
+  labs(title = "Could a lower loading percentage be contributing to decreased revenue?",
+       subtitle = "",
        x = "Average Load Percentage (%)", 
        y = "Route, Engine & Ship Type") +
   theme(
     axis.text.y = element_text(size = 6), 
     axis.text.x = element_text(size = 6),  
-    axis.title.x = element_text(size = 9),
-    axis.title.y = element_text(size = 9),
+    axis.title.x = element_text(size = 10),
+    axis.title.y = element_text(size = 10),
     strip.text = element_text(size = 7, face = "bold"),  # Facet title size
     legend.position = "top",
     legend.title = element_text(size = 8),
@@ -1170,15 +1199,12 @@ ggplot(ship_cleaned, aes(x = Average_Load_Percentage,
     legend.background = element_rect(fill = "#f3f1e9"),
     panel.background = element_rect(fill = "#f3f1e9"),
     plot.background = element_rect(fill = "#f3f1e9", color = NA),
-    plot.title = element_text(size = 15,hjust = 0.5,face='bold'),
+    plot.title = element_text(size = 13,hjust = 0.5,face='bold'),
     plot.margin = margin(10, 50, 10 ,20), 
     panel.spacing = unit(1, "lines"),
     strip.placement = "outside",  # Places strip above the panel
     strip.switch.pad.wrap = unit(1, "cm") 
-  )+
-  geom_vline(data = quarter_avg, 
-             aes(xintercept = avg_profit), 
-             color = "white", linetype = "dashed", size = 0.4)
+  )
 ```
 
 </details>
@@ -1250,7 +1276,7 @@ ggplot(ship_cleaned, aes(x = Average_Load_Percentage,
 ```
 :::::
 
-### 5.2.1 Correlation Test 
+### 5.2.1 Correlation Test
 
 However, the correlation between profit and average load percentage is **0.03**, with a **p-value of 0.097**, indicating a weak and statistically insignificant relationship. This suggests that while load percentage may influence profit, other operational factors likely play a more substantial role.
 
@@ -1262,13 +1288,16 @@ cor.test(ship_cleaned$Profit_per_Voyage, ship_cleaned$Average_Load_Percentage)
 
 **Revenue, profit margin**, and **cost per nautical mile** are crucial indicators of a ship’s financial performance. Higher revenue and profit margins reflect income generation, while cost per nautical mile assesses operational efficiency, including fuel, crew wages, and maintenance. A lower cost per nautical mile indicates better efficiency and enhances profitability.
 
-The chart, sorted by revenue, shows that:
+The chart, sorted by profit margin, shows that:
 
--   **Revenue and Profitability:** Revenue is similar across ship types (ranging from 500K to 595K), profit margins vary significantly from 7.4% to 36.6%.
+-   **Revenue and Profitability:** While revenue remains consistent across different ship and route types, profit margins show substantial variation, ranging from 7.4% to 36.6% among ship types.
 
--   **Cost Efficiency**: The Medium Fish Carrier, with a cost per nautical mile of 1.84, stands out for its strong operational efficiency. On the other hand, the Medium Bulk Carrier has a higher cost per nautical mile, indicating poor cost control.
+-   **Cost Efficiency**: The Medium Fish Carrier demonstrates strong operational efficiency with a cost of 1.84 per nautical mile. In contrast, the Medium Bulk Carrier's higher cost per nautical mile indicates poor cost management. Among route types, shorter distances perform better. Coastal routes show the best cost efficiency, while transoceanic routes have the lowest.
 
-Although Kruskal-Wallis tests fail to reject the null hypothesis, suggesting similar distributions for margin, revenue, and cost per nautical mile across ship types, performance differences are still evident.
+The Kruskal-Wallis test provides significant evidence (p-value = 0.01) that Cost per nm differs by Route Type, with coastal routes demonstrating notably better cost efficiency compared to long-haul and transoceanic routes. Although the Kruskal-Wallis test fails to reject the null hypothesis for margin, revenue, and cost per nautical mile across ship types, performance differences remain apparent.
+
+::::: panel-tabset
+## by Ship Type
 
 ::: toggle
 <details>
@@ -1382,7 +1411,8 @@ p <- ggplot(ship_combined,
   ) +
   theme_classic() +  
   scale_fill_manual(values = my_palette) +
-  scale_linetype_manual(values = c("Mean*" = "dashed","Median"="dashed")) +
+  scale_linetype_manual(name = "Reference",
+                        values = c("Mean*" = "dashed","Median"="dashed")) +
   guides(
     fill = guide_legend(order = 1),
     linetype = guide_legend(order = 2) #adding line type legend
@@ -1401,7 +1431,7 @@ p <- ggplot(ship_combined,
     panel.background = element_rect(fill = "#f3f1e9"),
     plot.background = element_rect(fill = "#f3f1e9", color = NA),
     plot.title = element_text(size = 11,hjust = 0.5,face='bold'),
-    plot.subtitle = element_markdown(size = 6, hjust = 0, lineheight = 1.1),
+    plot.subtitle = element_text(size = 6, hjust = 0, lineheight = 1.1),
     plot.caption = element_text(size = 6,color="grey40"),
     plot.margin = margin(10, 50, 10 ,30), 
     panel.spacing = unit(1, "lines"),
@@ -1581,6 +1611,317 @@ girafe(
   ))
 ```
 
+## by Route Type
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+# Create a summary dataframe for total revenue per ship_engine for sorting purpose
+ship_summary <- ship_cleaned %>%
+  group_by(Route_Type) %>%
+  summarise(mean_margin_all = mean(Margin_per_Voyage, na.rm = TRUE)) %>%
+  arrange(mean_margin_all)
+
+# Create the long format dataframe for rev & p >> column 1
+ship_rev <- ship_cleaned %>%
+    group_by(Route_Type) %>%
+    summarise(
+        avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE)) %>%
+    pivot_longer(cols = c(avg_revenue), 
+                names_to = "metric", 
+                values_to = "value") 
+
+# Create the long format dataframe for growth rate and margin >> column 2
+ship_margin <- ship_cleaned %>%
+    group_by(Route_Type) %>%
+    summarise(
+        avg_margin =mean(Margin_per_Voyage, na.rm = TRUE)
+
+    ) %>%
+    pivot_longer(cols = c(avg_margin), 
+                names_to = "metric", 
+                values_to = "value") 
+
+# Create the long format dataframe for growth rate and margin >> column 3
+ship_op_efficiency <- ship_cleaned %>%
+    group_by(Route_Type) %>%
+    summarise(
+        avg_cost_nm = mean(Cost_per_nm, na.rm = TRUE)
+    ) %>%
+    pivot_longer(cols = c(avg_cost_nm), 
+                names_to = "metric", 
+                values_to = "value") 
+
+# summary for tooltips
+ship_metrics_summary <- ship_cleaned %>%
+  group_by(Route_Type) %>%
+  summarise(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_margin = mean(Margin_per_Voyage, na.rm = TRUE),
+    avg_cost_nm = mean(Cost_per_nm, na.rm = TRUE)
+  )
+
+# Create the combined dataframe with correct tooltips
+ship_combined <- bind_rows(
+    ship_rev %>% mutate(category = "Revenue"),
+    ship_margin %>% mutate(category = "Profitability"),
+    ship_op_efficiency %>% mutate(category = "Cost Efficiency")
+) %>%
+  left_join(ship_metrics_summary, by = "Route_Type") %>%
+  mutate(
+    tooltip = case_when(
+      metric == "avg_revenue" ~ sprintf("Ship Type: %s\nRevenue: %.2f K", Route_Type, value),
+      metric == "avg_margin" ~ sprintf("Ship Type: %s\nProfit Margin: %.2f%%", Route_Type, value),
+      metric == "avg_cost_nm" ~ sprintf("Ship Type: %s\nCost per nm: %.2f", Route_Type, value)
+    )
+  )
+
+# avg ref line 
+avg_revenue <- mean(ship_metrics_summary$avg_revenue, na.rm = TRUE)
+avg_margin <- mean(ship_metrics_summary$avg_margin, na.rm = TRUE)
+avg_cost <- mean(ship_metrics_summary$avg_cost_nm, na.rm = TRUE)
+
+# Plot with Facet & Hover
+p <- ggplot(ship_combined, 
+       aes(x = case_when(
+           category == "Revenue" ~ factor(Route_Type, 
+                                          levels = ship_summary$Route_Type),
+           category == "Profitability" ~ factor(Route_Type, 
+                                                levels = ship_summary$Route_Type),
+           category == "Cost Efficiency" ~ factor(Route_Type, 
+                                                  levels = ship_summary$Route_Type)
+         ), 
+           y = value,
+           fill = metric)) +
+  geom_bar_interactive(stat = "identity",
+                       position = position_dodge(width = 0.7),
+                       aes(tooltip = tooltip, 
+                           data_id = Route_Type),
+                       width = 0.5) +
+  # Reference line using geom_hline
+  geom_hline(data = data.frame(
+    category = c("Revenue", "Profitability", "Cost Efficiency"),
+    avg_value = c(avg_revenue, avg_margin, avg_cost)
+  ),
+    aes(yintercept = avg_value, linetype = "Mean*"),
+    color = "black",
+    size = 0.5
+  ) +
+  coord_flip() +
+  facet_wrap(~ factor(category, 
+                      levels = c("Profitability", "Revenue", "Cost Efficiency")),
+             scales = "free_x") + 
+  labs(
+    title = "Sailing Towards Profit: Which Route Types Lead the Way?",
+    subtitle = "The plot indicates that short-term routes generally yield higher profit margins and better cost efficiency.\nNotably, coastal routes achieve the highest profit margin of 25.12% while maintaining the lowest cost per nautical mile at 2",
+    x = "Route Type",
+    y = "",
+    fill = "Metric"
+  ) +
+  theme_classic() +  
+  scale_fill_manual(values = my_palette) +
+  scale_linetype_manual(name = "Reference",
+                        values = c("Mean*" = "dashed","Median"="dashed")) +
+  guides(
+    fill = guide_legend(order = 1),
+    linetype = guide_legend(order = 2) #adding line type legend
+  ) +
+  theme(
+    axis.text.y = element_text(size = 6,color="grey20"), 
+    axis.text.x = element_text(size = 6,color="grey20"),  
+    axis.title.x = element_text(size = 8,color="grey20"),
+    axis.title.y = element_text(size = 8,color="grey20"),
+    strip.text = element_text(size = 7, face = "bold"), 
+    legend.position = "top",
+    legend.title = element_text(size = 6),
+    legend.key.size = unit(0.2, "cm"),
+    legend.text = element_text(size = 6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.title = element_text(size = 11,hjust = 0.5,face='bold'),
+    plot.subtitle = element_text(size = 6, hjust = 0, lineheight = 1.1),
+    plot.caption = element_text(size = 6,color="grey40"),
+    plot.margin = margin(10, 50, 10 ,30), 
+    panel.spacing = unit(1, "lines"),
+    strip.placement = "outside",  
+    strip.switch.pad.wrap = unit(2, "cm")
+  )
+
+tooltip_css <- "background-color:white; font-style: bold; font-size:10px; color:black; border-radius: 5px; margin: 3px; padding:3px;"  
+
+# Convert to Interactive
+girafe(
+  code = print(p), 
+  width_svg = 6,
+  height_svg = 4,
+  options = list(
+    opts_hover(css = "stroke-width:3px; opacity: 1;"),
+    opts_hover_inv(css = "opacity: 0.2;"),
+    opts_tooltip(css = tooltip_css)
+  ))
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 12
+#| out-extra: "style='max-width:100%; display: block;'"
+#| out-width: 100%
+
+# Create a summary dataframe for total revenue per ship_engine for sorting purpose
+ship_summary <- ship_cleaned %>%
+  group_by(Route_Type) %>%
+  summarise(mean_margin_all = mean(Margin_per_Voyage, na.rm = TRUE)) %>%
+  arrange(mean_margin_all)
+
+# Create the long format dataframe for rev & p >> column 1
+ship_rev <- ship_cleaned %>%
+    group_by(Route_Type) %>%
+    summarise(
+        avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE)) %>%
+    pivot_longer(cols = c(avg_revenue), 
+                names_to = "metric", 
+                values_to = "value") 
+
+# Create the long format dataframe for growth rate and margin >> column 2
+ship_margin <- ship_cleaned %>%
+    group_by(Route_Type) %>%
+    summarise(
+        avg_margin =mean(Margin_per_Voyage, na.rm = TRUE)
+
+    ) %>%
+    pivot_longer(cols = c(avg_margin), 
+                names_to = "metric", 
+                values_to = "value") 
+
+# Create the long format dataframe for growth rate and margin >> column 3
+ship_op_efficiency <- ship_cleaned %>%
+    group_by(Route_Type) %>%
+    summarise(
+        avg_cost_nm = mean(Cost_per_nm, na.rm = TRUE)
+    ) %>%
+    pivot_longer(cols = c(avg_cost_nm), 
+                names_to = "metric", 
+                values_to = "value") 
+
+# summary for tooltips
+ship_metrics_summary <- ship_cleaned %>%
+  group_by(Route_Type) %>%
+  summarise(
+    avg_revenue = mean(Revenue_per_Voyage_k, na.rm = TRUE),
+    avg_margin = mean(Margin_per_Voyage, na.rm = TRUE),
+    avg_cost_nm = mean(Cost_per_nm, na.rm = TRUE)
+  )
+
+# Create the combined dataframe with correct tooltips
+ship_combined <- bind_rows(
+    ship_rev %>% mutate(category = "Revenue"),
+    ship_margin %>% mutate(category = "Profitability"),
+    ship_op_efficiency %>% mutate(category = "Cost Efficiency")
+) %>%
+  left_join(ship_metrics_summary, by = "Route_Type") %>%
+  mutate(
+    tooltip = case_when(
+      metric == "avg_revenue" ~ sprintf("Ship Type: %s\nRevenue: %.2f K", Route_Type, value),
+      metric == "avg_margin" ~ sprintf("Ship Type: %s\nProfit Margin: %.2f%%", Route_Type, value),
+      metric == "avg_cost_nm" ~ sprintf("Ship Type: %s\nCost per nm: %.2f", Route_Type, value)
+    )
+  )
+
+# avg ref line 
+avg_revenue <- mean(ship_metrics_summary$avg_revenue, na.rm = TRUE)
+avg_margin <- mean(ship_metrics_summary$avg_margin, na.rm = TRUE)
+avg_cost <- mean(ship_metrics_summary$avg_cost_nm, na.rm = TRUE)
+
+# Plot with Facet & Hover
+p <- ggplot(ship_combined, 
+       aes(x = case_when(
+           category == "Revenue" ~ factor(Route_Type, 
+                                          levels = ship_summary$Route_Type),
+           category == "Profitability" ~ factor(Route_Type, 
+                                                levels = ship_summary$Route_Type),
+           category == "Cost Efficiency" ~ factor(Route_Type, 
+                                                  levels = ship_summary$Route_Type)
+         ), 
+           y = value,
+           fill = metric)) +
+  geom_bar_interactive(stat = "identity",
+                       position = position_dodge(width = 0.7),
+                       aes(tooltip = tooltip, 
+                           data_id = Route_Type),
+                       width = 0.5) +
+  # Reference line using geom_hline
+  geom_hline(data = data.frame(
+    category = c("Revenue", "Profitability", "Cost Efficiency"),
+    avg_value = c(avg_revenue, avg_margin, avg_cost)
+  ),
+    aes(yintercept = avg_value, linetype = "Mean*"),
+    color = "black",
+    size = 0.5
+  ) +
+  coord_flip() +
+  facet_wrap(~ factor(category, 
+                      levels = c("Profitability", "Revenue", "Cost Efficiency")),
+             scales = "free_x") + 
+  labs(
+    title = "Sailing Towards Profit: Which Route Types Lead the Way?",
+    subtitle = "The plot indicates that short-term routes generally yield higher profit margins and better cost efficiency.\nNotably, coastal routes achieve the highest profit margin of 25.12% while maintaining the lowest cost per nautical mile at 2",
+    x = "Route Type",
+    y = "",
+    fill = "Metric"
+  ) +
+  theme_classic() +  
+  scale_fill_manual(values = my_palette) +
+  scale_linetype_manual(name = "Reference",
+                        values = c("Mean*" = "dashed","Median"="dashed")) +
+  guides(
+    fill = guide_legend(order = 1),
+    linetype = guide_legend(order = 2) #adding line type legend
+  ) +
+  theme(
+    axis.text.y = element_text(size = 6,color="grey20"), 
+    axis.text.x = element_text(size = 6,color="grey20"),  
+    axis.title.x = element_text(size = 8,color="grey20"),
+    axis.title.y = element_text(size = 8,color="grey20"),
+    strip.text = element_text(size = 7, face = "bold"), 
+    legend.position = "top",
+    legend.title = element_text(size = 6),
+    legend.key.size = unit(0.2, "cm"),
+    legend.text = element_text(size = 6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.title = element_text(size = 11,hjust = 0.5,face='bold'),
+    plot.subtitle = element_text(size = 6, hjust = 0, lineheight = 1.1),
+    plot.caption = element_text(size = 6,color="grey40"),
+    plot.margin = margin(10, 50, 10 ,30), 
+    panel.spacing = unit(1, "lines"),
+    strip.placement = "outside",  
+    strip.switch.pad.wrap = unit(2, "cm")
+  )
+
+tooltip_css <- "background-color:white; font-style: bold; font-size:10px; color:black; border-radius: 5px; margin: 3px; padding:3px;"  
+
+# Convert to Interactive
+girafe(
+  code = print(p), 
+  width_svg = 6,
+  height_svg = 4,
+  options = list(
+    opts_hover(css = "stroke-width:3px; opacity: 1;"),
+    opts_hover_inv(css = "opacity: 0.2;"),
+    opts_tooltip(css = tooltip_css)
+  ))
+```
+:::::
+
 ### 5.3.1 Normality and Kruskal-Wallis Test
 
 ::: panel-tabset
@@ -1594,7 +1935,7 @@ shapiro.test(ship_cleaned$Revenue_per_Voyage_k)
 shapiro.test(ship_cleaned$Cost_per_nm)
 ```
 
-### Kruskal-Wallis Test
+## Kruskal-Wallis Test
 
 Three tests all show p-value \> 0.05, failing to reject the null hypothesis.
 
@@ -1604,9 +1945,28 @@ kruskal_test_margin <- kruskal.test(Margin_per_Voyage ~ type_size, data = ship_c
 kruskal_test_rev <- kruskal.test(Revenue_per_Voyage_k ~ type_size, data = ship_cleaned)
 kruskal_test_costnm <- kruskal.test(Cost_per_nm ~ type_size, data = ship_cleaned)
 
+kruskal_test_margin_r <- kruskal.test(Margin_per_Voyage ~ Route_Type, data = ship_cleaned)
+kruskal_test_rev_r <- kruskal.test(Revenue_per_Voyage_k ~ Route_Type, data = ship_cleaned)
+kruskal_test_costnm_r <- kruskal.test(Cost_per_nm ~ Route_Type, data = ship_cleaned)
+
 print(kruskal_test_margin)
 print(kruskal_test_rev)
 print(kruskal_test_costnm)
+print(kruskal_test_margin_r)
+print(kruskal_test_rev_r)
+print(kruskal_test_costnm_r)
+
+
+```
+
+```{r}
+library(dunn.test)
+mean_cnm <- ship_cleaned %>%
+  group_by(Route_Type) %>%
+  summarise(mean_Cost_per_nm = mean(Cost_per_nm, na.rm = TRUE))
+
+print(mean_cnm)
+dunn.test(ship_cleaned$Cost_per_nm, ship_cleaned$Route_Type, kw = TRUE)
 ```
 :::
 
@@ -1614,7 +1974,7 @@ print(kruskal_test_costnm)
 
 As marine regulations tighten, ship maintenance becomes crucial, as poor upkeep leads to higher operational costs. The plot below shows that **Diesel and Heavy Fuel Oil engines** with **critical maintenance status** also incur higher costs.
 
-To confirm statistical differences, we conducted a **Kruskal-Wallis test** to assess whether **operational cost per voyage**varies by **engine type, maintenance status, and their interaction**. While neither engine type nor maintenance status alone has a significant impact, there is **strong evidence of an interaction effect** (**p-value = 0.001**). This suggests that operational costs depend on the combination of these factors, highlighting the need to consider both when managing expenses.
+To confirm statistical differences, we conducted a **Kruskal-Wallis test** to assess whether **operational cost per voyage** varies by **engine type, maintenance status, and their interaction**. While neither engine type nor maintenance status alone has a significant impact, there is **strong evidence of an interaction effect** (**p-value = 0.001**). This suggests that operational costs depend on the combination of these factors, highlighting the need to consider both when managing expenses.
 
 ::: toggle
 <details>
@@ -1623,6 +1983,7 @@ To confirm statistical differences, we conducted a **Kruskal-Wallis test** to 
 
 ``` r
 # Create the plot
+
 p <- ggplot(ship_cleaned, aes(x = Cost_per_Voyage_k, 
                                   y =  Maintenance_Status,
                                   fill = Engine_Type)) +   
@@ -1763,7 +2124,6 @@ A **Kruskal-Wallis test** (p = 0.029) confirms **significant differences** in t
 <summary>**Display Code**</summary>
 
 ``` r
-# reorder factor level
 # Calculate median turnaround time per Ship Type
 turnaround_medians <- ship_cleaned %>%
   group_by(Ship_Type) %>%
@@ -1920,12 +2280,12 @@ The key findings are:
 
 -   In terms of **turnaround time (TAT)**, large ships showed the shorter turnaround time compared to medium ships with statistical significance, indicating ship size is an important factor to TAT.
 
--   Finally, key financial indicators—**revenue**, **profit margin**, and **cost per nautical mile**—reveal variations in performance. While revenue levels are similar across ship types, profit margins show significant variation. Although statistical tests show no significant differences in these indicators, clear performance distinctions exist between ship types.
+-   Key financial indicators—**revenue**, **profit margin**, and **cost per nautical mile**—reveal variations in performance. While revenue levels are similar across ship types, profit margins show significant variation. Although statistical tests show no significant differences in these indicators, clear performance distinctions exist between ship types.
+
+-   The coastal short-distance routes show significant evidence (p-value = 0.01) that shorter distances are more likely to achieve cost efficiency.
 
 # 7 Reference
 
 -   Mr. Marine. (2024). Types of Ships – What are the differences?. <https://mr-marinegroup.com/types-of-ships/>
 
 -   Mark Ian Dacera. (2023). Key Performance Indicators (KPIs) in Maritime Business: Driving Growth and Excellence. <https://www.linkedin.com/pulse/key-performance-indicators-kpis-maritime-business-dacera-mba-mm-kx5pe/>
-
--   
