@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Johsuan Huang">
+<meta name="dcterms.date" content="2024-02-24">
 
-<title>Johsuan’s Visual Analytics Site – ISSS608-VAA</title>
+<title>Take-Home Exercise 2: Makeover of Merchandise Trade Data from Singstat.gov – ISSS608-VAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,28 +22,60 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./images/favicon/favicon-96x96.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/favicon/favicon-96x96.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,68 +103,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-title','listing-date','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      page: 9,
-    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -140,8 +115,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    <img src="./images/Logo_VAA.png" alt="" class="navbar-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/Logo_VAA.png" alt="" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -156,59 +131,59 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">
  <span class="dropdown-text">01: A Layered Grammar of Graphics: ggplot2 methods</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html">
  <span class="dropdown-text">02: Beyond ggplot2 Fundamentals</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html">
  <span class="dropdown-text">03.a: Programming Interactive Data Visualisation with R</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html">
  <span class="dropdown-text">03.b: Programming Animated Statistical Graphics with R</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
  <span class="dropdown-text">04.a: Visualising Distribution</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_b.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_b.html">
  <span class="dropdown-text">04.b: Visual Statistical Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html">
  <span class="dropdown-text">04.c: Visualising Uncertainty</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html">
  <span class="dropdown-text">04.d: Funnel Plots for Fair Comparisons</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_a.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_a.html">
  <span class="dropdown-text">05.a: Creating Ternary Plot with R</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html">
  <span class="dropdown-text">05.b: Heatmap for Visualising and Analysing Multivariate Data</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html">
  <span class="dropdown-text">05.c: Visual Multivariate Analysis with Parallel Coordinates Plot</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html">
  <span class="dropdown-text">05.d: Treemap Visualisation with R</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.html">
  <span class="dropdown-text">05.e: Visual Correlation Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html">
  <span class="dropdown-text">07: Visualising and Analysing Time-oriented Data</span></a>
   </li>  
     </ul>
@@ -227,11 +202,11 @@ window.Quarto = {
  <span class="dropdown-text">In-class Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex04/In-class_Ex04.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html">
  <span class="dropdown-text">In-class Exercise 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex05/In-class_Ex05.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html">
  <span class="dropdown-text">In-class Exercise 5</span></a>
   </li>  
     </ul>
@@ -242,7 +217,7 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
         <li>
-    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html">
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html">
  <span class="dropdown-text">Take-home Exercise 1: Ship performance Analysis</span></a>
   </li>  
     </ul>
@@ -250,11 +225,11 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -269,22 +244,48 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(14)</span></div><div class="category" data-category="Q0dQZnVuY3Rpb25z">CGPfunctions <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RFQ=">DT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RnVubmVsUGxvdFI=">FunnelPlotR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0dhbGx5">GGally <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGVuZGV4dGVuZA==">dendextend <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZHBseXI=">dplyr <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dhbmltYXRl">gganimate <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dkaXN0">ggdist <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Z2dpcmFwaA==">ggiraph <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dwbG90Mg==">ggplot2 <span class="quarto-category-count">(8)</span></div><div class="category" data-category="Z2dyZXBlbA==">ggrepel <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dyaWRnZXM=">ggridges <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2dzdGF0c3Bsb3Q=">ggstatsplot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z2d0ZXJu">ggtern <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Z3JpZEV4dHJh">gridExtra <span class="quarto-category-count">(1)</span></div><div class="category" data-category="aGVhdG1hcGx5">heatmaply <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bHVicmlkYXRl">lubridate <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bm9ydGVzdA==">nortest <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYWxsZWxQbG90">parallelPlot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFyYW1ldGVycw==">parameters <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGF0Y2h3b3Jr">patchwork <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGVyZm9ybWFuY2U=">performance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGxvdGx5">plotly <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c2Vl">see <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2VyaWF0aW9u">seriation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGhlbWVz">themes <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGlkeXZlcnNl">tidyverse <span class="quarto-category-count">(6)</span></div><div class="category" data-category="dHJlZW1hcA==">treemap <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dHJlZW1hcGlmeQ==">treemapify <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dW5nZXZpeg==">ungeviz <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1 Overview</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2 Getting Started</a></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">4 Reference</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Johsuan’s Visual Analytics Site</h1>
+<h1 class="title">Take-Home Exercise 2: Makeover of Merchandise Trade Data from Singstat.gov</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Johsuan Huang </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 24, 2024</p>
+    </div>
+  </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">February 25, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -293,290 +294,109 @@ window.Quarto = {
 </header>
 
 
-<p>This website contains exercises from ISSS608 Visual Analytics and Applications.</p>
-<p>I hope you enjoy exploring my website!</p>
-<hr>
-<p><strong>Here are my latest posts :</strong></p>
+<p>note:</p>
+<ul>
+<li><p>The website should add explanations for the relationships between merchandise trade, imports and exports (domestic export + re-export), and highlight the difference between diff export type and export of service</p></li>
+<li><p><a href="https://www.singstat.gov.sg/modules/infographics/singapore-international-trade" class="uri">https://www.singstat.gov.sg/modules/infographics/singapore-international-trade</a></p></li>
+</ul>
+<p>makeover:</p>
+<ol type="1">
+<li><p><strong>MERCHANDISE TRADE PERFORMANCE WITH MAJOR TRADING PARTNERS, 2024</strong></p>
+<p>The plot clearly shows the net export deficit and surplus partners of Singapore. However, it would be more interesting and informative if we can make it into an animation.</p></li>
+<li><p><strong>Non-oil re-exports</strong></p>
+<p>The data is organized in the shape of boats, which is creative and attractive. However, due to ships being displayed vertically and sparse data points, it’s difficult to read the information. Additionally, it only shows data from 2024, so we cannot see the variations between years. <strong>May use newggslopegraph to show the trend.</strong></p></li>
+<li><p><strong>Import of Service</strong></p>
+<p>It uses different icons and colors to highlight different service sectors, which make it easier for users to recognize the import amount and percentage by service sectors from the graph. However, since the number of service sectors is 12, it is a bit messy to display the information by pie chart.</p>
+<p><strong>May consider:</strong></p>
+<ul>
+<li>Combine the service industries with lower proportions (5%), such as insurance and finance</li>
+<li>Use tree map and animation to show the variations between years and sectors.</li>
+</ul></li>
+</ol>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">1 Overview</h2>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started">2 Getting Started</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Loading the packages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Import data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Observe data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Prepare data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Use the <strong>pacman</strong> package <code>p_load()</code> to check, install and launch the following R packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, lubridate, gridExtra,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               CGPfunctions,patchwork,ggthemes,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               ggridges, ggdist, ggiraph, plotly, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               knitr,ggiraph,ggstatsplot,readxl</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><strong>Library</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>tidyverse</td>
+<td>a family of R packages for data processing</td>
+</tr>
+<tr class="odd">
+<td><a href="https://plot.ly/r/"><strong>Plotly R</strong></a></td>
+<td>an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>service <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byService.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T4"</span>,<span class="at">range=</span><span class="st">"A11:k297"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>After importing the data, let’s examine it to understand its data structure:</p>
+<p>The dataset contains 5 attributes and 108,126 observations with no missing values:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#head(pop_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str(pop_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(pop_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#any(is.na(pop_data))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>From the “Observe data” tab, we can see that age is a categorical variable. For better analysis, we should transpose this variable and group the ages into young, active, and old categories to make the data more interpretable:</p>
+<p>There are 10 age groups in this dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pop_data %&gt;% distinct(AG)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding new derived variables for the young, economy active and old age group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="reference" class="level2">
+<h2 class="anchored" data-anchor-id="reference">4 Reference</h2>
+<ul>
+<li>Kam, T.S. (2025).</li>
+</ul>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="dGlkeXZlcnNlJTJDbHVicmlkYXRlJTJDZ3JpZEV4dHJhJTJDQ0dQZnVuY3Rpb25z" data-listing-date-sort="1708704000000" data-listing-file-modified-sort="1740406136205" data-listing-date-modified-sort="1740406136000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2100">
-<a href="./Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 07
-</h5>
-<div class="card-text listing-description">
-Visualising and Analysing Time-oriented Data
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 24, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="dHJlZW1hcCUyQ3RyZWVtYXBpZnklMkN0aWR5dmVyc2U=" data-listing-date-sort="1707753600000" data-listing-file-modified-sort="1739461327085" data-listing-date-modified-sort="1739461327000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2814">
-<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 05.e
-</h5>
-<div class="card-text listing-description">
-Visual Correlation Analysis
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 13, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="R0dhbGx5JTJDcGFyYWxsZWxQbG90JTJDdGlkeXZlcnNl" data-listing-date-sort="1707667200000" data-listing-file-modified-sort="1739375542393" data-listing-date-modified-sort="1739375542000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1549">
-<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_c.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 05.c
-</h5>
-<div class="card-text listing-description">
-Visual Multivariate Analysis with Parallel Coordinates Plot
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 12, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="dHJlZW1hcCUyQ3RyZWVtYXBpZnklMkN0aWR5dmVyc2U=" data-listing-date-sort="1707667200000" data-listing-file-modified-sort="1739413183317" data-listing-date-modified-sort="1739413183000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2861">
-<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 05.d
-</h5>
-<div class="card-text listing-description">
-Treemap Visualisation with R
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 12, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="4" data-categories="c2VyaWF0aW9uJTJDZGVuZGV4dGVuZCUyQ2hlYXRtYXBseSUyQ3RpZHl2ZXJzZQ==" data-listing-date-sort="1707580800000" data-listing-file-modified-sort="1739408563252" data-listing-date-modified-sort="1739408563000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2564">
-<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_b.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 05.b
-</h5>
-<div class="card-text listing-description">
-Heatmap for Visualising and Analysing Multivariate Data
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 11, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="dGlkeXZlcnNlJTJDZ2d0ZXJuJTJDcGxvdGx5" data-listing-date-sort="1707494400000" data-listing-file-modified-sort="1739408657369" data-listing-date-modified-sort="1739408657000" data-listing-reading-time-sort="5" data-listing-word-count-sort="925">
-<a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_a.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 05.a
-</h5>
-<div class="card-text listing-description">
-Creating Ternary Plot with R
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 10, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="Z2dwbG90MiUyQ0Z1bm5lbFBsb3RS" data-listing-date-sort="1707148800000" data-listing-file-modified-sort="1738994040287" data-listing-date-modified-sort="1738994040000" data-listing-reading-time-sort="8" data-listing-word-count-sort="1476">
-<a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_d.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 04.d
-</h5>
-<div class="card-text listing-description">
-Funnel Plots for Fair Comparisons
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 06, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="7" data-categories="Z2dwbG90MiUyQ2dnZGlzdCUyQ3VuZ2V2aXo=" data-listing-date-sort="1707062400000" data-listing-file-modified-sort="1739000290020" data-listing-date-modified-sort="1739000290000" data-listing-reading-time-sort="23" data-listing-word-count-sort="4564">
-<a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_c.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 04.c
-</h5>
-<div class="card-text listing-description">
-Visualising Uncertainty
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 05, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="8" data-categories="Z2dwbG90MiUyQ2dnc3RhdHNwbG90JTJDbm9ydGVzdCUyQ3BlcmZvcm1hbmNlJTJDcGFyYW1ldGVycyUyQ3NlZQ==" data-listing-date-sort="1706889600000" data-listing-file-modified-sort="1739600445524" data-listing-date-modified-sort="1739600445000" data-listing-reading-time-sort="79" data-listing-word-count-sort="15758">
-<a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_b.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 04.b
-</h5>
-<div class="card-text listing-description">
-Visual Statistical Analysis
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 03, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="9" data-categories="Z2dwbG90MiUyQ2dncmlkZ2VzJTJDZ2dkaXN0" data-listing-date-sort="1706803200000" data-listing-file-modified-sort="1739380927364" data-listing-date-modified-sort="1739380927000" data-listing-reading-time-sort="37" data-listing-word-count-sort="7242">
-<a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 04.a
-</h5>
-<div class="card-text listing-description">
-Visualising Distribution
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Feb 02, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="10" data-categories="Z2dwbG90MiUyQ2RwbHlyJTJDZ2dhbmltYXRlJTJDcGxvdGx5" data-listing-date-sort="1706371200000" data-listing-file-modified-sort="1738855890364" data-listing-date-modified-sort="1738855890000" data-listing-reading-time-sort="17" data-listing-word-count-sort="3326">
-<a href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03-2.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 03.b
-</h5>
-<div class="card-text listing-description">
-Programming Animated Statistical Graphics with R
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 28, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="11" data-categories="Z2dwbG90MiUyQ2dnaXJhcGglMkNwbG90bHklMkNEVA==" data-listing-date-sort="1706112000000" data-listing-file-modified-sort="1739108451137" data-listing-date-modified-sort="1739108451000" data-listing-reading-time-sort="27" data-listing-word-count-sort="5250">
-<a href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_EX03.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 03.a
-</h5>
-<div class="card-text listing-description">
-Programming Interactive Data Visualisation with R
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 25, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="12" data-categories="Z2dwbG90MiUyQ2dncmVwZWwlMkNwYXRjaHdvcmslMkN0aGVtZXM=" data-listing-date-sort="1705507200000" data-listing-file-modified-sort="1738038100206" data-listing-date-modified-sort="1738038100000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3015">
-<a href="./Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 02
-</h5>
-<div class="card-text listing-description">
-Beyond ggplot2 Fundamentals
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 18, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="13" data-categories="Z2dwbG90Mg==" data-listing-date-sort="1704902400000" data-listing-file-modified-sort="1739359914367" data-listing-date-modified-sort="1739359914000" data-listing-reading-time-sort="24" data-listing-word-count-sort="4715">
-<a href="./Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 01
-</h5>
-<div class="card-text listing-description">
-A Layered Grammar of Graphics: ggplot2 methods
-</div>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Jan 11, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
-  <ul class="pagination"></ul>
-</nav>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

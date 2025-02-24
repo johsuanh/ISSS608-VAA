@@ -35,12 +35,12 @@ pacman::p_load(tidyverse, scales, viridis, lubridate, ggthemes, gridExtra, readx
 ```
 
 | **Library** | **Description** |
-|----|----|
-| lubridate | an R package that makes it easier to work with dates and times |
-| tidyverse | a family of R packages for data processing |
-| gridExtra | Provides a number of user-level functions to work with “grid” graphics, notably to arrange multiple grid-based plots on a page, and draw tables. |
-| knitr | a package that enables integration of R code into LaTeX, LyX, HTML, Markdown, AsciiDoc, and reStructuredText documents. |
-| data.table | an R package that provides an enhanced version of a data.frame |
+|-------------|-----------------------------------------------------------|
+| **lubridate** | an R package that makes it easier to work with dates and times |
+| **tidyverse** | a family of R packages for data processing |
+| **gridExtra** | Provides a number of user-level functions to work with “grid” graphics, notably to arrange multiple grid-based plots on a page, and draw tables. |
+| **knitr** | a package that enables integration of R code into LaTeX, LyX, HTML, Markdown, AsciiDoc, and reStructuredText documents. |
+| **data.table** | an R package that provides an enhanced version of a data.frame |
 
 ## 3 Plotting Calendar Heatmap
 

@@ -1,0 +1,109 @@
+---
+title: "Take-Home Exercise 2: Makeover of Merchandise Trade Data from Singstat.gov"
+author: Johsuan Huang
+date: 2024-02-24
+date-modified: "last-modified"
+categories: []
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+note:
+
+-   The website should add explanations for the relationships between merchandise trade, imports and exports (domestic export + re-export), and highlight the difference between diff export type and export of service
+
+-   <https://www.singstat.gov.sg/modules/infographics/singapore-international-trade>
+
+makeover:
+
+1.  **MERCHANDISE TRADE PERFORMANCE WITH MAJOR TRADING PARTNERS, 2024**
+
+    The plot clearly shows the net export deficit and surplus partners of Singapore. However, it would be more interesting and informative if we can make it into an animation.
+
+2.  **Non-oil re-exports**
+
+    The data is organized in the shape of boats, which is creative and attractive. However, due to ships being displayed vertically and sparse data points, it's difficult to read the information. Additionally, it only shows data from 2024, so we cannot see the variations between years. **May use newggslopegraph to show the trend.**
+
+3.  **Import of Service**
+
+    It uses different icons and colors to highlight different service sectors, which make it easier for users to recognize the import amount and percentage by service sectors from the graph. However, since the number of service sectors is 12, it is a bit messy to display the information by pie chart.
+
+    **May consider:**
+
+    -   Combine the service industries with lower proportions (5%), such as insurance and finance
+    -   Use tree map and animation to show the variations between years and sectors.
+
+## 1 Overview
+
+## 2 Getting Started
+
+::: panel-tabset
+## Loading the packages
+
+Use the **pacman** package `p_load()` to check, install and launch the following R packages:
+
+```{r}
+pacman::p_load(tidyverse, lubridate, gridExtra,
+               CGPfunctions,patchwork,ggthemes,
+               ggridges, ggdist, ggiraph, plotly, 
+               knitr,ggiraph,ggstatsplot,readxl
+               )
+```
+
+| **Library** | **Description** |
+|-----------------------|-------------------------------------------------|
+|  |  |
+| tidyverse | a family of R packages for data processing |
+| [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |
+
+## Import data
+
+```{r}
+service <- read_excel("data/SGTrade_byService.xlsx",sheet = "T4",range="A11:k297")
+```
+
+## Observe data
+
+After importing the data, let's examine it to understand its data structure:
+
+The dataset contains 5 attributes and 108,126 observations with no missing values:
+
+```{r}
+#head(pop_data)
+```
+
+```{r}
+#str(pop_data)
+```
+
+```{r}
+#summary(pop_data)
+```
+
+```{r}
+#any(is.na(pop_data))
+```
+
+## Prepare data
+
+From the "Observe data" tab, we can see that age is a categorical variable. For better analysis, we should transpose this variable and group the ages into young, active, and old categories to make the data more interpretable:
+
+There are 10 age groups in this dataset:
+
+```{r}
+#pop_data %>% distinct(AG)
+```
+
+```{r}
+# Adding new derived variables for the young, economy active and old age group
+
+
+```
+:::
+
+## 4 Reference
+
+-   Kam, T.S. (2025).
