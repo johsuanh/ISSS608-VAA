@@ -36,6 +36,8 @@ website:
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.html
           - text: "05.e: Visual Correlation Analysis"
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.html
+          - text: "07: Visualising and Analysing Time-oriented Data"
+            href: Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html
       - text: "In-class Exercise"
         menu:
           - text: "In-class Exercise 1"
