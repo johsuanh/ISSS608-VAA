@@ -1,5 +1,5 @@
 ---
-title: "Take-Home Exercise 2: Makeover of Merchandise Trade Data from Singstat.gov"
+title: "Take-Home Exercise 2: Be Tradewise or Otherwise"
 author: Johsuan Huang
 date: 2024-02-24
 date-modified: "last-modified"
@@ -38,41 +38,45 @@ makeover:
 
 ## 1 Overview
 
+Since Mr. Donald Trump took office as the President of the United States on January 20, 2025, one of the most closely watched topics has been global trade.
+
+As a visual analytics novice, you are eager to apply newly acquired techniques to explore and analyze the changing trends and patterns of Singapore’s international trade since 2015.
+
 ## 2 Getting Started
 
 ::: panel-tabset
-## Loading the packages
+## Load the packages and import data
 
 Use the **pacman** package `p_load()` to check, install and launch the following R packages:
 
 ```{r}
 pacman::p_load(tidyverse, lubridate, gridExtra,
-               CGPfunctions,patchwork,ggthemes,
+               CGPfunctions,patchwork,ggthemes,gganimate,
+               ggtext,scales,patchwork,ggrepel,
                ggridges, ggdist, ggiraph, plotly, 
-               knitr,ggiraph,ggstatsplot,readxl
+               knitr,ggiraph,ggstatsplot,readxl,
+               treemap
                )
 ```
 
 | **Library** | **Description** |
-|-----------------------|-------------------------------------------------|
+|-------------------------|------------------------------------------------|
 |  |  |
 | tidyverse | a family of R packages for data processing |
 | [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |
 
-## Import data
+Use read_excel function to import xlsx files:
 
 ```{r}
-service <- read_excel("data/SGTrade_byService.xlsx",sheet = "T4",range="A11:k297")
+m_import <- read_excel("data/SGTrade_byCountry.xlsx",sheet = "T1",range="A11:BJ171")
+m_export <- read_excel("data/SGTrade_byCountry.xlsx",sheet = "T2",range="A11:BJ171")
+m_re_export <- read_excel("data/SGTrade_byCountry.xlsx",sheet = "T3",range="A11:BJ171")
 ```
 
 ## Observe data
 
-After importing the data, let's examine it to understand its data structure:
-
-The dataset contains 5 attributes and 108,126 observations with no missing values:
-
 ```{r}
-#head(pop_data)
+kable(head(m_import,10))
 ```
 
 ```{r}
@@ -84,7 +88,10 @@ The dataset contains 5 attributes and 108,126 observations with no missing value
 ```
 
 ```{r}
-#any(is.na(pop_data))
+any(is.na(m_import))
+any(is.na(m_export))
+any(is.na(m_re_export))
+
 ```
 
 ## Prepare data
@@ -104,6 +111,452 @@ There are 10 age groups in this dataset:
 ```
 :::
 
+## 3 GOV Trade Data Visualization Make-Over
+
+### **3.1 MERCHANDISE TRADE PERFORMANCE WITH MAJOR TRADING PARTNERS, 2024**
+
+-   **Pros:** Use the diagonal line and blocks to clearly show **net export deficit and surplus partners** of Singapore
+
+-   **Cons:** It only shows 2024 mechandise data, so it cannot offer a complete view of merchandise trade trends in recent years
+
+-   **Make-Over Suggestion**: Use animation combining years of data to enhance data storytelling
+
+::: panel-tabset
+## Original
+
+## Make-over
+
+### 
+:::
+
+#### 3.1.1 Import data
+
+```{r}
+m_import <- read_excel("data/SGTrade_byCountry.xlsx",sheet = "T1",range="A11:DR171")
+m_export <- read_excel("data/SGTrade_byCountry.xlsx",sheet = "T2",range="A11:DR171")
+m_re_export <- read_excel("data/SGTrade_byCountry.xlsx",sheet = "T3",range="A11:DR171")
+```
+
+#### 3.1.2 Data processing
+
+```{r}
+
+# rename the col name of country
+colnames(m_export)[1] <- "country"
+colnames(m_re_export)[1] <- "country"
+colnames(m_import)[1] <- "country"
+
+# copy the structure and transform it to long df 
+m_by_country <- m_export %>%
+  gather(key = month_year, value="export",-country)
+
+m_re_export_long <- m_re_export %>%
+  gather(key = month_year, value="re_export",-country)
+
+m_import_long <- m_import %>%
+  gather(key = month_year, value = "import",-country)
+
+# join all data together
+m_by_country <- m_by_country %>%
+  left_join(m_re_export_long,by=c("country","month_year")) %>%
+  left_join(m_import_long, by = c("country","month_year")) %>%
+  mutate(total_trade = round(export+re_export+import,1),
+         net_export = round((export+re_export)-import,1),
+         abs_net_export = abs(round((export+re_export)-import,1)),
+         year = as.integer(substr(month_year,1,4)))%>%
+  filter(year != 2025)
+
+# create yearly data
+m_by_country_year <- m_by_country %>%
+  group_by(country,year) %>%
+  summarise(across(c("export","re_export","import","net_export","abs_net_export","total_trade"),~sum(.x, na.rm = TRUE)/1000),.groups="drop")
+
+# filter continent only
+m_by_continent_year <- m_by_country_year %>%
+  filter(country %in% c("America","Asia","Europe","Oceania","Africa","Total All Markets"))
+
+# filter country only
+m_by_country_year <- m_by_country_year %>%
+  filter(!country %in% c("America","Asia","Oceania","Africa","Total All Markets"))
+
+# calculate avg net export 
+m_by_country_avg <- m_by_country_year %>%
+  group_by(country)%>%
+  summarise(across(c("export","re_export","import","net_export","abs_net_export","total_trade"),~round(mean(.x),1)),.groups="drop") %>%
+  arrange(desc(total_trade))
+
+# top 5 postive net export countries for SG
+top_10_m_trade <- m_by_country_avg$country[1:10]
+
+# filter top 10 trade countries
+top_10_trade_country <- m_by_country_year %>%
+  filter(country %in% top_10_m_trade) %>%
+  mutate(total_export = re_export + export)
+
+country_abbr <- c(
+  "Hong Kong" = "HK",
+  "Indonesia" = "ID",
+  "Malaysia" = "MY",
+  "Thailand" = "TH",
+  "China" = "CN",
+  "Taiwan" = "TW",
+  "United States" = "US",
+  "Europe" = "EU",
+  "Korea, Rep Of" = "KR",
+  "Japan" = "JP"
+)
+
+top_10_trade_country <- top_10_trade_country %>%
+  mutate(country_abbr = country_abbr[country])
+
+```
+
+```{r}
+summary(top_10_trade_country)
+```
+
+#### 3.1.3 Plotting
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 10
+#| out-extra: "style='max-width:100%; display: block;'"
+#| out-width: 100%
+
+my_palette <- c("#D989AE", "#96C6D9", "#F2CD88", "#D97259", "#468C6C", "grey60", 
+                      "#B3A2C7", "#E1A77C", "#7CA08B", "#C77C8C")
+
+ggplot(data=top_10_trade_country,
+       aes(x= total_export, y = import))+
+  # lower part background
+  annotate(geom = "polygon", 
+           x = c(-Inf, Inf, Inf),
+           y = c(-Inf, Inf, -Inf), 
+           fill = "#34a853", alpha = 0.1)+
+  # upper part background
+  annotate(geom = "polygon", 
+           x = c(Inf, -Inf, -Inf),
+           y = c(Inf, -Inf, Inf), 
+           fill = "#4285f4", alpha = 0.1)+
+  annotate("text", x = 10, y = 90, label = "Net Export\nDeficit", 
+           color = "#4285f4", size = 4, hjust = 0.5, alpha=0.7) +
+  annotate("text", x = 90, y = 20, label = "Net Export\nSurplus", 
+           color = "#34a853", size = 4, hjust = 0.5, alpha=0.7) +
+  geom_point(
+       aes(size = total_trade, color = country_abbr),
+       alpha=0.7,
+       show.legend = FALSE)+
+         scale_colour_manual(values = my_palette)+
+         scale_size(range = c(2,15))+
+         labs(title = "Merchandise Trade Performance With Top 10 Trading Partners",
+         subtitle = "Year: {frame_time}",
+         x = "Annual Exports<br>S$ Bil",
+         y = "Annual Imports<br>S$ Bil",
+         caption = "Source: singstat.gov.sg ")+
+  geom_label(aes(label = country_abbr,
+                 color = country_abbr),
+             hjust=0.5, 
+             vjust=-1,
+             fill = NA,
+             label.size = 0,
+             show.legend = FALSE)+
+  transition_time(year)+
+  ease_aes('cubic-in-out')+
+  coord_cartesian(xlim = c(0, 100), ylim = c(0, 100))+
+  theme_classic()+
+  theme(
+    plot.title = element_markdown(size = 15, hjust = 0,face="bold"),
+    axis.line.x = element_line(color = "#34a853"),
+    axis.ticks.x = element_line(color = "#34a853"),
+    axis.ticks.y = element_line(color = "#4285f4"), 
+    axis.line.y = element_line(color = "#4285f4"),  
+    axis.text.x = element_text(color = "#34a853"), 
+    axis.text.y = element_text(color = "#4285f4"),
+    axis.title.x = element_markdown(color = "#34a853",
+                                margin = margin(t = 13),
+                                hjust=1), 
+    axis.title.y = element_markdown(color = "#4285f4",
+                                margin = margin(r = 10),
+                                hjust=1 ,angle = 360),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.margin = margin(1, 1, 1, 1, "cm"), 
+    panel.spacing = unit(2, "cm"))
+  
+```
+
+### **3.2 Non-oil re-exports**
+
+-   **Pros:** Creative and attractive visual design (stacked bar chart shaped like boats)
+
+-   **Cons:**
+
+    1.  Only shows 2024 data, making it hard to compare trends over time and less meaningful
+
+    2.  Difficult to read due to vertical ship display and sparse data points
+
+-   **Make-Over Suggestion**: Use **newggslopegraph** to show trends over multiple years
+
+::: panel-tabset
+## Original
+
+## Make-Over
+:::
+
+#### 3.2.1 Import data and Data Processing
+
+```{r}
+com_re_export <- read_excel("data/SGTrade_byCommodity.xlsx",sheet = "T1",range="A11:DR79")
+
+non_oil_re_export <- com_re_export[-(1:59),] 
+
+colnames(non_oil_re_export)[1] = "commodity"
+
+non_oil_re_export <- non_oil_re_export %>%
+  gather(key="month_year",value="re_export",-commodity)%>%
+  mutate(year = as.ordered(substr(month_year,1,4)))%>%
+  filter(year %in% c(2015,2020,2022,2024))%>%
+  group_by(commodity,year)%>%
+  summarise(re_export = round(sum(re_export,na.rm=TRUE)/1000000),.groups = "drop")
+
+```
+
+### 3.2.2 Plotting
+
+```{r}
+#| echo: false
+#| fig-height: 6
+#| fig-width: 10
+#| out-extra: "style='max-width:100%; display: block;'"
+#| out-width: 100%
+
+
+
+p1 <- non_oil_re_export %>%
+  group_by(year) %>%
+  mutate(total_re_export_year = sum(re_export, na.rm = TRUE), 
+         proportion = round(re_export / total_re_export_year * 100),
+         label = ifelse(year %in% c(2015,2020,2022,2024),
+                        paste0("$ ",comma(re_export)," B / ",proportion,"%"),
+                        NA))%>% 
+  ungroup()%>%
+  filter(commodity == "Machinery & Transport Equipment") %>%
+  newggslopegraph(year, re_export, commodity,
+                  Title = "<span style='color:grey30;'>NON-OIL RE-EXPORT by MAJOR COMMODITY</span><br>",
+                  SubTitle = "**Something was brewing during the COVID-19 padenmic?**<br><span style='color:#D989AE;'>**Machinery & Transportation Equipment**</span> not only remained unaffected by COVID,<br>but saw a **37% surge** in re-export trade during the period.<br> <br> ",
+                  Data.label = label,
+                  Caption = NULL,
+                  DataLabelPadding = 0.5,
+                  DataLabelFillColor = "#f3f1e9",
+                  LineColor = "#D989AE") +
+  annotate("rect", xmin = 2, xmax = 3, ymin = -Inf, ymax = Inf, 
+         fill = "gray", alpha = 0.25)+
+    geom_segment(aes(x = 1.7, y = 240, xend = 2, yend = 250),
+               linetype = "solid", color = "grey20", size = 0.5,
+               arrow = arrow(length = unit(0.03, "npc"))) +
+    geom_richtext(
+    aes(x = 1.7, y = 240, 
+        label = "2020–2022 was the<br>**COVID-19 pandemic**"),
+    fill = NA, label.color = NA, 
+    color = "grey40", size = 3, hjust = 1, alpha = 0.7
+  ) +
+  theme(axis.ticks = element_blank(),
+        plot.title = element_markdown(size = 15, hjust = 0.5, face = "bold",lineheight = 0.8),
+        plot.subtitle = element_markdown(size = 12, hjust = 0.5,lineheight = 1.3),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        panel.background = element_rect(fill = "#f3f1e9", color = NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+
+
+p2 <- non_oil_re_export %>%
+  group_by(year) %>%
+  mutate(total_re_export_year = sum(re_export, na.rm = TRUE), 
+         proportion = round(re_export / total_re_export_year * 100),
+         label = ifelse(year %in% c(2015,2024),
+                        paste0("$ ",comma(re_export)," B / ",proportion,"%"),
+                        NA))%>% 
+  ungroup()%>%
+  filter(commodity != "Machinery & Transport Equipment") %>%
+  
+  newggslopegraph(year, re_export, commodity,
+                  Title = NULL,
+                  SubTitle = NULL,
+                  Caption = "Source: singstat.gov.sg",
+                  Data.label = label,
+                  DataLabelPadding = 0,
+                  DataLabelFillColor = "#f3f1e9",
+                  LineColor = c(rep("#B0B0B0",8))) + 
+  scale_x_discrete(position = "bottom")+
+  annotate("rect", xmin = 2, xmax = 3, ymin = -Inf, ymax = Inf, 
+         fill = "gray", alpha = 0.25)+
+  theme(axis.ticks = element_blank(),
+        plot.title = element_text(size = 10, hjust = 0, face = "bold"),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        panel.background = element_rect(fill = "#f3f1e9", color = NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+
+
+
+p1 <- p1 + theme(plot.margin = margin(20, 5, -5, 5))
+p2 <- p2 + theme(plot.margin = margin(-5, 5, 10, 5))
+combined_plot <- p1 / p2
+combined_plot
+
+```
+
+### **3.3 Import of Service**
+
+-   **Pros**:
+
+    1.  Icons and colors help differentiate service sectors, making it visually appealing
+
+    2.  Allows users to easily recognize import amounts and percentages
+
+-   **Cons**:
+
+    1.  Too cluttered (12 service sectors in a pie chart)
+
+    2.  Hard to compare variations across years
+
+-   **Make-Over Suggestion**:
+
+    1.  Use a **tree map** to improve readability.
+
+    2.  Add **animation** to show changes over years and across sectors.
+
+```{r}
+s_export <- read_excel("data/SGTrade_byService.xlsx",sheet = "T2",range="A11:k55")
+
+service_type <- c(
+  "Manufacturing Services On Physical Inputs Owned By Others",
+  "Maintenance And Repair Services",
+  "Transport",
+  "Travel",
+  "Insurance",
+  "Government Goods And Services",
+  "Construction",
+  "Financial",
+  "Telecommunications, Computer & Information",
+  "Charges For The Use Of Intellectual Property",
+  "Personal, Cultural And Recreational",
+  "Other Business Services",
+  "Advertising And Market Research",
+  "Business Management"
+)
+
+colnames(s_export)[1]="service"
+
+s_export_selected <- s_export %>%
+  filter(service %in% service_type)
+
+# deduct Ad & business management from other Business service 
+
+s_export_selected[12,2:ncol(s_export_selected)] <- s_export_selected[12,2:ncol(s_export_selected)] - s_export_selected[13,2:ncol(s_export_selected)]
+
+s_export_selected[12,2:ncol(s_export_selected)] <- s_export_selected[12,2:ncol(s_export_selected)] - s_export_selected[14,2:ncol(s_export_selected)]
+
+s_export_selected <- s_export_selected %>%
+  gather(key=year, value="export",-service)
+
+ggplot(data = s_export_selected) +
+  geom_histogram(aes(x = service))+
+  coord_flip()
+```
+
+```{r}
+s_export2 <- read_excel("data/SGTrade_byService2.xlsx",sheet = "T4",range="A11:k275")
+
+s_export2 <- s_export2 %>%
+  gather(key=year, value = "export", -c(Service,Country))%>%
+  mutate(export = str_replace_all(export, "na", "0")) %>%
+  mutate(export = as.numeric(export)) 
+  
+  
+```
+
+```{r}
+
+s_export2 <- s_export2 %>%
+  mutate(year = as.integer(year))
+
+s_export2_2 <- s_export2 %>%
+  filter(Country %in% c("United States Of America", "Hong Kong", "India", "Indonesia", "Japan", "Mainland China","Malaysia", "Philippines", "Republic Of Korea", "Thailand", "United Arab Emirates","France", "Germany", "Netherlands", "United Kingdom", "Australia"))
+
+
+
+ggplot(s_export2_2, aes(x = export, 
+                              y = Country,
+                              fill = Country)) + 
+  geom_density_ridges(geom = "density_ridges_gradient", 
+                      calc_ecdf = TRUE,
+                      quantiles = 4,
+                      alpha = 0.6,
+                      scale = 0.8) +
+  geom_boxplot(outlier.shape = 16, 
+               outlier.colour = "black",  
+               outlier.size = 0.5,
+               width = 0.2, 
+               position = position_dodge(width = 0.7))+
+  facet_grid(~Service,scales = "free_x")+
+  theme_ridges() +
+  labs(title = "",
+       subtitle = "",
+       x="Export Value" ,
+       y="Country")+
+  theme(
+    axis.text.y = element_text(size = 7), 
+    axis.text.x = element_text(size = 7),  
+    axis.title.x = element_text(size = 8),
+    axis.title.y = element_text(size = 8),
+    strip.text = element_text(size = 9, face = "bold"),  # Facet title size
+    plot.margin = margin(10, 20, 10, 20),  
+    legend.position = "none",
+    legend.title = element_text(size=8),
+    legend.key.size = unit(0.3, "cm"),
+    legend.text = element_text(size=6),
+    legend.background = element_rect(fill = "#f3f1e9"),
+    panel.background = element_rect(fill = "#f3f1e9"),
+    plot.title = element_text(size=13,hjust=0),
+    plot.subtitle = element_text(size=8,hjust=0),
+    plot.background = element_rect(fill = "#f3f1e9",color = NA)
+    )
+ # transition_time(year) + 
+  #ease_aes('cubic-in-out')
+```
+
+```{r}
+s_export2 <- s_export2 %>%
+  mutate(year = as.integer(year))
+
+# Create a treemap plot using ggplot2 (with geom_tile or geom_rect)
+ggplot(s_export2, aes(x = Country, y = Service, size = export, fill = export)) +
+  geom_tile() +  # or geom_rect() depending on your preference
+  scale_fill_gradientn(colors = RColorBrewer::brewer.pal(9, "RdYlBu")) +  # Use the palette
+  scale_size_continuous(range = c(1, 20)) +  # Adjust the size range
+  theme_void() +
+  theme(legend.position = "right") +
+  labs(title = "Export Data Treemap",
+       subtitle = 'Year: {frame_time}',  # Subtitle dynamically changes with year
+       fill = "Export Value") +
+  transition_time(year) +  # Animate by year
+  ease_aes('cubic-in-out')  # Smooth animation
+```
+
+::: panel-tabset
+## Original
+
+## Make-Over
+:::
+
 ## 4 Reference
 
 -   Kam, T.S. (2025).
+
+<https://stackoverflow.com/questions/74015542/adding-a-shaded-triangle-to-a-ggplot2-plot>

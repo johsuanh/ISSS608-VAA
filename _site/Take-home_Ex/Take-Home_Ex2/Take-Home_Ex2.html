@@ -9,7 +9,7 @@
 <meta name="author" content="Johsuan Huang">
 <meta name="dcterms.date" content="2024-02-24">
 
-<title>Take-Home Exercise 2: Makeover of Merchandise Trade Data from Singstat.gov – ISSS608-VAA</title>
+<title>Take-Home Exercise 2: Be Tradewise or Otherwise – ISSS608-VAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -250,6 +250,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1 Overview</a></li>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2 Getting Started</a></li>
+  <li><a href="#gov-trade-data-visualization-make-over" id="toc-gov-trade-data-visualization-make-over" class="nav-link" data-scroll-target="#gov-trade-data-visualization-make-over">3 GOV Trade Data Visualization Make-Over</a>
+  <ul class="collapse">
+  <li><a href="#merchandise-trade-performance-with-major-trading-partners-2024" id="toc-merchandise-trade-performance-with-major-trading-partners-2024" class="nav-link" data-scroll-target="#merchandise-trade-performance-with-major-trading-partners-2024"><strong>3.1 MERCHANDISE TRADE PERFORMANCE WITH MAJOR TRADING PARTNERS, 2024</strong></a></li>
+  <li><a href="#non-oil-re-exports" id="toc-non-oil-re-exports" class="nav-link" data-scroll-target="#non-oil-re-exports"><strong>3.2 Non-oil re-exports</strong></a></li>
+  <li><a href="#plotting-1" id="toc-plotting-1" class="nav-link" data-scroll-target="#plotting-1">3.2.2 Plotting</a></li>
+  <li><a href="#import-of-service" id="toc-import-of-service" class="nav-link" data-scroll-target="#import-of-service"><strong>3.3 Import of Service</strong></a></li>
+  </ul></li>
   <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">4 Reference</a></li>
   </ul>
 </nav>
@@ -259,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Take-Home Exercise 2: Makeover of Merchandise Trade Data from Singstat.gov</h1>
+<h1 class="title">Take-Home Exercise 2: Be Tradewise or Otherwise</h1>
 </div>
 
 
@@ -283,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 25, 2025</p>
+      <p class="date-modified">February 28, 2025</p>
     </div>
   </div>
     
@@ -315,20 +322,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">1 Overview</h2>
+<p>Since Mr.&nbsp;Donald Trump took office as the President of the United States on January 20, 2025, one of the most closely watched topics has been global trade.</p>
+<p>As a visual analytics novice, you are eager to apply newly acquired techniques to explore and analyze the changing trends and patterns of Singapore’s international trade since 2015.</p>
 </section>
 <section id="getting-started" class="level2">
 <h2 class="anchored" data-anchor-id="getting-started">2 Getting Started</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Loading the packages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Import data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Observe data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Prepare data</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Load the packages and import data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Observe data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Prepare data</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Use the <strong>pacman</strong> package <code>p_load()</code> to check, install and launch the following R packages:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, lubridate, gridExtra,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               CGPfunctions,patchwork,ggthemes,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               ggridges, ggdist, ggiraph, plotly, </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               knitr,ggiraph,ggstatsplot,readxl</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               CGPfunctions,patchwork,ggthemes,gganimate,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               ggtext,scales,patchwork,ggrepel,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               ggridges, ggdist, ggiraph, plotly, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               knitr,ggiraph,ggstatsplot,readxl</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <table class="caption-top table">
 <thead>
@@ -352,17 +362,792 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<p>Use read_excel function to import xlsx files:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>m_import <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCountry.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T1"</span>,<span class="at">range=</span><span class="st">"A11:BJ171"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>m_export <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCountry.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T2"</span>,<span class="at">range=</span><span class="st">"A11:BJ171"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>m_re_export <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCountry.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T3"</span>,<span class="at">range=</span><span class="st">"A11:BJ171"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>service <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byService.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T4"</span>,<span class="at">range=</span><span class="st">"A11:k297"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(m_import,<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Data Series</th>
+<th style="text-align: right;">2025 Jan</th>
+<th style="text-align: right;">2024 Dec</th>
+<th style="text-align: right;">2024 Nov</th>
+<th style="text-align: right;">2024 Oct</th>
+<th style="text-align: right;">2024 Sep</th>
+<th style="text-align: right;">2024 Aug</th>
+<th style="text-align: right;">2024 Jul</th>
+<th style="text-align: right;">2024 Jun</th>
+<th style="text-align: right;">2024 May</th>
+<th style="text-align: right;">2024 Apr</th>
+<th style="text-align: right;">2024 Mar</th>
+<th style="text-align: right;">2024 Feb</th>
+<th style="text-align: right;">2024 Jan</th>
+<th style="text-align: right;">2023 Dec</th>
+<th style="text-align: right;">2023 Nov</th>
+<th style="text-align: right;">2023 Oct</th>
+<th style="text-align: right;">2023 Sep</th>
+<th style="text-align: right;">2023 Aug</th>
+<th style="text-align: right;">2023 Jul</th>
+<th style="text-align: right;">2023 Jun</th>
+<th style="text-align: right;">2023 May</th>
+<th style="text-align: right;">2023 Apr</th>
+<th style="text-align: right;">2023 Mar</th>
+<th style="text-align: right;">2023 Feb</th>
+<th style="text-align: right;">2023 Jan</th>
+<th style="text-align: right;">2022 Dec</th>
+<th style="text-align: right;">2022 Nov</th>
+<th style="text-align: right;">2022 Oct</th>
+<th style="text-align: right;">2022 Sep</th>
+<th style="text-align: right;">2022 Aug</th>
+<th style="text-align: right;">2022 Jul</th>
+<th style="text-align: right;">2022 Jun</th>
+<th style="text-align: right;">2022 May</th>
+<th style="text-align: right;">2022 Apr</th>
+<th style="text-align: right;">2022 Mar</th>
+<th style="text-align: right;">2022 Feb</th>
+<th style="text-align: right;">2022 Jan</th>
+<th style="text-align: right;">2021 Dec</th>
+<th style="text-align: right;">2021 Nov</th>
+<th style="text-align: right;">2021 Oct</th>
+<th style="text-align: right;">2021 Sep</th>
+<th style="text-align: right;">2021 Aug</th>
+<th style="text-align: right;">2021 Jul</th>
+<th style="text-align: right;">2021 Jun</th>
+<th style="text-align: right;">2021 May</th>
+<th style="text-align: right;">2021 Apr</th>
+<th style="text-align: right;">2021 Mar</th>
+<th style="text-align: right;">2021 Feb</th>
+<th style="text-align: right;">2021 Jan</th>
+<th style="text-align: right;">2020 Dec</th>
+<th style="text-align: right;">2020 Nov</th>
+<th style="text-align: right;">2020 Oct</th>
+<th style="text-align: right;">2020 Sep</th>
+<th style="text-align: right;">2020 Aug</th>
+<th style="text-align: right;">2020 Jul</th>
+<th style="text-align: right;">2020 Jun</th>
+<th style="text-align: right;">2020 May</th>
+<th style="text-align: right;">2020 Apr</th>
+<th style="text-align: right;">2020 Mar</th>
+<th style="text-align: right;">2020 Feb</th>
+<th style="text-align: right;">2020 Jan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Total All Markets</td>
+<td style="text-align: right;">54746.4</td>
+<td style="text-align: right;">56135.9</td>
+<td style="text-align: right;">51802.1</td>
+<td style="text-align: right;">51415.6</td>
+<td style="text-align: right;">49068.4</td>
+<td style="text-align: right;">49949.0</td>
+<td style="text-align: right;">52965.2</td>
+<td style="text-align: right;">48845.9</td>
+<td style="text-align: right;">52681.4</td>
+<td style="text-align: right;">52901.0</td>
+<td style="text-align: right;">51339.9</td>
+<td style="text-align: right;">45008.5</td>
+<td style="text-align: right;">49246.6</td>
+<td style="text-align: right;">45253.9</td>
+<td style="text-align: right;">49402.4</td>
+<td style="text-align: right;">51889.5</td>
+<td style="text-align: right;">48959.2</td>
+<td style="text-align: right;">49260.0</td>
+<td style="text-align: right;">46574.6</td>
+<td style="text-align: right;">46726.3</td>
+<td style="text-align: right;">45562.0</td>
+<td style="text-align: right;">44966.7</td>
+<td style="text-align: right;">51593.3</td>
+<td style="text-align: right;">42748.4</td>
+<td style="text-align: right;">44382.9</td>
+<td style="text-align: right;">49869.8</td>
+<td style="text-align: right;">50653.9</td>
+<td style="text-align: right;">53182.9</td>
+<td style="text-align: right;">55799.3</td>
+<td style="text-align: right;">58466.0</td>
+<td style="text-align: right;">61029.4</td>
+<td style="text-align: right;">59649.2</td>
+<td style="text-align: right;">57604.3</td>
+<td style="text-align: right;">56116.0</td>
+<td style="text-align: right;">58080.0</td>
+<td style="text-align: right;">44958.4</td>
+<td style="text-align: right;">50026.8</td>
+<td style="text-align: right;">54349.4</td>
+<td style="text-align: right;">50674.9</td>
+<td style="text-align: right;">47945.2</td>
+<td style="text-align: right;">45980.4</td>
+<td style="text-align: right;">44714.5</td>
+<td style="text-align: right;">46107.8</td>
+<td style="text-align: right;">45039.8</td>
+<td style="text-align: right;">41559.7</td>
+<td style="text-align: right;">45169.5</td>
+<td style="text-align: right;">47668.4</td>
+<td style="text-align: right;">37643.7</td>
+<td style="text-align: right;">39028.6</td>
+<td style="text-align: right;">40154.5</td>
+<td style="text-align: right;">38477.9</td>
+<td style="text-align: right;">38173.8</td>
+<td style="text-align: right;">38801.4</td>
+<td style="text-align: right;">36472.3</td>
+<td style="text-align: right;">37843.6</td>
+<td style="text-align: right;">35120.9</td>
+<td style="text-align: right;">31458.2</td>
+<td style="text-align: right;">35878.8</td>
+<td style="text-align: right;">40433.0</td>
+<td style="text-align: right;">39472.6</td>
+<td style="text-align: right;">41180.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">America</td>
+<td style="text-align: right;">6923.3</td>
+<td style="text-align: right;">7873.7</td>
+<td style="text-align: right;">7879.6</td>
+<td style="text-align: right;">8077.6</td>
+<td style="text-align: right;">9112.0</td>
+<td style="text-align: right;">8581.4</td>
+<td style="text-align: right;">8462.0</td>
+<td style="text-align: right;">7611.1</td>
+<td style="text-align: right;">8388.0</td>
+<td style="text-align: right;">8971.9</td>
+<td style="text-align: right;">7279.1</td>
+<td style="text-align: right;">6398.3</td>
+<td style="text-align: right;">6711.7</td>
+<td style="text-align: right;">7171.9</td>
+<td style="text-align: right;">7907.6</td>
+<td style="text-align: right;">7514.7</td>
+<td style="text-align: right;">6991.3</td>
+<td style="text-align: right;">8087.7</td>
+<td style="text-align: right;">6766.8</td>
+<td style="text-align: right;">7887.7</td>
+<td style="text-align: right;">6445.0</td>
+<td style="text-align: right;">6590.1</td>
+<td style="text-align: right;">7555.1</td>
+<td style="text-align: right;">6008.9</td>
+<td style="text-align: right;">6226.7</td>
+<td style="text-align: right;">6901.5</td>
+<td style="text-align: right;">7529.4</td>
+<td style="text-align: right;">7666.4</td>
+<td style="text-align: right;">7995.9</td>
+<td style="text-align: right;">8633.8</td>
+<td style="text-align: right;">7879.7</td>
+<td style="text-align: right;">8024.0</td>
+<td style="text-align: right;">8521.1</td>
+<td style="text-align: right;">7822.1</td>
+<td style="text-align: right;">7176.1</td>
+<td style="text-align: right;">5385.2</td>
+<td style="text-align: right;">5850.9</td>
+<td style="text-align: right;">6261.1</td>
+<td style="text-align: right;">6127.4</td>
+<td style="text-align: right;">6027.6</td>
+<td style="text-align: right;">5631.6</td>
+<td style="text-align: right;">5750.1</td>
+<td style="text-align: right;">5728.6</td>
+<td style="text-align: right;">5457.4</td>
+<td style="text-align: right;">5191.8</td>
+<td style="text-align: right;">6195.9</td>
+<td style="text-align: right;">5303.5</td>
+<td style="text-align: right;">4164.2</td>
+<td style="text-align: right;">4580.0</td>
+<td style="text-align: right;">4676.4</td>
+<td style="text-align: right;">4588.2</td>
+<td style="text-align: right;">4869.7</td>
+<td style="text-align: right;">4886.4</td>
+<td style="text-align: right;">4132.0</td>
+<td style="text-align: right;">4667.3</td>
+<td style="text-align: right;">4686.2</td>
+<td style="text-align: right;">4259.0</td>
+<td style="text-align: right;">5183.5</td>
+<td style="text-align: right;">5910.8</td>
+<td style="text-align: right;">5314.1</td>
+<td style="text-align: right;">5844.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Antigua And Barbuda</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Argentina</td>
+<td style="text-align: right;">4.0</td>
+<td style="text-align: right;">12.5</td>
+<td style="text-align: right;">116.2</td>
+<td style="text-align: right;">4.1</td>
+<td style="text-align: right;">8.1</td>
+<td style="text-align: right;">7.2</td>
+<td style="text-align: right;">6.6</td>
+<td style="text-align: right;">17.2</td>
+<td style="text-align: right;">13.9</td>
+<td style="text-align: right;">18.3</td>
+<td style="text-align: right;">42.4</td>
+<td style="text-align: right;">45.1</td>
+<td style="text-align: right;">35.6</td>
+<td style="text-align: right;">37.3</td>
+<td style="text-align: right;">40.4</td>
+<td style="text-align: right;">7.9</td>
+<td style="text-align: right;">5.7</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">8.8</td>
+<td style="text-align: right;">5.2</td>
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">29.1</td>
+<td style="text-align: right;">6.9</td>
+<td style="text-align: right;">5.5</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">11.3</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">14.9</td>
+<td style="text-align: right;">13.2</td>
+<td style="text-align: right;">11.8</td>
+<td style="text-align: right;">10.3</td>
+<td style="text-align: right;">11.6</td>
+<td style="text-align: right;">16.4</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">6.7</td>
+<td style="text-align: right;">8.3</td>
+<td style="text-align: right;">9.7</td>
+<td style="text-align: right;">11.4</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">4.1</td>
+<td style="text-align: right;">6.4</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">5.2</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">8.7</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">22.0</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">29.7</td>
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">33.6</td>
+<td style="text-align: right;">4.4</td>
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">6.5</td>
+<td style="text-align: right;">16.5</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">6.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bahamas</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">8.1</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">19.8</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">14.7</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">7.3</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">20.6</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">29.5</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">33.3</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">118.6</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">152.9</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">13.7</td>
+<td style="text-align: right;">6.2</td>
+<td style="text-align: right;">63.1</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">37.1</td>
+<td style="text-align: right;">0.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bermuda</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Brazil</td>
+<td style="text-align: right;">870.2</td>
+<td style="text-align: right;">586.8</td>
+<td style="text-align: right;">942.4</td>
+<td style="text-align: right;">639.9</td>
+<td style="text-align: right;">786.6</td>
+<td style="text-align: right;">550.6</td>
+<td style="text-align: right;">1555.9</td>
+<td style="text-align: right;">522.9</td>
+<td style="text-align: right;">1205.4</td>
+<td style="text-align: right;">734.0</td>
+<td style="text-align: right;">574.8</td>
+<td style="text-align: right;">715.0</td>
+<td style="text-align: right;">506.8</td>
+<td style="text-align: right;">597.2</td>
+<td style="text-align: right;">477.2</td>
+<td style="text-align: right;">583.1</td>
+<td style="text-align: right;">835.3</td>
+<td style="text-align: right;">543.0</td>
+<td style="text-align: right;">666.2</td>
+<td style="text-align: right;">704.1</td>
+<td style="text-align: right;">658.0</td>
+<td style="text-align: right;">876.2</td>
+<td style="text-align: right;">787.2</td>
+<td style="text-align: right;">565.0</td>
+<td style="text-align: right;">516.9</td>
+<td style="text-align: right;">1004.2</td>
+<td style="text-align: right;">1132.9</td>
+<td style="text-align: right;">917.5</td>
+<td style="text-align: right;">833.3</td>
+<td style="text-align: right;">968.7</td>
+<td style="text-align: right;">928.9</td>
+<td style="text-align: right;">1070.9</td>
+<td style="text-align: right;">954.9</td>
+<td style="text-align: right;">836.5</td>
+<td style="text-align: right;">516.5</td>
+<td style="text-align: right;">458.5</td>
+<td style="text-align: right;">795.0</td>
+<td style="text-align: right;">340.5</td>
+<td style="text-align: right;">661.0</td>
+<td style="text-align: right;">671.5</td>
+<td style="text-align: right;">491.7</td>
+<td style="text-align: right;">464.8</td>
+<td style="text-align: right;">550.5</td>
+<td style="text-align: right;">481.4</td>
+<td style="text-align: right;">459.1</td>
+<td style="text-align: right;">572.1</td>
+<td style="text-align: right;">328.8</td>
+<td style="text-align: right;">173.9</td>
+<td style="text-align: right;">283.0</td>
+<td style="text-align: right;">304.5</td>
+<td style="text-align: right;">302.1</td>
+<td style="text-align: right;">153.7</td>
+<td style="text-align: right;">510.8</td>
+<td style="text-align: right;">204.3</td>
+<td style="text-align: right;">190.3</td>
+<td style="text-align: right;">418.1</td>
+<td style="text-align: right;">288.8</td>
+<td style="text-align: right;">237.6</td>
+<td style="text-align: right;">310.9</td>
+<td style="text-align: right;">331.2</td>
+<td style="text-align: right;">404.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Canada</td>
+<td style="text-align: right;">267.5</td>
+<td style="text-align: right;">212.7</td>
+<td style="text-align: right;">221.6</td>
+<td style="text-align: right;">323.8</td>
+<td style="text-align: right;">236.5</td>
+<td style="text-align: right;">224.4</td>
+<td style="text-align: right;">244.2</td>
+<td style="text-align: right;">240.4</td>
+<td style="text-align: right;">321.4</td>
+<td style="text-align: right;">731.1</td>
+<td style="text-align: right;">261.1</td>
+<td style="text-align: right;">248.1</td>
+<td style="text-align: right;">480.8</td>
+<td style="text-align: right;">210.0</td>
+<td style="text-align: right;">234.3</td>
+<td style="text-align: right;">231.1</td>
+<td style="text-align: right;">206.5</td>
+<td style="text-align: right;">239.2</td>
+<td style="text-align: right;">223.1</td>
+<td style="text-align: right;">192.9</td>
+<td style="text-align: right;">298.6</td>
+<td style="text-align: right;">230.8</td>
+<td style="text-align: right;">275.1</td>
+<td style="text-align: right;">218.1</td>
+<td style="text-align: right;">202.8</td>
+<td style="text-align: right;">211.2</td>
+<td style="text-align: right;">224.9</td>
+<td style="text-align: right;">213.6</td>
+<td style="text-align: right;">241.0</td>
+<td style="text-align: right;">599.5</td>
+<td style="text-align: right;">284.9</td>
+<td style="text-align: right;">215.6</td>
+<td style="text-align: right;">200.8</td>
+<td style="text-align: right;">204.5</td>
+<td style="text-align: right;">253.6</td>
+<td style="text-align: right;">197.8</td>
+<td style="text-align: right;">227.7</td>
+<td style="text-align: right;">208.1</td>
+<td style="text-align: right;">174.5</td>
+<td style="text-align: right;">160.5</td>
+<td style="text-align: right;">206.7</td>
+<td style="text-align: right;">190.4</td>
+<td style="text-align: right;">135.9</td>
+<td style="text-align: right;">156.6</td>
+<td style="text-align: right;">161.7</td>
+<td style="text-align: right;">154.3</td>
+<td style="text-align: right;">158.2</td>
+<td style="text-align: right;">148.1</td>
+<td style="text-align: right;">143.8</td>
+<td style="text-align: right;">143.0</td>
+<td style="text-align: right;">141.0</td>
+<td style="text-align: right;">153.1</td>
+<td style="text-align: right;">93.7</td>
+<td style="text-align: right;">149.8</td>
+<td style="text-align: right;">186.8</td>
+<td style="text-align: right;">178.3</td>
+<td style="text-align: right;">148.8</td>
+<td style="text-align: right;">248.4</td>
+<td style="text-align: right;">228.5</td>
+<td style="text-align: right;">200.2</td>
+<td style="text-align: right;">568.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chile</td>
+<td style="text-align: right;">12.6</td>
+<td style="text-align: right;">5.7</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">7.1</td>
+<td style="text-align: right;">2.3</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">11.3</td>
+<td style="text-align: right;">19.2</td>
+<td style="text-align: right;">12.8</td>
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">23.4</td>
+<td style="text-align: right;">13.1</td>
+<td style="text-align: right;">9.8</td>
+<td style="text-align: right;">10.4</td>
+<td style="text-align: right;">6.6</td>
+<td style="text-align: right;">8.4</td>
+<td style="text-align: right;">9.5</td>
+<td style="text-align: right;">5.9</td>
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">8.8</td>
+<td style="text-align: right;">11.3</td>
+<td style="text-align: right;">10.0</td>
+<td style="text-align: right;">8.1</td>
+<td style="text-align: right;">14.6</td>
+<td style="text-align: right;">16.6</td>
+<td style="text-align: right;">13.8</td>
+<td style="text-align: right;">11.6</td>
+<td style="text-align: right;">29.6</td>
+<td style="text-align: right;">75.5</td>
+<td style="text-align: right;">20.1</td>
+<td style="text-align: right;">11.0</td>
+<td style="text-align: right;">15.5</td>
+<td style="text-align: right;">9.5</td>
+<td style="text-align: right;">17.1</td>
+<td style="text-align: right;">36.6</td>
+<td style="text-align: right;">8.9</td>
+<td style="text-align: right;">14.4</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">7.4</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">18.9</td>
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">7.2</td>
+<td style="text-align: right;">37.3</td>
+<td style="text-align: right;">9.9</td>
+<td style="text-align: right;">6.5</td>
+<td style="text-align: right;">7.9</td>
+<td style="text-align: right;">6.5</td>
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">5.6</td>
+<td style="text-align: right;">6.4</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">5.7</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">6.8</td>
+<td style="text-align: right;">7.3</td>
+<td style="text-align: right;">7.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Colombia</td>
+<td style="text-align: right;">17.6</td>
+<td style="text-align: right;">19.4</td>
+<td style="text-align: right;">9.2</td>
+<td style="text-align: right;">2.4</td>
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">5.7</td>
+<td style="text-align: right;">2.7</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">13.2</td>
+<td style="text-align: right;">59.6</td>
+<td style="text-align: right;">15.1</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">7.5</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">28.9</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">24.6</td>
+<td style="text-align: right;">7.8</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">7.9</td>
+<td style="text-align: right;">4.4</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">10.5</td>
+<td style="text-align: right;">9.8</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">84.4</td>
+<td style="text-align: right;">50.7</td>
+<td style="text-align: right;">16.1</td>
+<td style="text-align: right;">29.5</td>
+<td style="text-align: right;">5.5</td>
+<td style="text-align: right;">87.6</td>
+<td style="text-align: right;">6.3</td>
+<td style="text-align: right;">36.4</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">39.8</td>
+<td style="text-align: right;">2.3</td>
+<td style="text-align: right;">49.0</td>
+<td style="text-align: right;">45.3</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">114.8</td>
+<td style="text-align: right;">5.3</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">8.2</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">8.6</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">4.4</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">33.2</td>
+</tr>
+</tbody>
+</table>
 </div>
-</div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<p>After importing the data, let’s examine it to understand its data structure:</p>
-<p>The dataset contains 5 attributes and 108,126 observations with no missing values:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#head(pop_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str(pop_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -371,27 +1156,265 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(pop_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#any(is.na(pop_data))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(m_import))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(m_export))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(<span class="fu">is.na</span>(m_re_export))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
 </div>
 </div>
-<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <p>From the “Observe data” tab, we can see that age is a categorical variable. For better analysis, we should transpose this variable and group the ages into young, active, and old categories to make the data more interpretable:</p>
 <p>There are 10 age groups in this dataset:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pop_data %&gt;% distinct(AG)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pop_data %&gt;% distinct(AG)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding new derived variables for the young, economy active and old age group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding new derived variables for the young, economy active and old age group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
+</section>
+<section id="gov-trade-data-visualization-make-over" class="level2">
+<h2 class="anchored" data-anchor-id="gov-trade-data-visualization-make-over">3 GOV Trade Data Visualization Make-Over</h2>
+<section id="merchandise-trade-performance-with-major-trading-partners-2024" class="level3">
+<h3 class="anchored" data-anchor-id="merchandise-trade-performance-with-major-trading-partners-2024"><strong>3.1 MERCHANDISE TRADE PERFORMANCE WITH MAJOR TRADING PARTNERS, 2024</strong></h3>
+<ul>
+<li><p><strong>Pros:</strong> Use the diagonal line and blocks to clearly show <strong>net export deficit and surplus partners</strong>&nbsp;of Singapore</p></li>
+<li><p><strong>Cons:</strong> It only shows 2024 mechandise data, so it cannot offer a complete view of merchandise trade trends in recent years</p></li>
+<li><p><strong>Make-Over Suggestion</strong>: Use animation combining years of data to enhance data storytelling</p></li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Make-over</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+</section>
+</div>
+</div>
+</div>
+<section id="import-data" class="level4">
+<h4 class="anchored" data-anchor-id="import-data">3.1.1 Import data</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>m_import <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCountry.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T1"</span>,<span class="at">range=</span><span class="st">"A11:DR171"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>m_export <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCountry.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T2"</span>,<span class="at">range=</span><span class="st">"A11:DR171"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>m_re_export <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCountry.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T3"</span>,<span class="at">range=</span><span class="st">"A11:DR171"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-processing" class="level4">
+<h4 class="anchored" data-anchor-id="data-processing">3.1.2 Data processing</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rename the col name of country</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(m_export)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"country"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(m_re_export)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"country"</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(m_import)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"country"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># copy the structure and transform it to long df </span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>m_by_country <span class="ot">&lt;-</span> m_export <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key =</span> month_year, <span class="at">value=</span><span class="st">"export"</span>,<span class="sc">-</span>country)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>m_re_export_long <span class="ot">&lt;-</span> m_re_export <span class="sc">%&gt;%</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key =</span> month_year, <span class="at">value=</span><span class="st">"re_export"</span>,<span class="sc">-</span>country)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>m_import_long <span class="ot">&lt;-</span> m_import <span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key =</span> month_year, <span class="at">value =</span> <span class="st">"import"</span>,<span class="sc">-</span>country)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># join all data together</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>m_by_country <span class="ot">&lt;-</span> m_by_country <span class="sc">%&gt;%</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(m_re_export_long,<span class="at">by=</span><span class="fu">c</span>(<span class="st">"country"</span>,<span class="st">"month_year"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(m_import_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"country"</span>,<span class="st">"month_year"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_trade =</span> <span class="fu">round</span>(export<span class="sc">+</span>re_export<span class="sc">+</span>import,<span class="dv">1</span>),</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">net_export =</span> <span class="fu">round</span>((export<span class="sc">+</span>re_export)<span class="sc">-</span>import,<span class="dv">1</span>),</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">abs_net_export =</span> <span class="fu">abs</span>(<span class="fu">round</span>((export<span class="sc">+</span>re_export)<span class="sc">-</span>import,<span class="dv">1</span>)),</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">year =</span> <span class="fu">as.integer</span>(<span class="fu">substr</span>(month_year,<span class="dv">1</span>,<span class="dv">4</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">!=</span> <span class="dv">2025</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co"># create yearly data</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>m_by_country_year <span class="ot">&lt;-</span> m_by_country <span class="sc">%&gt;%</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country,year) <span class="sc">%&gt;%</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="st">"export"</span>,<span class="st">"re_export"</span>,<span class="st">"import"</span>,<span class="st">"net_export"</span>,<span class="st">"abs_net_export"</span>,<span class="st">"total_trade"</span>),<span class="sc">~</span><span class="fu">sum</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span><span class="dv">1000</span>),<span class="at">.groups=</span><span class="st">"drop"</span>)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co"># filter continent only</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>m_by_continent_year <span class="ot">&lt;-</span> m_by_country_year <span class="sc">%&gt;%</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"America"</span>,<span class="st">"Asia"</span>,<span class="st">"Europe"</span>,<span class="st">"Oceania"</span>,<span class="st">"Africa"</span>,<span class="st">"Total All Markets"</span>))</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="co"># filter country only</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>m_by_country_year <span class="ot">&lt;-</span> m_by_country_year <span class="sc">%&gt;%</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"America"</span>,<span class="st">"Asia"</span>,<span class="st">"Oceania"</span>,<span class="st">"Africa"</span>,<span class="st">"Total All Markets"</span>))</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate avg net export </span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>m_by_country_avg <span class="ot">&lt;-</span> m_by_country_year <span class="sc">%&gt;%</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country)<span class="sc">%&gt;%</span></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">c</span>(<span class="st">"export"</span>,<span class="st">"re_export"</span>,<span class="st">"import"</span>,<span class="st">"net_export"</span>,<span class="st">"abs_net_export"</span>,<span class="st">"total_trade"</span>),<span class="sc">~</span><span class="fu">round</span>(<span class="fu">mean</span>(.x),<span class="dv">1</span>)),<span class="at">.groups=</span><span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_trade))</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="co"># top 5 postive net export countries for SG</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>top_10_m_trade <span class="ot">&lt;-</span> m_by_country_avg<span class="sc">$</span>country[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="co"># filter top 10 trade countries</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>top_10_trade_country <span class="ot">&lt;-</span> m_by_country_year <span class="sc">%&gt;%</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(country <span class="sc">%in%</span> top_10_m_trade) <span class="sc">%&gt;%</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_export =</span> re_export <span class="sc">+</span> export)</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>country_abbr <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Hong Kong"</span> <span class="ot">=</span> <span class="st">"HK"</span>,</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Indonesia"</span> <span class="ot">=</span> <span class="st">"ID"</span>,</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Malaysia"</span> <span class="ot">=</span> <span class="st">"MY"</span>,</span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Thailand"</span> <span class="ot">=</span> <span class="st">"TH"</span>,</span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>  <span class="st">"China"</span> <span class="ot">=</span> <span class="st">"CN"</span>,</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Taiwan"</span> <span class="ot">=</span> <span class="st">"TW"</span>,</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>  <span class="st">"United States"</span> <span class="ot">=</span> <span class="st">"US"</span>,</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Europe"</span> <span class="ot">=</span> <span class="st">"EU"</span>,</span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Korea, Rep Of"</span> <span class="ot">=</span> <span class="st">"KR"</span>,</span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Japan"</span> <span class="ot">=</span> <span class="st">"JP"</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>top_10_trade_country <span class="ot">&lt;-</span> top_10_trade_country <span class="sc">%&gt;%</span></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country_abbr =</span> country_abbr[country])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(top_10_trade_country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   country               year          export         re_export     
+ Length:100         Min.   :2015   Min.   : 7.469   Min.   : 9.172  
+ Class :character   1st Qu.:2017   1st Qu.:10.405   1st Qu.:14.340  
+ Mode  :character   Median :2020   Median :17.473   Median :20.471  
+                    Mean   :2020   Mean   :19.526   Mean   :24.524  
+                    3rd Qu.:2022   3rd Qu.:28.046   3rd Qu.:29.421  
+                    Max.   :2024   Max.   :40.025   Max.   :63.399  
+     import         net_export       abs_net_export    total_trade    
+ Min.   : 2.965   Min.   :-51.8489   Min.   : 2.104   Min.   : 28.97  
+ 1st Qu.:20.508   1st Qu.:-13.6179   1st Qu.: 7.043   1st Qu.: 53.91  
+ Median :37.136   Median :  0.2195   Median :12.743   Median : 71.68  
+ Mean   :41.546   Mean   :  2.5035   Mean   :18.857   Mean   : 85.60  
+ 3rd Qu.:65.744   3rd Qu.: 10.4078   3rd Qu.:23.965   3rd Qu.:117.50  
+ Max.   :89.635   Max.   : 76.3764   Max.   :76.376   Max.   :175.03  
+  total_export   country_abbr      
+ Min.   :19.01   Length:100        
+ 1st Qu.:24.64   Class :character  
+ Median :41.96   Mode  :character  
+ Mean   :44.05                     
+ 3rd Qu.:59.37                     
+ Max.   :94.44                     </code></pre>
+</div>
+</div>
+</section>
+<section id="plotting" class="level4">
+<h4 class="anchored" data-anchor-id="plotting">3.1.3 Plotting</h4>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-Home_Ex2_files/figure-html/unnamed-chunk-12-1.gif" class="img-fluid figure-img" style="max-width:100%; display: block;;width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="non-oil-re-exports" class="level3">
+<h3 class="anchored" data-anchor-id="non-oil-re-exports"><strong>3.2 Non-oil re-exports</strong></h3>
+<ul>
+<li><p><strong>Pros:</strong> Creative and attractive visual design (data shaped like boats)</p></li>
+<li><p><strong>Cons:</strong></p>
+<ol type="1">
+<li><p>Only shows 2024 data, making it hard to compare trends over time and less meaningful</p></li>
+<li><p>Difficult to read due to vertical ship display and sparse data points</p></li>
+</ol></li>
+<li><p><strong>Make-Over Suggestion</strong>: Use&nbsp;<strong>newggslopegraph</strong>&nbsp;to show trends over multiple years</p></li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Make-Over</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+
+</div>
+</div>
+</div>
+<section id="import-data-and-data-processing" class="level4">
+<h4 class="anchored" data-anchor-id="import-data-and-data-processing">3.2.1 Import data and Data Processing</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>com_re_export <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/SGTrade_byCommodity.xlsx"</span>,<span class="at">sheet =</span> <span class="st">"T1"</span>,<span class="at">range=</span><span class="st">"A11:DR79"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>non_oil_re_export <span class="ot">&lt;-</span> com_re_export[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>),] </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(non_oil_re_export)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">"commodity"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>non_oil_re_export <span class="ot">&lt;-</span> non_oil_re_export <span class="sc">%&gt;%</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="at">key=</span><span class="st">"month_year"</span>,<span class="at">value=</span><span class="st">"re_export"</span>,<span class="sc">-</span>commodity)<span class="sc">%&gt;%</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.ordered</span>(<span class="fu">substr</span>(month_year,<span class="dv">1</span>,<span class="dv">4</span>)))<span class="sc">%&gt;%</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2015</span>,<span class="dv">2020</span>,<span class="dv">2022</span>,<span class="dv">2024</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(commodity,year)<span class="sc">%&gt;%</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">re_export =</span> <span class="fu">round</span>(<span class="fu">sum</span>(re_export,<span class="at">na.rm=</span><span class="cn">TRUE</span>)<span class="sc">/</span><span class="dv">1000000</span>),<span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="plotting-1" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-1">3.2.2 Plotting</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-Home_Ex2_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" style="max-width:100%; display: block;;width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="import-of-service" class="level3">
+<h3 class="anchored" data-anchor-id="import-of-service"><strong>3.3 Import of Service</strong></h3>
+<ul>
+<li><p><strong>Pros</strong>:</p>
+<ol type="1">
+<li><p>Icons and colors help differentiate service sectors, making it visually appealing</p></li>
+<li><p>Allows users to easily recognize import amounts and percentages</p></li>
+</ol></li>
+<li><p><strong>Cons</strong>:</p>
+<ol type="1">
+<li><p>Too cluttered (12 service sectors in a pie chart)</p></li>
+<li><p>Hard to compare variations across years</p></li>
+</ol></li>
+<li><p><strong>Make-Over Suggestion</strong>:</p>
+<ol type="1">
+<li><p><strong>Combine smaller sectors</strong> (below 5%, e.g., insurance and finance).</p></li>
+<li><p>Use a <strong>tree map</strong> to improve readability.</p></li>
+<li><p>Add <strong>animation</strong> to show changes over years and across sectors.</p></li>
+</ol></li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Make-Over</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="reference" class="level2">
 <h2 class="anchored" data-anchor-id="reference">4 Reference</h2>
 <ul>
 <li>Kam, T.S. (2025).</li>
 </ul>
+<p><a href="https://stackoverflow.com/questions/74015542/adding-a-shaded-triangle-to-a-ggplot2-plot" class="uri">https://stackoverflow.com/questions/74015542/adding-a-shaded-triangle-to-a-ggplot2-plot</a></p>
 
 
 </section>

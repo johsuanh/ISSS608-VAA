@@ -1,0 +1,271 @@
+---
+title: "In-class_Ex07"
+author: "Johsuan Huang"
+date: 2024-03-01
+date-modified: "last-modified"
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+# 1 Installing packages and Importing data
+
+```{r}
+pacman::p_load(tidyverse, tsibble, feasts, fable, seasonal)
+```
+
+```{r}
+ts_data <- read_csv("data/visitor_arrivals_by_air.csv")
+
+# coverting data type from chr to date
+ts_data$`Month-Year` <- dmy(ts_data$`Month-Year`)# date-month-year
+```
+
+```{r}
+# check data structure
+str(ts_data)
+```
+
+```{r}
+summary(ts_data)
+```
+
+# 2 Visualising Time-series Data
+
+## 2.1 **Conventional base `ts` object versus `tibble`object**
+
+```{r}
+ts_data_ts <- ts(ts_data)
+class(ts_data_ts)
+kable(head(ts_data_ts))
+
+```
+
+## 2.2 **Converting `tibble` object to `tsibble`object**
+
+Built on top of the tibble, a **tsibble** (or tbl_ts) is a data- and model-oriented object. Compared to the conventional time series objects in R, for example ts, zoo, and xts, the tsibble preserves time indices as the essential data column and makes heterogeneous data structures possible. Beyond the tibble-like representation, key comprised of single or multiple variables is introduced to uniquely identify observational units over time (index).
+
+```{r}
+ts_tsibble <- ts_data %>%
+  mutate(Month = yearmonth(`Month-Year`)) %>%
+  as_tsibble(index = `Month`)
+
+```
+
+## 2.3 Visualising Time-series Data
+
+In order to visualise the time-series data effectively, we need to organise the data frame from wide to long format by using [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html) of **tidyr** package as shown below.
+
+```{r}
+ts_longer <- ts_data %>%
+  #organize country data in a column "Country"
+  pivot_longer(cols = c(2:34), 
+               names_to = "Country",
+               values_to = "Arrivals")
+```
+
+## 2.3.1 **Visualising single time-series: ggplot2 methods**
+
+-   [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) of [**dplyr**](https://dplyr.tidyverse.org/) package is used to select records belong to Vietnam.
+
+-   [`geom_line()`](https://ggplot2.tidyverse.org/reference/geom_path.html) of [**ggplot2**](https://ggplot2.tidyverse.org/) package is used to plot the time-series line graph. 
+
+```{r}
+ts_longer %>%
+  filter(Country == "Vietnam") %>% #plot vietnam
+  ggplot(aes(x = `Month-Year`, 
+             y = Arrivals))+
+  geom_line(size = 0.5)+
+  theme_classic()
+```
+
+## 2.3.2 **Plotting multiple time-series data with ggplot2 methods**
+
+```{r}
+#| fig-height: 12
+
+ggplot(data = ts_longer, 
+       aes(x = `Month-Year`, 
+           y = Arrivals,
+           color = Country,
+           ))+
+  geom_line(size = 0.5) +
+  theme_classic()+
+  theme(legend.position = "right", 
+        legend.box.spacing = unit(0.5, "cm"))
+```
+
+```{r}
+#| fig-height: 12
+
+ggplot(data = ts_longer, 
+       aes(x = `Month-Year`, 
+           y = Arrivals))+
+  geom_line(size = 0.5) +
+  facet_wrap(~ Country,
+             ncol = 3,
+             scales = "free_y") +
+  theme_bw()
+```
+
+## 2.4 **Visual Analysis of Seasonality with Cycle Plot**
+
+```{r}
+tsibble_longer <- ts_tsibble %>%
+  pivot_longer(cols = c(2:34),
+               names_to = "Country",
+               values_to = "Arrivals")
+```
+
+```{r}
+#| fig-height: 6
+
+tsibble_longer %>%
+  filter(Country == "Vietnam" |
+         Country == "Italy") %>% 
+  gg_subseries(Arrivals)
+```
+
+## 3 Time series decomposition
+
+Time series decomposition allows us to isolate structural components: trend + seasonality cycle + error (irregularity)
+
+### 3.1 Single time series decomposition
+
+In **feasts** package, time series decomposition is supported by [`ACF()`](https://feasts.tidyverts.org/reference/ACF.html), `PACF()`, `CCF()`, [`feat_acf()`](https://feasts.tidyverts.org/reference/feat_acf.html), and [`feat_pacf()`](https://feasts.tidyverts.org/reference/feat_acf.html). The output can then be plotted by using `autoplot()` of **feasts** package.
+
+-   ACF: Autocorrelation and Cross-Correlation Function
+
+-   PACF:
+
+In the code chunk below, `ACF()` of **feasts** package is used to plot the ACF curve of visitor arrival from Vietnam.
+
+-   The y-axis show the correlation between current time:t(0) and time lag:t(n)
+
+-   Blue lines suggest whether the acf or pacf is statistically significant
+
+::: panel-tabset
+## ACF
+
+## PACF
+:::
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam") %>%
+  ACF(Arrivals)
+
+```
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` "Vietnam") %>%
+  ACF(Arrivals) %>% 
+   autoplot()
+```
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam") %>%
+  PACF(Arrivals)
+```
+
+lag2 significantly decreased:
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam") %>%
+  PACF(Arrivals) %>% 
+  autoplot()
+```
+
+### 3.2 Multiple time-series decomposition
+
+China (6-month), UK(12-month) and Vietnam(12-month) show both strong seasonal pattern.
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam" |
+         `Country` == "Italy" |
+         `Country` == "United Kingdom" |
+         `Country` == "China") %>%
+  ACF(Arrivals) %>%
+  autoplot()
+```
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam" |
+         `Country` == "Italy" |
+         `Country` == "United Kingdom" |
+         `Country` == "China") %>%
+  PACF(Arrivals) %>%
+  autoplot()
+```
+
+### 3.3 **Composite plot of time series decomposition**
+
+One of the interesting function of feasts package time series decomposition is [`gg_tsdisplay()`](https://feasts.tidyverts.org/reference/gg_tsdisplay.html). It provides a composite plot by showing the original line graph on the top pane follow by the ACF on the left and seasonal plot on the right.
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam") %>%
+  gg_tsdisplay(Arrivals)
+```
+
+## 3.4 Visual STL Diagnostics
+
+STL is an acronym for “Seasonal and Trend decomposition using Loess”. STL is a robust method of time series decomposition often used in economic and environmental analyses. The STL method uses locally fitted regression models to decompose a time series into trend, seasonal, and remainder components.
+
+-   remainder: white noise and errors
+
+```{r}
+tsibble_longer %>%
+  filter(`Country` == "Vietnam") %>%
+  model(stl = STL(Arrivals)) %>%
+  components() %>%
+  autoplot()
+```
+
+The grey bars to the left of each panel show the relative scales of the components. Each grey bar represents the same length but because the plots are on different scales, the bars vary in size. The large grey bar in the bottom panel shows that the variation in the remainder component is smallest compared to the variation in the data. If we shrank the bottom three panels until their bars became the same size as that in the data panel, then all the panels would be on the same scale.
+
+## 3.5 Visual Forecasting
+
+In this section, two R packages belong to tidyverts family will be used they are:
+
+-   [**fable**](https://lubridate.tidyverse.org/) provides a collection of commonly used univariate and multivariate time series forecasting models including exponential smoothing via state space models and automatic ARIMA modelling. It is a tidy version of the popular [**forecast**](https://cran.r-project.org/web/packages/forecast/index.html) package and a member of [**tidyverts**](https://tidyverts.org/).
+
+-   [**fabletools**](https://fabletools.tidyverts.org/) provides tools for building modelling packages, with a focus on time series forecasting. This package allows package developers to extend fable with additional models, without needing to depend on the models supported by fable.
+
+### 3.5.1 Time Series Data Sampling
+
+A good practice in forecasting is to split the original data set into a training and a hold-out data sets. The first part is called **estimate sample** (also known as training data). It will be used to estimate the starting values and the smoothing parameters. This sample typically contains 75-80 percent of the observation, although the forecaster may choose to use a smaller percentage for longer series.
+
+The second part of the time series is called **hold-out sample**. It is used to check the forecasting performance. No matter how many parameters are estimated with the estimation sample, each method under consideration can be evaluated with the use of the “new” observation contained in the hold-out sample.
+
+\*\* time-series data sample shouldn't be shuffled for its continous attribute
+
+In this example we will use the last 12 months for hold-out and the rest for training. (2019/1\~2019/12)
+
+```{r}
+# hold-out sample
+vietnam_ts <- tsibble_longer %>%
+  filter(Country == "Vietnam") %>% 
+  mutate(Type = if_else(
+    `Month-Year` >= "2019-01-01", 
+    "Hold-out", "Training"))
+```
+
+```{r}
+# training sample
+vietnam_train <- vietnam_ts %>%
+  filter(`Month-Year` < "2019-01-01")
+```
+
+### 3.5.2 fit the models
+
+```{r}
+
+```
