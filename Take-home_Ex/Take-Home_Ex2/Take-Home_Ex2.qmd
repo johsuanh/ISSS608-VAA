@@ -34,7 +34,8 @@ pacman::p_load(tidyverse, lubridate, gridExtra,
                CGPfunctions,patchwork,ggthemes,gganimate,
                ggtext,scales,patchwork,ggrepel,
                ggridges, ggdist, ggiraph, plotly, 
-               knitr,ggiraph,ggstatsplot,readxl)
+               knitr,ggiraph,ggstatsplot,readxl,
+               tsibble,feasts,fable,seasonal)
 ```
 
 | **Library** | **Description** |
@@ -43,7 +44,7 @@ pacman::p_load(tidyverse, lubridate, gridExtra,
 | tidyverse | a family of R packages for data processing |
 | [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |
 
-# 4 DOS Infographics Makeover 
+# 4 DOS Infographics Makeover
 
 ## 4.1 Merchandise Trade Performance With Major Trading Partners
 
@@ -925,7 +926,140 @@ girafe(ggobj = patch,
 
 ```
 
-# 5 Time-Series Forecasting
+# 5 Time-Series Analysis
+
+We are curious about the trade relationship between Singapore and the USA in recent years. We will analyze imports, exports, and re-exports from January 2015 to January 2025 to identify trends and seasonality patterns.
+
+## 5.1 Decomposition of STL
+
+We first use STL of stats package to decompose data into trend, seasonal and remainder (random noise):
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+# filter US data
+m_usa <- m_by_country %>%
+  filter(country == "United States") %>%
+  select(country, month_year, import, export, re_export) %>%
+  mutate(month_year = yearmonth(month_year))%>%
+  select(-country)
+
+# transform data from wide to long
+m_usa_long <- m_usa %>%
+  pivot_longer(cols = c(re_export, import, export), 
+               names_to = "type", values_to = "value")%>%
+  as_tsibble(index = month_year,key=type)
+
+# plot STL graph
+m_usa_long %>%
+  model(stl = STL(value)) %>%
+  components() %>%
+  autoplot()+
+  theme_minimal()+
+    theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.title = element_text(size = 8),
+        legend.position = 'top',
+        legend.background = element_blank(),
+        legend.key = element_blank(), 
+        panel.background = element_rect(fill = "#f3f1e9",color=NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA))
+
+```
+
+</details>
+:::
+
+```{r}
+#| echo: false
+#| fig-height: 6
+
+# filter US data
+m_usa <- m_by_country %>%
+  filter(country == "United States") %>%
+  select(country, month_year, import, export, re_export) %>%
+  mutate(month_year = yearmonth(month_year))%>%
+  select(-country)
+
+# transform data from wide to long
+m_usa_long <- m_usa %>%
+  pivot_longer(cols = c(re_export, import, export), 
+               names_to = "type", values_to = "value")%>%
+  as_tsibble(index = month_year,key=type)
+
+# plot STL graph
+m_usa_long %>%
+  model(stl = STL(value)) %>%
+  components() %>%
+  autoplot()+
+  labs(title="STL Decomposition of Singapore-US Trade Trends",subtitle = "Significant residual variation emerges from January 2020 onward.\n# In this plot, value(S$ million) = trend + seasonal + remainder.")+
+  geom_vline(xintercept = as.Date("2020-01-01"), linetype = "dashed", color = "grey60") + 
+  theme_minimal()+
+    theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.title = element_text(size = 8),
+        legend.position = 'top',
+        legend.background = element_blank(),
+        legend.key = element_blank(), 
+        panel.background = element_rect(fill = "#f3f1e9",color=NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA))
+```
+
+::: {.callout-important appearance="simple"}
+## Insight
+
+Following the dashed line, from January 2020 onwards, the variation in both **imports and exports to the US** of both **value and remainder panels** becomes noticeably more volatile compared to the pre-January 2020 period.
+
+Trend-wise, there are slight upward trends for import, export, and re-export.
+
+Seasonal-wise, although we can see clear seasonal patterns for each trade type, the range of variation is smaller than in the other three panels, suggesting the seasonal variation isn't significant.
+:::
+
+## 5.2 Cycle plot
+
+```{r}
+m_usa_long%>% 
+  gg_subseries(value)+
+  theme_minimal()+
+  labs(title="Cycle Plot of Singapore–US Trade Relations",
+       subtitle = "There is no clear cyclical pattern, but a distinct seasonal pattern in the trade volume\nbetween USA and SG, with the lowest point in Feb, peaking in Mar, \nand gradually declining until the following Feb")+
+    theme(plot.title = element_text(size = 11, hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(size = 8, hjust = 0.5),
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(size = 4,angle=90),
+        axis.text.y = element_text(size = 5),
+        legend.position = 'top',
+        legend.background = element_blank(),
+        legend.key = element_blank(), 
+        legend.title = element_text(size = 9),
+        legend.text = element_text(size = 8),
+        panel.background = element_rect(fill = "#f3f1e9",color=NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA))
+  
+```
+
+## 5.3 ACF and PCF
+
+::: panel-tabset
+## ACF
+
+```{r}
+m_usa_long %>%
+  ACF(value) %>% 
+  autoplot()
+```
+
+## PACF
+
+```{r}
+m_usa_long %>%
+  PACF(value) %>% 
+  autoplot()
+```
+:::
 
 # 6 Reference
 
