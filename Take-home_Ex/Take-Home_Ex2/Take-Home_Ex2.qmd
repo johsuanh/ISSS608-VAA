@@ -39,7 +39,7 @@ pacman::p_load(tidyverse, lubridate, gridExtra,
 ```
 
 | **Library** | **Description** |
-|--------------------------|----------------------------------------------|
+|---------------------------|---------------------------------------------|
 |  |  |
 | tidyverse | a family of R packages for data processing |
 | [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |
@@ -222,7 +222,7 @@ ggplot(data=top_10_trade_country,
          subtitle = "Year: {frame_time}",
          x = "Annual Exports<br>S$ Bil",
          y = "Annual Imports<br>S$ Bil",
-         caption = "Source: singstat.gov.sg ")+
+         caption = "Source: singstat.gov.sg")+
   geom_label(aes(label = country_abbr,
                  color = country_abbr),
              hjust=0.5, 
@@ -326,6 +326,15 @@ ggplot(data=top_10_trade_country,
     panel.spacing = unit(2, "cm"))
   
 ```
+
+::: {.callout-note appearance="simple"}
+## Observation
+
+By animating the plot, we can observe :
+
+1.  Singapore has consistently **maintained** **a trade deficit with Taiwan, the EU, and the US** (with 2020 being the only exception), while **maintaining a trade surplus with China, Hong Kong, Indonesia, and Thailand**.
+2.  Overall, SIngapore's total **trade amount** with top 10 trade partners has gradully **increased** by years.
+:::
 
 ## 4.2 NON-OIL RE-EXPORTS by Major Commodity
 
@@ -561,6 +570,24 @@ combined_plot
 
 ```
 
+::: {.callout-caution appearance="simple"}
+## Insight
+
+From the slope graph above, we can observe:
+
+1.  **Increased Re-Exports**:
+
+    Except for Miscellaneuos(Excluding bunkers), other categories re-export amount got increased from 2015 to 2024, suggesting re-export markets getting more active and **foreign trade or global supply chains are expanding, with more goods being processed through the region**.
+
+2.  **Increase for Machinery and Transportation Equipment:**
+
+    This category includes various **high-tech products** such as electronics, semiconductors, precision engineering equipment, and medical devices. With the **AI and technology boom**, the **demand** for electronics and semiconductor equipment (including ICs) **has surged**.
+
+3.  **Increase for Miscellaneous Manufactured Goods**:
+
+    This category includes footwear, jewellery, apparel and households goods. The booming e-commerce sector has served as a key driver of growth.
+:::
+
 ## 4.3 Export of Service by Service Category
 
 ![](images/Graph3.png){fig-align="center" width="434"}
@@ -585,7 +612,7 @@ combined_plot
 
     3.  Use **patchwork** and **ggiraph** to combine graphs creating interactive visualizations
 
-### 4.3.2 Import Data
+### 4.3.1 Import Data
 
 We import the data [International Trade in Services](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/trade-in-services/latest-data) from DOS:
 
@@ -719,7 +746,7 @@ p1 <- ggplot(top5_service_exp,
     fill = guide_legend(order = 1),
     linetype = guide_legend(order = 2) # Adds linetype to the legend
   ) +
-  labs(title = "Time Series of Singapore's Services Exports from 2015 to 2023",
+  labs(title = "Singapore's Services Exports: Top 5 Partners (2015–2023)",
        subtitle = "Service Exports Top 5 Countries: US, China, Japan, Austalia and UK\nAnalyzing trends and growth in various services.",
        x = "Year", y = "Export Value (S$ Bil)") +
   theme_minimal() +
@@ -800,7 +827,6 @@ girafe(ggobj = patch,
 
 ```{r}
 #| echo: false
-#| fig-height: 8
 
 # filter only top 5 service export partners
 top5_service_country <- s_export_ct_total$Country[1:5] 
@@ -849,7 +875,7 @@ p1 <- ggplot(top5_service_exp,
     fill = guide_legend(order = 1),
     linetype = guide_legend(order = 2) # Adds linetype to the legend
   ) +
-  labs(title = "Time Series of Singapore's Services Exports from 2015 to 2023",
+  labs(title = "Singapore's Services Exports: Top 5 Partners (2015–2023)",
        subtitle = "Service Exports Top 5 Countries: US, China, Japan, Austalia and UK\nAnalyzing trends and growth in various services.",
        x = "Year", y = "Export Value (S$ Bil)") +
   theme_minimal() +
@@ -926,6 +952,144 @@ girafe(ggobj = patch,
 
 ```
 
+### 4.3.4 Shiny APP
+
+Since there are 12 service types which make all graphs appear tiny and difficult to read, we can use Shiny and dropdown lists to resolve this issue.
+
+To minimize data processing steps when loading the Shiny app, we first need to export the processed data to our folder and then import to the app.R (the Shiny file)
+
+```{r}
+write.csv(top5_service_exp, file = "top5_service_exp.csv", row.names = FALSE)
+```
+
+Below is the link and code for Shiny APP:
+
+[Click me to see](https://johsuanh.shinyapps.io/Take-Home_Ex2/)
+
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
+
+pacman::p_load(shiny,tidyverse,ggplot2,ggiraph,patchwork)
+
+
+top5_service_exp <- read.csv("data/top5_service_exp.csv")
+list.files()
+my_palette <- c("#D989AE", "#96C6D9", "#F2CD88", "#D97259", "#468C6C", "grey60","#B3A2C7", "#E1A77C", "#7CA08B", "#C77C8C")
+
+
+# create dropdown list for service selection
+ui <- fluidPage(
+  tags$style(HTML("
+    body {
+      background-color: #ffffff;
+      font-family: 'Calibri', sans-serif;
+    }
+    select, input {
+      font-family: 'Calibri', sans-serif;
+    }
+  ")),
+
+  titlePanel("Singapore's Services Exports: Top 5 Partners"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("selected_service", "Select a Service:", 
+                  choices = unique(top5_service_exp$Service), 
+                  selected = unique(top5_service_exp$Service)[1])
+    ),
+    
+    mainPanel(
+      girafeOutput("export_plot")
+    )
+  )
+)
+
+# filter data and update plots
+server <- function(input, output) {
+  output$export_plot <- renderGirafe({
+    # filter dataset based on selected Service
+    filtered_data <- top5_service_exp %>% filter(Service == input$selected_service)
+    
+    # reference line
+    avg_export_by_service <- filtered_data %>%
+      group_by(Service) %>%
+      summarise(avg_export = mean(export, na.rm = TRUE), .groups = "drop")
+    
+    sum_export_by_country <- filtered_data %>%
+      group_by(Country, year) %>%
+      summarise(sum_export = sum(export, na.rm = TRUE), .groups = "drop")
+    
+    avg_ser_export <- sum_export_by_country %>%
+      summarise(avg_export = mean(sum_export, na.rm = TRUE), .groups = "drop")
+    
+    # Main line plot by service type
+    p1 <- ggplot(filtered_data, 
+                 aes(x = year, y = export, color = Country, group = Country)) +
+      geom_line_interactive(aes(data_id = Country), size = 1) +
+      scale_color_manual(values = my_palette) +
+      facet_wrap(~Service, scales = "free_y") +
+      geom_hline(data = avg_export_by_service, aes(yintercept = avg_export, linetype = "Mean"), 
+                 color = "grey30", size = 0.7) +
+      scale_linetype_manual(name = "Reference", values = c("Mean"="dashed")) +
+      labs(title = paste("Service Export Trends:", input$selected_service),
+           x = "Year", y = "Export Value (S$ Bil)") +
+      theme_minimal() +
+      theme(
+        legend.position = "top",
+        plot.title = element_text(hjust = 0.5,size=16,face="bold"))
+    
+    # bar plot by country
+    p2 <- ggplot(filtered_data, 
+                 aes(x = Country, y = export, fill = Country)) +
+      geom_bar_interactive(aes(data_id = Country),
+                           stat = "identity", 
+                           position = position_dodge(width = 0.7),width=0.5) +  
+      scale_fill_manual(values = my_palette) +  
+      labs(y = "Export Value (S$ Bil)", caption = "Source: singstat.gov.sg") +
+      coord_flip() +
+      theme_minimal() +
+      theme(legend.position = "none")
+    
+    # box plot by country
+    p3 <- ggplot(sum_export_by_country, 
+                 aes(x = year, y = sum_export, fill = Country, group = Country)) +
+      geom_boxplot_interactive(aes(data_id = Country), size = 1) +
+      scale_fill_manual(values = my_palette) +
+      geom_hline(data = avg_ser_export, aes(yintercept = avg_export), linetype = "dashed", 
+                 color = "grey30", size = 0.7) +
+      labs(y = "Total Export Value (S$ Bil)") +
+      theme_minimal() +
+      theme(legend.position = "none")
+    
+    patch <- p1 + (p3 / p2) + plot_layout(widths = c(3, 1))
+    
+    girafe(ggobj = patch, width_svg = 12, height_svg = 6, 
+           options = list(opts_hover(css = "stroke-width:3px; opacity: 1;"),
+                          opts_hover_inv(css = "opacity: 0.1;")))
+  })
+}
+
+shinyApp(ui, server)
+
+```
+
+</details>
+:::
+
+::: callout-caution
+## Insight
+
+Let's analyze the graph by sector:
+
+-   **Transport**: As the line graph shows, transport service fees (which include carriage for both goods and travelers) began increasing in 2020 and peaked in 2022. Since many countries had travel restrictions during 2020–2022, the high fees were likely due to surging goods carriage costs. Hence, after 2022, the transport export gradually decreased.
+
+-   
+:::
+
 # 5 Time-Series Analysis
 
 We are curious about the trade relationship between Singapore and the USA in recent years. We will analyze imports, exports, and re-exports from January 2015 to January 2025 to identify trends and seasonality patterns.
@@ -967,7 +1131,6 @@ m_usa_long %>%
         legend.key = element_blank(), 
         panel.background = element_rect(fill = "#f3f1e9",color=NA),
         plot.background = element_rect(fill = "#f3f1e9", color = NA))
-
 ```
 
 </details>
@@ -995,7 +1158,9 @@ m_usa_long %>%
   model(stl = STL(value)) %>%
   components() %>%
   autoplot()+
-  labs(title="STL Decomposition of Singapore-US Trade Trends",subtitle = "Significant residual variation emerges from January 2020 onward.\n# In this plot, value(S$ million) = trend + seasonal + remainder.")+
+  labs(title="STL Decomposition of Singapore-US Trade Trends",
+       subtitle = "Significant residual variation emerges from January 2020 onward.\n# In this plot, value(S$ million) = trend + seasonal + remainder.",
+       caption = "Source: singstat.gov.sg")+
   geom_vline(xintercept = as.Date("2020-01-01"), linetype = "dashed", color = "grey60") + 
   theme_minimal()+
     theme(plot.title = element_text(hjust = 0.5, face = 'bold'),
@@ -1015,12 +1180,17 @@ Following the dashed line, from January 2020 onwards, the variation in both **im
 
 Trend-wise, there are slight upward trends for import, export, and re-export.
 
-Seasonal-wise, although we can see clear seasonal patterns for each trade type, the range of variation is smaller than in the other three panels, suggesting the seasonal variation isn't significant.
+Seasonal-wise, although we can see clear seasonal patterns for each trade type, the range of variation is smaller than in the other three panels, suggesting the seasonal variation is weaker.
 :::
 
 ## 5.2 Cycle plot
 
-```{r}
+::: toggle
+<details>
+
+<summary>**Display Code**</summary>
+
+``` r
 m_usa_long%>% 
   gg_subseries(value)+
   theme_minimal()+
@@ -1038,33 +1208,106 @@ m_usa_long%>%
         legend.text = element_text(size = 8),
         panel.background = element_rect(fill = "#f3f1e9",color=NA),
         plot.background = element_rect(fill = "#f3f1e9", color = NA))
+```
+
+</details>
+:::
+
+```{r}
+m_usa_long%>% 
+  gg_subseries(value)+
+  theme_minimal()+
+  labs(title="Cycle Plot of Singapore–US Trade Relations",
+       subtitle = "There is no clear cyclical pattern, but a distinct seasonal pattern in the trade volume\nbetween USA and SG, with the lowest point in Feb, peaking in Mar, \nand gradually declining until the following Feb",
+       caption = "Source: singstat.gov.sg")+
+    theme(plot.title = element_text(size = 11, hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(size = 8, hjust = 0.5),
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(size = 4,angle=90),
+        axis.text.y = element_text(size = 5),
+        plot.caption = element_text(size=5),
+        legend.position = 'top',
+        legend.background = element_blank(),
+        legend.key = element_blank(), 
+        legend.title = element_text(size = 9),
+        legend.text = element_text(size = 8),
+        panel.background = element_rect(fill = "#f3f1e9",color=NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA))
   
 ```
 
+::: {.callout-caution appearance="simple"}
+## Insight
+
+we can observe trend, seasonality and cylcles from the cycle polt graph. Based on the STL decomposition plot, we can see the lowest trade amounts occur around Feb and spike at Mar, suggesting monthly seasonal pattern. Additionally, the trend also suggest the trade line shows trade amounts gradually increase over the years.
+
+However, cycle-wise, it has irregular, high volatiltiy and less clear cycles, showing variations that repeat but not in a completely predictable manner. 
+
+-   **Cycle and Seasonality are different:**
+
+    -   **Cylcle**: meaning clear patterns **across years**, which is **less predicable,** It normally affected by economic conditions and business cycle. (e.g. the economic cycle: recessions vs. economic booms)
+
+    -   **Seasonality**: meaning clear patterns **within a year,** which is **predicable**, such as a weekly, monthly or quarterly partten. (e.g. retail sales boost during holidays or shopping day like double11, double12...)
+:::
+
 ## 5.3 ACF and PCF
+
+To analyze autocorrelation and partial correlation, we use the ACF and PACF functions from the built-in `stats` package to assess both indirect and direct relationships between the current month and lagged months:
 
 ::: panel-tabset
 ## ACF
 
+-   NOTICE: the lower and upper line supposed to be displayed in other three panels "export", "import" and "re_export"
+
 ```{r}
 m_usa_long %>%
   ACF(value) %>% 
-  autoplot()
+  autoplot()+
+  labs(title = "Autocorrelation of US-Singapore Trade Amounts",
+       caption = "Source: singstat.gov.sg")+
+  theme(plot.title = element_text(size = 11, hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(size = 8, hjust = 0.5),
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 6),
+        plot.caption = element_text(size=5),
+        panel.background = element_rect(fill = "#f3f1e9",color=NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA))
 ```
 
 ## PACF
 
+-   NOTICE: the lower and upper line supposed to be displayed in other three panels "export", "import" and "re_export"
+
 ```{r}
 m_usa_long %>%
   PACF(value) %>% 
-  autoplot()
+  autoplot()+
+  labs(title = "Partial Autocorrelation of US-Singapore Trade Amounts",
+       caption = "Source: singstat.gov.sg")+
+  theme(plot.title = element_text(size = 10, hjust = 0.5, face = 'bold'),
+        plot.subtitle = element_text(size = 8, hjust = 0.5),
+        axis.title = element_text(size = 8),
+        axis.text.x = element_text(size = 8),
+        axis.text.y = element_text(size = 6),
+        plot.caption = element_text(size=5),
+        panel.background = element_rect(fill = "#f3f1e9",color=NA),
+        plot.background = element_rect(fill = "#f3f1e9", color = NA))
 ```
+:::
+
+::: {.callout-caution appearance="simple"}
+## Insight
+
+The ACF shows strong autocorrelation beyond 18 months, suggesting that SG-US's current trade amounts may be indirectly influenced by trade patterns from more than 18+ months ago.
+
+On the other hand, the PACF shows strong correlations only at lag 1, meaning that current trade amounts are significantly affected by the previous month's trade value. It doesn't show long-term direct relationships beyond 18 months like the ACF does, indicating that the ACF's strong long-term lags are likely due to indirect effects such as global demand cycles or other indirect long-term patterns.
 :::
 
 # 6 Reference
 
--   **Vaswani, K.** (2020, December 10). Brexit: UK and Singapore sign free trade agreement. *BBC News*. <https://www.bbc.com/news/business-55255082>
-
 -   **Stackerflow User.** (2023). Adding a shaded triangle to a ggplot2 plot. *Stackerflow*. <https://stackoverflow.com/questions/74015542/adding-a-shaded-triangle-to-a-ggplot2-plot>
 
--   
+-   **DHL.** (2024, October 7). POWERING GLOBAL TRADE: SINGAPORE'S TOP 5 EXPORTS IN 2024 AND WHAT THEY MEAN FOR THE ECONOMY. *DHL.* <https://www.dhl.com/discover/en-sg/logistics-advice/logistics-insights/singapore-top-exports-2024>
+
+-   **Vaswani, K.** (2020, December 10). Brexit: UK and Singapore sign free trade agreement. *BBC News*. <https://www.bbc.com/news/business-55255082>

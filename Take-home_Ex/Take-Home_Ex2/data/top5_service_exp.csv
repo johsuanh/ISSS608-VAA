@@ -1,0 +1,541 @@
+"Country","Service","year","export"
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2023",0
+"Japan","Maintenance And Repair Services","2023",1.1058
+"Japan","Transport","2023",7.1192
+"Japan","Insurance","2023",1.8035
+"Japan","Construction","2023",0.0792
+"Japan","Financial","2023",1.755
+"Japan","Telecommunications, Computer & Information","2023",5.5444
+"Japan","Charges For The Use Of Intellectual Property","2023",0.4693
+"Japan","Personal, Cultural And Recreational","2023",0.0838
+"Japan","Trade-Related","2023",0.6252
+"Japan","Business Management","2023",2.946
+"Japan","Other Services","2023",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2023",0
+"China","Maintenance And Repair Services","2023",0.9659
+"China","Transport","2023",14.8833
+"China","Insurance","2023",1.3143
+"China","Construction","2023",0.0906
+"China","Financial","2023",2.318
+"China","Telecommunications, Computer & Information","2023",2.6965
+"China","Charges For The Use Of Intellectual Property","2023",0.5949
+"China","Personal, Cultural And Recreational","2023",0.1492
+"China","Trade-Related","2023",0
+"China","Business Management","2023",1.5257
+"China","Other Services","2023",2.4009
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2023",0.0266
+"USA","Maintenance And Repair Services","2023",3.2909
+"USA","Transport","2023",20.0198
+"USA","Insurance","2023",0.6507
+"USA","Construction","2023",0.0476
+"USA","Financial","2023",2.7656
+"USA","Telecommunications, Computer & Information","2023",5.2556
+"USA","Charges For The Use Of Intellectual Property","2023",0.4429
+"USA","Personal, Cultural And Recreational","2023",1.0707
+"USA","Trade-Related","2023",1.4257
+"USA","Business Management","2023",10.391
+"USA","Other Services","2023",5.7356
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2023",0.1543
+"UK","Maintenance And Repair Services","2023",0.5885
+"UK","Transport","2023",5.0444
+"UK","Insurance","2023",0.3869
+"UK","Construction","2023",0.0146
+"UK","Financial","2023",3.2086
+"UK","Telecommunications, Computer & Information","2023",1.4548
+"UK","Charges For The Use Of Intellectual Property","2023",0.1223
+"UK","Personal, Cultural And Recreational","2023",0.3617
+"UK","Trade-Related","2023",0.4919
+"UK","Business Management","2023",5.2323
+"UK","Other Services","2023",3.1454
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2023",0
+"Australia","Maintenance And Repair Services","2023",0.3872
+"Australia","Transport","2023",7.5714
+"Australia","Insurance","2023",0.9578
+"Australia","Construction","2023",0.0823
+"Australia","Financial","2023",3.3377
+"Australia","Telecommunications, Computer & Information","2023",4.027
+"Australia","Charges For The Use Of Intellectual Property","2023",0.3698
+"Australia","Personal, Cultural And Recreational","2023",0.1343
+"Australia","Trade-Related","2023",1.4222
+"Australia","Business Management","2023",2.8262
+"Australia","Other Services","2023",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2022",0
+"Japan","Maintenance And Repair Services","2022",0.7348
+"Japan","Transport","2022",9.8905
+"Japan","Insurance","2022",1.1644
+"Japan","Construction","2022",0.0997
+"Japan","Financial","2022",1.378
+"Japan","Telecommunications, Computer & Information","2022",4.422
+"Japan","Charges For The Use Of Intellectual Property","2022",0.4497
+"Japan","Personal, Cultural And Recreational","2022",0.0968
+"Japan","Trade-Related","2022",0.4301
+"Japan","Business Management","2022",2.4193
+"Japan","Other Services","2022",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2022",0
+"China","Maintenance And Repair Services","2022",0.8469
+"China","Transport","2022",18.7789
+"China","Insurance","2022",1.5357
+"China","Construction","2022",0.0879
+"China","Financial","2022",2.3008
+"China","Telecommunications, Computer & Information","2022",2.3962
+"China","Charges For The Use Of Intellectual Property","2022",0.5425
+"China","Personal, Cultural And Recreational","2022",0.1702
+"China","Trade-Related","2022",0
+"China","Business Management","2022",0.9773
+"China","Other Services","2022",2.8926
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2022",0.0146
+"USA","Maintenance And Repair Services","2022",3.3223
+"USA","Transport","2022",36.0216
+"USA","Insurance","2022",0.8381
+"USA","Construction","2022",0.0239
+"USA","Financial","2022",3.1234
+"USA","Telecommunications, Computer & Information","2022",4.3782
+"USA","Charges For The Use Of Intellectual Property","2022",0.4712
+"USA","Personal, Cultural And Recreational","2022",1.1873
+"USA","Trade-Related","2022",0.6804
+"USA","Business Management","2022",7.4485
+"USA","Other Services","2022",4.4272
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2022",0.1348
+"UK","Maintenance And Repair Services","2022",0.9669
+"UK","Transport","2022",6.9491
+"UK","Insurance","2022",0.3747
+"UK","Construction","2022",0.0096
+"UK","Financial","2022",2.6043
+"UK","Telecommunications, Computer & Information","2022",0.9497
+"UK","Charges For The Use Of Intellectual Property","2022",0.0889
+"UK","Personal, Cultural And Recreational","2022",0.3102
+"UK","Trade-Related","2022",0.8627
+"UK","Business Management","2022",4.2897
+"UK","Other Services","2022",1.4964
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2022",0
+"Australia","Maintenance And Repair Services","2022",0.3591
+"Australia","Transport","2022",9.396
+"Australia","Insurance","2022",0.9962
+"Australia","Construction","2022",0.0296
+"Australia","Financial","2022",2.9621
+"Australia","Telecommunications, Computer & Information","2022",3.0797
+"Australia","Charges For The Use Of Intellectual Property","2022",0.497
+"Australia","Personal, Cultural And Recreational","2022",0.1051
+"Australia","Trade-Related","2022",1.3184
+"Australia","Business Management","2022",1.9972
+"Australia","Other Services","2022",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2021",0
+"Japan","Maintenance And Repair Services","2021",0.6182
+"Japan","Transport","2021",7.6613
+"Japan","Insurance","2021",0.7602
+"Japan","Construction","2021",0.0151
+"Japan","Financial","2021",1.4319
+"Japan","Telecommunications, Computer & Information","2021",4.156
+"Japan","Charges For The Use Of Intellectual Property","2021",0.4749
+"Japan","Personal, Cultural And Recreational","2021",0.0971
+"Japan","Trade-Related","2021",0.2724
+"Japan","Business Management","2021",2.9995
+"Japan","Other Services","2021",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2021",0.0062
+"China","Maintenance And Repair Services","2021",0.8997
+"China","Transport","2021",16.0901
+"China","Insurance","2021",1.2043
+"China","Construction","2021",0.1738
+"China","Financial","2021",2.5491
+"China","Telecommunications, Computer & Information","2021",2.5512
+"China","Charges For The Use Of Intellectual Property","2021",0.5055
+"China","Personal, Cultural And Recreational","2021",0.1263
+"China","Trade-Related","2021",2.5189
+"China","Business Management","2021",0.7659
+"China","Other Services","2021",2.292
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2021",0.0131
+"USA","Maintenance And Repair Services","2021",3.1267
+"USA","Transport","2021",26.9826
+"USA","Insurance","2021",0.5475
+"USA","Construction","2021",0.0108
+"USA","Financial","2021",2.9954
+"USA","Telecommunications, Computer & Information","2021",3.7389
+"USA","Charges For The Use Of Intellectual Property","2021",0.3482
+"USA","Personal, Cultural And Recreational","2021",0.7194
+"USA","Trade-Related","2021",0.5624
+"USA","Business Management","2021",5.7776
+"USA","Other Services","2021",3.6754
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2021",0
+"UK","Maintenance And Repair Services","2021",0.7685
+"UK","Transport","2021",5.4022
+"UK","Insurance","2021",0.2871
+"UK","Construction","2021",0
+"UK","Financial","2021",2.5699
+"UK","Telecommunications, Computer & Information","2021",0.9314
+"UK","Charges For The Use Of Intellectual Property","2021",0.0847
+"UK","Personal, Cultural And Recreational","2021",0.1529
+"UK","Trade-Related","2021",0.2023
+"UK","Business Management","2021",3.3855
+"UK","Other Services","2021",1.4204
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2021",0
+"Australia","Maintenance And Repair Services","2021",0.304
+"Australia","Transport","2021",6.3967
+"Australia","Insurance","2021",0.9298
+"Australia","Construction","2021",0.0444
+"Australia","Financial","2021",2.5151
+"Australia","Telecommunications, Computer & Information","2021",3.2375
+"Australia","Charges For The Use Of Intellectual Property","2021",0.4567
+"Australia","Personal, Cultural And Recreational","2021",0.0912
+"Australia","Trade-Related","2021",1.0817
+"Australia","Business Management","2021",1.9021
+"Australia","Other Services","2021",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2020",0
+"Japan","Maintenance And Repair Services","2020",1.0253
+"Japan","Transport","2020",4.9136
+"Japan","Insurance","2020",0.6198
+"Japan","Construction","2020",0.0136
+"Japan","Financial","2020",1.3616
+"Japan","Telecommunications, Computer & Information","2020",3.8574
+"Japan","Charges For The Use Of Intellectual Property","2020",0.5166
+"Japan","Personal, Cultural And Recreational","2020",0.0763
+"Japan","Trade-Related","2020",0.1688
+"Japan","Business Management","2020",3.2222
+"Japan","Other Services","2020",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2020",0.0026
+"China","Maintenance And Repair Services","2020",0.5763
+"China","Transport","2020",10.7447
+"China","Insurance","2020",1.0139
+"China","Construction","2020",0.092
+"China","Financial","2020",2.7087
+"China","Telecommunications, Computer & Information","2020",1.7823
+"China","Charges For The Use Of Intellectual Property","2020",0.6792
+"China","Personal, Cultural And Recreational","2020",0.0218
+"China","Trade-Related","2020",0.9509
+"China","Business Management","2020",0.7347
+"China","Other Services","2020",1.9117
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2020",0.0155
+"USA","Maintenance And Repair Services","2020",2.7657
+"USA","Transport","2020",14.8734
+"USA","Insurance","2020",0.3658
+"USA","Construction","2020",0.0097
+"USA","Financial","2020",2.6772
+"USA","Telecommunications, Computer & Information","2020",3.1325
+"USA","Charges For The Use Of Intellectual Property","2020",0.4562
+"USA","Personal, Cultural And Recreational","2020",0.3526
+"USA","Trade-Related","2020",0.4704
+"USA","Business Management","2020",5.2486
+"USA","Other Services","2020",3.0587
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2020",0
+"UK","Maintenance And Repair Services","2020",0.2552
+"UK","Transport","2020",3.2233
+"UK","Insurance","2020",0.2394
+"UK","Construction","2020",0
+"UK","Financial","2020",2.23
+"UK","Telecommunications, Computer & Information","2020",0.8841
+"UK","Charges For The Use Of Intellectual Property","2020",0.3196
+"UK","Personal, Cultural And Recreational","2020",0.0235
+"UK","Trade-Related","2020",0.333
+"UK","Business Management","2020",3.0637
+"UK","Other Services","2020",0.8556
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2020",0
+"Australia","Maintenance And Repair Services","2020",0.2564
+"Australia","Transport","2020",4.874
+"Australia","Insurance","2020",0.5873
+"Australia","Construction","2020",0.0303
+"Australia","Financial","2020",2.2756
+"Australia","Telecommunications, Computer & Information","2020",3.0607
+"Australia","Charges For The Use Of Intellectual Property","2020",0.4241
+"Australia","Personal, Cultural And Recreational","2020",0.0594
+"Australia","Trade-Related","2020",0.7142
+"Australia","Business Management","2020",1.8119
+"Australia","Other Services","2020",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2019",0
+"Japan","Maintenance And Repair Services","2019",1.0898
+"Japan","Transport","2019",4.8437
+"Japan","Insurance","2019",0.9228
+"Japan","Construction","2019",0.0354
+"Japan","Financial","2019",1.4841
+"Japan","Telecommunications, Computer & Information","2019",3.0026
+"Japan","Charges For The Use Of Intellectual Property","2019",0.4928
+"Japan","Personal, Cultural And Recreational","2019",0.0622
+"Japan","Trade-Related","2019",0.6982
+"Japan","Business Management","2019",3.2632
+"Japan","Other Services","2019",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2019",0.0066
+"China","Maintenance And Repair Services","2019",0.7929
+"China","Transport","2019",11.9125
+"China","Insurance","2019",1.0618
+"China","Construction","2019",0.0735
+"China","Financial","2019",2.4502
+"China","Telecommunications, Computer & Information","2019",0.7971
+"China","Charges For The Use Of Intellectual Property","2019",0.9995
+"China","Personal, Cultural And Recreational","2019",0.0201
+"China","Trade-Related","2019",2.0394
+"China","Business Management","2019",0.7596
+"China","Other Services","2019",1.7034
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2019",0.0257
+"USA","Maintenance And Repair Services","2019",2.7279
+"USA","Transport","2019",12.0908
+"USA","Insurance","2019",0.2617
+"USA","Construction","2019",0.0103
+"USA","Financial","2019",2.0693
+"USA","Telecommunications, Computer & Information","2019",2.4979
+"USA","Charges For The Use Of Intellectual Property","2019",0.2642
+"USA","Personal, Cultural And Recreational","2019",0.53
+"USA","Trade-Related","2019",0.6536
+"USA","Business Management","2019",5.4375
+"USA","Other Services","2019",2.7081
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2019",NA
+"UK","Maintenance And Repair Services","2019",0.4537
+"UK","Transport","2019",3.8575
+"UK","Insurance","2019",0.2155
+"UK","Construction","2019",0
+"UK","Financial","2019",4.1407
+"UK","Telecommunications, Computer & Information","2019",0.4947
+"UK","Charges For The Use Of Intellectual Property","2019",0.2201
+"UK","Personal, Cultural And Recreational","2019",0
+"UK","Trade-Related","2019",0.5287
+"UK","Business Management","2019",3.0584
+"UK","Other Services","2019",0.6438
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2019",0
+"Australia","Maintenance And Repair Services","2019",0.3643
+"Australia","Transport","2019",6.6944
+"Australia","Insurance","2019",0.5548
+"Australia","Construction","2019",0.0709
+"Australia","Financial","2019",2.1384
+"Australia","Telecommunications, Computer & Information","2019",2.7064
+"Australia","Charges For The Use Of Intellectual Property","2019",0.4051
+"Australia","Personal, Cultural And Recreational","2019",0.0196
+"Australia","Trade-Related","2019",0.9173
+"Australia","Business Management","2019",1.723
+"Australia","Other Services","2019",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2018",3e-04
+"Japan","Maintenance And Repair Services","2018",0.5707
+"Japan","Transport","2018",4.6056
+"Japan","Insurance","2018",0.7283
+"Japan","Construction","2018",0.0243
+"Japan","Financial","2018",1.4325
+"Japan","Telecommunications, Computer & Information","2018",2.5839
+"Japan","Charges For The Use Of Intellectual Property","2018",0.4072
+"Japan","Personal, Cultural And Recreational","2018",0.0457
+"Japan","Trade-Related","2018",0.7936
+"Japan","Business Management","2018",2.8084
+"Japan","Other Services","2018",10.4228
+"China","Manufacturing Services On Physical Inputs Owned By Others","2018",0.0117
+"China","Maintenance And Repair Services","2018",0.5836
+"China","Transport","2018",13.4693
+"China","Insurance","2018",0.9566
+"China","Construction","2018",0.271
+"China","Financial","2018",2.1675
+"China","Telecommunications, Computer & Information","2018",0.715
+"China","Charges For The Use Of Intellectual Property","2018",0.7917
+"China","Personal, Cultural And Recreational","2018",0.0438
+"China","Trade-Related","2018",1.921
+"China","Business Management","2018",0.765
+"China","Other Services","2018",1.3057
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2018",0.0749
+"USA","Maintenance And Repair Services","2018",2.1898
+"USA","Transport","2018",12.229
+"USA","Insurance","2018",0.2451
+"USA","Construction","2018",0.0095
+"USA","Financial","2018",1.9825
+"USA","Telecommunications, Computer & Information","2018",2.0796
+"USA","Charges For The Use Of Intellectual Property","2018",0.3665
+"USA","Personal, Cultural And Recreational","2018",0.5011
+"USA","Trade-Related","2018",0.7781
+"USA","Business Management","2018",5.434
+"USA","Other Services","2018",2.4311
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2018",0
+"UK","Maintenance And Repair Services","2018",0
+"UK","Transport","2018",3.0749
+"UK","Insurance","2018",0.2058
+"UK","Construction","2018",0.0033
+"UK","Financial","2018",4.5429
+"UK","Telecommunications, Computer & Information","2018",0.4916
+"UK","Charges For The Use Of Intellectual Property","2018",0.2308
+"UK","Personal, Cultural And Recreational","2018",0
+"UK","Trade-Related","2018",0.4297
+"UK","Business Management","2018",2.3717
+"UK","Other Services","2018",0.7587
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2018",0
+"Australia","Maintenance And Repair Services","2018",0.1575
+"Australia","Transport","2018",5.8613
+"Australia","Insurance","2018",0.4748
+"Australia","Construction","2018",0.0456
+"Australia","Financial","2018",1.9713
+"Australia","Telecommunications, Computer & Information","2018",2.5536
+"Australia","Charges For The Use Of Intellectual Property","2018",0.4046
+"Australia","Personal, Cultural And Recreational","2018",0.0336
+"Australia","Trade-Related","2018",0.7657
+"Australia","Business Management","2018",1.5144
+"Australia","Other Services","2018",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2017",0
+"Japan","Maintenance And Repair Services","2017",0.3704
+"Japan","Transport","2017",3.3829
+"Japan","Insurance","2017",0.5202
+"Japan","Construction","2017",0.0063
+"Japan","Financial","2017",1.134
+"Japan","Telecommunications, Computer & Information","2017",2.6695
+"Japan","Charges For The Use Of Intellectual Property","2017",0.4462
+"Japan","Personal, Cultural And Recreational","2017",0.0451
+"Japan","Trade-Related","2017",0.2967
+"Japan","Business Management","2017",2.7237
+"Japan","Other Services","2017",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2017",0
+"China","Maintenance And Repair Services","2017",0.5631
+"China","Transport","2017",9.7197
+"China","Insurance","2017",0.5902
+"China","Construction","2017",0.1006
+"China","Financial","2017",1.9265
+"China","Telecommunications, Computer & Information","2017",0.6356
+"China","Charges For The Use Of Intellectual Property","2017",0.6294
+"China","Personal, Cultural And Recreational","2017",0
+"China","Trade-Related","2017",1.6621
+"China","Business Management","2017",0.6394
+"China","Other Services","2017",1.4171
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2017",0.015
+"USA","Maintenance And Repair Services","2017",2.1563
+"USA","Transport","2017",6.7189
+"USA","Insurance","2017",0.2569
+"USA","Construction","2017",0.0024
+"USA","Financial","2017",1.98
+"USA","Telecommunications, Computer & Information","2017",1.6547
+"USA","Charges For The Use Of Intellectual Property","2017",0.215
+"USA","Personal, Cultural And Recreational","2017",0.2021
+"USA","Trade-Related","2017",0.7808
+"USA","Business Management","2017",5.0803
+"USA","Other Services","2017",1.974
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2017",NA
+"UK","Maintenance And Repair Services","2017",0
+"UK","Transport","2017",2.2814
+"UK","Insurance","2017",0.2059
+"UK","Construction","2017",0
+"UK","Financial","2017",3.7188
+"UK","Telecommunications, Computer & Information","2017",0.3525
+"UK","Charges For The Use Of Intellectual Property","2017",0.068
+"UK","Personal, Cultural And Recreational","2017",0.0903
+"UK","Trade-Related","2017",0.16
+"UK","Business Management","2017",1.7768
+"UK","Other Services","2017",0.6025
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2017",0
+"Australia","Maintenance And Repair Services","2017",0.1687
+"Australia","Transport","2017",5.7195
+"Australia","Insurance","2017",0.3809
+"Australia","Construction","2017",0.0056
+"Australia","Financial","2017",1.5842
+"Australia","Telecommunications, Computer & Information","2017",2.4878
+"Australia","Charges For The Use Of Intellectual Property","2017",0.3603
+"Australia","Personal, Cultural And Recreational","2017",0.0375
+"Australia","Trade-Related","2017",0.8978
+"Australia","Business Management","2017",1.4012
+"Australia","Other Services","2017",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2016",0
+"Japan","Maintenance And Repair Services","2016",0.4499
+"Japan","Transport","2016",2.7582
+"Japan","Insurance","2016",0.596
+"Japan","Construction","2016",0
+"Japan","Financial","2016",0.8178
+"Japan","Telecommunications, Computer & Information","2016",2.157
+"Japan","Charges For The Use Of Intellectual Property","2016",0.2813
+"Japan","Personal, Cultural And Recreational","2016",0.0499
+"Japan","Trade-Related","2016",0.2822
+"Japan","Business Management","2016",2.5944
+"Japan","Other Services","2016",4.7472
+"China","Manufacturing Services On Physical Inputs Owned By Others","2016",0.0047
+"China","Maintenance And Repair Services","2016",0.5104
+"China","Transport","2016",5.1741
+"China","Insurance","2016",0.436
+"China","Construction","2016",0.0673
+"China","Financial","2016",1.432
+"China","Telecommunications, Computer & Information","2016",0.445
+"China","Charges For The Use Of Intellectual Property","2016",0.5944
+"China","Personal, Cultural And Recreational","2016",0.0474
+"China","Trade-Related","2016",0.4358
+"China","Business Management","2016",0.8246
+"China","Other Services","2016",0.807
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2016",0
+"USA","Maintenance And Repair Services","2016",2.0624
+"USA","Transport","2016",8.0367
+"USA","Insurance","2016",0.3103
+"USA","Construction","2016",0
+"USA","Financial","2016",1.7398
+"USA","Telecommunications, Computer & Information","2016",1.5767
+"USA","Charges For The Use Of Intellectual Property","2016",0.2213
+"USA","Personal, Cultural And Recreational","2016",0.1399
+"USA","Trade-Related","2016",0.5977
+"USA","Business Management","2016",4.955
+"USA","Other Services","2016",2.2641
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2016",NA
+"UK","Maintenance And Repair Services","2016",1.9295
+"UK","Transport","2016",2.0447
+"UK","Insurance","2016",0.1688
+"UK","Construction","2016",0
+"UK","Financial","2016",3.233
+"UK","Telecommunications, Computer & Information","2016",0.2926
+"UK","Charges For The Use Of Intellectual Property","2016",0
+"UK","Personal, Cultural And Recreational","2016",0.0666
+"UK","Trade-Related","2016",0.1639
+"UK","Business Management","2016",1.5042
+"UK","Other Services","2016",0.672
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2016",0
+"Australia","Maintenance And Repair Services","2016",0.2107
+"Australia","Transport","2016",4.3831
+"Australia","Insurance","2016",0.3407
+"Australia","Construction","2016",0.0059
+"Australia","Financial","2016",1.1383
+"Australia","Telecommunications, Computer & Information","2016",1.9381
+"Australia","Charges For The Use Of Intellectual Property","2016",0.1268
+"Australia","Personal, Cultural And Recreational","2016",0.0775
+"Australia","Trade-Related","2016",0.8752
+"Australia","Business Management","2016",1.4721
+"Australia","Other Services","2016",0
+"Japan","Manufacturing Services On Physical Inputs Owned By Others","2015",0
+"Japan","Maintenance And Repair Services","2015",0.3332
+"Japan","Transport","2015",3.1407
+"Japan","Insurance","2015",0.3729
+"Japan","Construction","2015",0.0042
+"Japan","Financial","2015",0.7767
+"Japan","Telecommunications, Computer & Information","2015",1.347
+"Japan","Charges For The Use Of Intellectual Property","2015",0.3078
+"Japan","Personal, Cultural And Recreational","2015",0.0938
+"Japan","Trade-Related","2015",0.2631
+"Japan","Business Management","2015",2.7633
+"Japan","Other Services","2015",0
+"China","Manufacturing Services On Physical Inputs Owned By Others","2015",0
+"China","Maintenance And Repair Services","2015",0.4553
+"China","Transport","2015",6.281
+"China","Insurance","2015",0.3071
+"China","Construction","2015",0.0828
+"China","Financial","2015",1.4087
+"China","Telecommunications, Computer & Information","2015",0.2463
+"China","Charges For The Use Of Intellectual Property","2015",0.5382
+"China","Personal, Cultural And Recreational","2015",0
+"China","Trade-Related","2015",0.4697
+"China","Business Management","2015",0.6838
+"China","Other Services","2015",1.3662
+"USA","Manufacturing Services On Physical Inputs Owned By Others","2015",0.0327
+"USA","Maintenance And Repair Services","2015",1.993
+"USA","Transport","2015",9.5266
+"USA","Insurance","2015",0.2148
+"USA","Construction","2015",0.0499
+"USA","Financial","2015",1.6857
+"USA","Telecommunications, Computer & Information","2015",1.0555
+"USA","Charges For The Use Of Intellectual Property","2015",0.1693
+"USA","Personal, Cultural And Recreational","2015",0.1394
+"USA","Trade-Related","2015",0.8562
+"USA","Business Management","2015",4.7176
+"USA","Other Services","2015",2.4885
+"UK","Manufacturing Services On Physical Inputs Owned By Others","2015",NA
+"UK","Maintenance And Repair Services","2015",1.9622
+"UK","Transport","2015",2.0097
+"UK","Insurance","2015",0.2146
+"UK","Construction","2015",0
+"UK","Financial","2015",3.4181
+"UK","Telecommunications, Computer & Information","2015",0.2634
+"UK","Charges For The Use Of Intellectual Property","2015",0
+"UK","Personal, Cultural And Recreational","2015",0.0654
+"UK","Trade-Related","2015",0.2068
+"UK","Business Management","2015",1.6035
+"UK","Other Services","2015",0.6261
+"Australia","Manufacturing Services On Physical Inputs Owned By Others","2015",0
+"Australia","Maintenance And Repair Services","2015",0.2399
+"Australia","Transport","2015",3.7176
+"Australia","Insurance","2015",0.336
+"Australia","Construction","2015",0.0067
+"Australia","Financial","2015",1.1145
+"Australia","Telecommunications, Computer & Information","2015",1.185
+"Australia","Charges For The Use Of Intellectual Property","2015",0.1681
+"Australia","Personal, Cultural And Recreational","2015",0.0755
+"Australia","Trade-Related","2015",0.9136
+"Australia","Business Management","2015",1.3958
+"Australia","Other Services","2015",0
