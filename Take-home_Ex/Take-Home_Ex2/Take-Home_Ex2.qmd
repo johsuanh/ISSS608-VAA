@@ -33,16 +33,9 @@ Use the **pacman** package `p_load()` to check, install and launch the following
 pacman::p_load(tidyverse, lubridate, gridExtra,
                CGPfunctions,patchwork,ggthemes,gganimate,
                ggtext,scales,patchwork,ggrepel,
-               ggridges, ggdist, ggiraph, plotly, 
-               knitr,ggiraph,ggstatsplot,readxl,
+               ggiraph, plotly,knitr,ggiraph,ggstatsplot,readxl,
                tsibble,feasts,fable,seasonal)
 ```
-
-| **Library** | **Description** |
-|---------------------------|---------------------------------------------|
-|  |  |
-| tidyverse | a family of R packages for data processing |
-| [**Plotly R**](https://plot.ly/r/) | an R package for creating interactive web-based graphs via plotly’s JavaScript graphing library. |
 
 # 4 DOS Infographics Makeover
 
@@ -332,8 +325,8 @@ ggplot(data=top_10_trade_country,
 
 By animating the plot, we can observe :
 
-1.  Singapore has consistently **maintained** **a trade deficit with Taiwan, the EU, and the US** (with 2020 being the only exception), while **maintaining a trade surplus with China, Hong Kong, Indonesia, and Thailand**.
-2.  Overall, SIngapore's total **trade amount** with top 10 trade partners has gradully **increased** by years.
+1.  Singapore has consistently maintained a trade deficit with Taiwan, the EU, and the US (with 2020 being the only exception), while maintaining a trade surplus with China, Hong Kong, Indonesia, and Thailand.
+2.  Overall, SIngapore's total trade amount with top 10 trade partners has gradully increased by years.
 :::
 
 ## 4.2 NON-OIL RE-EXPORTS by Major Commodity
@@ -347,17 +340,14 @@ The second graph shows Singapore's non-oil re-exports (NORX) goods. DOS organize
 -   **Cons:**
 
     1.  Difficult to read due to long vertical ship display and sparse data points
-
     2.  The proportions across categories are uneven, with "Machinery & Transportation" accounting for 76.1%, making it difficult to compare smaller categories. This issue is connected to the first cons.
-
     3.  Only shows 2024 data, making it hard to compare trends over time and less meaningful
-
     4.  The "Machinery & Transportation" icon (excavator) is somewhat misleading, as this category includes various types of machinery, which also integrated circuits, engines, and other components.
 
 -   **Make-Over Suggestion**:
 
-    1.  For improving the graph, we'll avoid visualization methods that directly compare categories. Instead, we'll use **newggslopegraph** of CGPfunctions to illustrate trends across multiple yearsand use **labels** display both the amounts and proportions of each category.
-    2.  Additionally, it would be interesting if we also showed the data points for 2020 and 2022 to highlight if there were any **variations during COVID (2020–2022)**.
+    1.  To improve the graph, we'll avoid direct category comparisons and instead use **`newggslopegraph`** from **CGPfunctions** to illustrate trends over multiple years. Labels will display both amounts and category proportions for clarity.
+    2.  Additionally, highlighting data points for 2020 and 2022 could reveal variations during the COVID period (2020–2022).
 
 ### 4.2.1 Import Data
 
@@ -570,7 +560,7 @@ combined_plot
 
 ```
 
-::: {.callout-caution appearance="simple"}
+::: {.callout-important appearance="simple"}
 ## Insight
 
 From the slope graph above, we can observe:
@@ -595,21 +585,17 @@ From the slope graph above, we can observe:
 -   **Pros**:
 
     1.  Icons and colors help differentiate service sectors, making it visually appealing
-
     2.  Allows users to easily recognize import amounts and percentages
 
 -   **Cons**:
 
     1.  Too cluttered (12 service sectors in a pie chart)
-
     2.  Hard to compare variations across years
 
 -   **Make-Over Suggestion**:
 
     1.  Visualize **top 5 service export partners** using line graphs and facet_wrap() to see trends by country and service category over time
-
     2.  Use bar charts to compare the total service exports by country
-
     3.  Use **patchwork** and **ggiraph** to combine graphs creating interactive visualizations
 
 ### 4.3.1 Import Data
@@ -705,19 +691,24 @@ top5_service_country <- s_export_ct_total$Country[1:5]
 top5_service_exp <- s_export_ct %>%
   filter(Country %in% top5_service_country)
 
-# ref line: calculate the average export by Service type
+# ref line for main chart: calculate the average export by Service type
 avg_export_by_service <- top5_service_exp %>%
   group_by(Service) %>%
   summarise(avg_export = mean(export, na.rm = TRUE), .groups = "drop")
 
-# total export by country
+# line chart: total export by country
 sum_export_by_country <- top5_service_exp %>%
   group_by(Country,year) %>%
-  summarise(sum_export = sum(export, na.rm = TRUE), .groups = "drop")
+  summarise(sum_export = sum(export, na.rm = TRUE),.groups = "drop")
 
-# ref line: average export
+# ref line for line chart: average export
 avg_ser_export <- sum_export_by_country %>%
-  summarise(avg_export = mean(sum_export, na.rm = TRUE), .groups = "drop")
+  summarise(avg_export = mean(sum_export, na.rm = TRUE),.groups = "drop")
+
+# bar chart: 
+avg_export_per_year <- sum_export_by_country %>%
+  group_by(Country) %>%
+  summarise(avg_annual_export = mean(sum_export, na.rm = TRUE,.groups = "drop"))
 
 # sort the levels for factors
 top5_service_exp$Country <- factor(top5_service_exp$Country, 
@@ -728,7 +719,11 @@ sum_export_by_country$Country <- factor(sum_export_by_country$Country,
                                    levels = c("UK","Australia","Japan",
                                                "China","USA"),
                                    ordered = TRUE)
-
+avg_export_per_year$Country <- factor(avg_export_per_year$Country, 
+                                   levels = c("UK","Australia","Japan",
+                                               "China","USA"),
+                                   ordered = TRUE)
+# main line chart
 p1 <- ggplot(top5_service_exp, 
              aes(x = year, y = export, 
                  color = Country, group=Country)) +
@@ -763,16 +758,16 @@ p1 <- ggplot(top5_service_exp,
         plot.background = element_rect(fill = "#f3f1e9", color = NA))
 
 
-
-p2 <-ggplot(top5_service_exp, 
-            aes(x = Country, y= export,fill = Country)) +
+# barchart
+p2 <-ggplot(avg_export_per_year, 
+            aes(x = Country, y= avg_annual_export,fill = Country)) +
   geom_bar_interactive(aes(data_id = Country,
                            #tooltip = tooltip
                            ),
                        stat = "identity",
                        position = position_dodge(width = 0.7),) +  
   scale_fill_manual(values = my_palette) +  
-  labs(y = "Export Value (S$ Bil)",
+  labs(y = "Average Yearly Export Value (S$ Bil)",
        caption="Source: singstat.gov.sg") +
   coord_flip() +
   theme_minimal() +
@@ -784,7 +779,7 @@ p2 <-ggplot(top5_service_exp,
     panel.background = element_rect(fill = "#f3f1e9", color = NA),  
     plot.background = element_rect(fill = "#f3f1e9", color = NA))
 
-
+# line chart
 p3 <- ggplot(sum_export_by_country, 
              aes(x = year, y = sum_export, 
                  color = Country, group=Country)) +
@@ -834,19 +829,24 @@ top5_service_country <- s_export_ct_total$Country[1:5]
 top5_service_exp <- s_export_ct %>%
   filter(Country %in% top5_service_country)
 
-# ref line: calculate the average export by Service type
+# ref line for main chart: calculate the average export by Service type
 avg_export_by_service <- top5_service_exp %>%
   group_by(Service) %>%
   summarise(avg_export = mean(export, na.rm = TRUE), .groups = "drop")
 
-# total export by country
+# line chart: total export by country
 sum_export_by_country <- top5_service_exp %>%
   group_by(Country,year) %>%
-  summarise(sum_export = sum(export, na.rm = TRUE), .groups = "drop")
+  summarise(sum_export = sum(export, na.rm = TRUE),.groups = "drop")
 
-# ref line: average export
+# ref line for line chart: average export
 avg_ser_export <- sum_export_by_country %>%
-  summarise(avg_export = mean(sum_export, na.rm = TRUE), .groups = "drop")
+  summarise(avg_export = mean(sum_export, na.rm = TRUE),.groups = "drop")
+
+# bar chart: 
+avg_export_per_year <- sum_export_by_country %>%
+  group_by(Country) %>%
+  summarise(avg_annual_export = mean(sum_export, na.rm = TRUE,.groups = "drop"))
 
 # sort the levels for factors
 top5_service_exp$Country <- factor(top5_service_exp$Country, 
@@ -857,7 +857,11 @@ sum_export_by_country$Country <- factor(sum_export_by_country$Country,
                                    levels = c("UK","Australia","Japan",
                                                "China","USA"),
                                    ordered = TRUE)
-
+avg_export_per_year$Country <- factor(avg_export_per_year$Country, 
+                                   levels = c("UK","Australia","Japan",
+                                               "China","USA"),
+                                   ordered = TRUE)
+# main line chart
 p1 <- ggplot(top5_service_exp, 
              aes(x = year, y = export, 
                  color = Country, group=Country)) +
@@ -892,16 +896,16 @@ p1 <- ggplot(top5_service_exp,
         plot.background = element_rect(fill = "#f3f1e9", color = NA))
 
 
-
-p2 <-ggplot(top5_service_exp, 
-            aes(x = Country, y= export,fill = Country)) +
+# barchart
+p2 <-ggplot(avg_export_per_year, 
+            aes(x = Country, y= avg_annual_export,fill = Country)) +
   geom_bar_interactive(aes(data_id = Country,
                            #tooltip = tooltip
                            ),
                        stat = "identity",
                        position = position_dodge(width = 0.7),) +  
   scale_fill_manual(values = my_palette) +  
-  labs(y = "Export Value (S$ Bil)",
+  labs(y = "Average Yearly Export Value (S$ Bil)",
        caption="Source: singstat.gov.sg") +
   coord_flip() +
   theme_minimal() +
@@ -913,7 +917,7 @@ p2 <-ggplot(top5_service_exp,
     panel.background = element_rect(fill = "#f3f1e9", color = NA),  
     plot.background = element_rect(fill = "#f3f1e9", color = NA))
 
-
+# line chart
 p3 <- ggplot(sum_export_by_country, 
              aes(x = year, y = sum_export, 
                  color = Country, group=Country)) +
@@ -954,9 +958,9 @@ girafe(ggobj = patch,
 
 ### 4.3.4 Shiny APP
 
-Since there are 12 service types which make all graphs appear tiny and difficult to read, we can use Shiny and dropdown lists to resolve this issue.
+Since there are 12 service types which make all graphs appear tiny and difficult to read, we can use Shiny and dropdown lists to resolve this issue. In the Shiny App version, the side graphs of p2 and p3 are replaced with a bar chart to show the distribution of sectors more intuitively.
 
-To minimize data processing steps when loading the Shiny app, we first need to export the processed data to our folder and then import to the app.R (the Shiny file)
+To minimize data processing steps when loading the Shiny app, we first need to export the processed data to our folder and then import it to app.R (the Shiny file).
 
 ```{r}
 write.csv(top5_service_exp, file = "top5_service_exp.csv", row.names = FALSE)
@@ -964,7 +968,7 @@ write.csv(top5_service_exp, file = "top5_service_exp.csv", row.names = FALSE)
 
 Below is the link and code for Shiny APP:
 
-[Click me to see](https://johsuanh.shinyapps.io/Take-Home_Ex2/)
+[Click here to view the Shiny app version](https://johsuanh.shinyapps.io/Take-Home_Ex2/)
 
 ::: toggle
 <details>
@@ -983,25 +987,16 @@ my_palette <- c("#D989AE", "#96C6D9", "#F2CD88", "#D97259", "#468C6C", "grey60",
 
 # create dropdown list for service selection
 ui <- fluidPage(
-  tags$style(HTML("
-    body {
-      background-color: #ffffff;
-      font-family: 'Calibri', sans-serif;
-    }
-    select, input {
-      font-family: 'Calibri', sans-serif;
-    }
-  ")),
-
+  # title
   titlePanel("Singapore's Services Exports: Top 5 Partners"),
-  
+  # sidebar
   sidebarLayout(
     sidebarPanel(
       selectInput("selected_service", "Select a Service:", 
                   choices = unique(top5_service_exp$Service), 
                   selected = unique(top5_service_exp$Service)[1])
     ),
-    
+  # main
     mainPanel(
       girafeOutput("export_plot")
     )
@@ -1042,30 +1037,18 @@ server <- function(input, output) {
         legend.position = "top",
         plot.title = element_text(hjust = 0.5,size=16,face="bold"))
     
-    # bar plot by country
-    p2 <- ggplot(filtered_data, 
-                 aes(x = Country, y = export, fill = Country)) +
-      geom_bar_interactive(aes(data_id = Country),
-                           stat = "identity", 
-                           position = position_dodge(width = 0.7),width=0.5) +  
-      scale_fill_manual(values = my_palette) +  
-      labs(y = "Export Value (S$ Bil)", caption = "Source: singstat.gov.sg") +
-      coord_flip() +
-      theme_minimal() +
-      theme(legend.position = "none")
-    
     # box plot by country
     p3 <- ggplot(sum_export_by_country, 
-                 aes(x = year, y = sum_export, fill = Country, group = Country)) +
+                 aes(x = Country, y = sum_export, fill = Country, group = Country)) +
       geom_boxplot_interactive(aes(data_id = Country), size = 1) +
       scale_fill_manual(values = my_palette) +
       geom_hline(data = avg_ser_export, aes(yintercept = avg_export), linetype = "dashed", 
                  color = "grey30", size = 0.7) +
-      labs(y = "Total Export Value (S$ Bil)") +
+      labs(y = "Export Value (S$ Bil)") +
       theme_minimal() +
       theme(legend.position = "none")
     
-    patch <- p1 + (p3 / p2) + plot_layout(widths = c(3, 1))
+    patch <- p1 + p3 + plot_layout(widths = c(3, 1))
     
     girafe(ggobj = patch, width_svg = 12, height_svg = 6, 
            options = list(opts_hover(css = "stroke-width:3px; opacity: 1;"),
@@ -1074,20 +1057,21 @@ server <- function(input, output) {
 }
 
 shinyApp(ui, server)
-
 ```
 
 </details>
 :::
 
-::: callout-caution
+::: {.callout-important appearance="simple"}
 ## Insight
 
-Let's analyze the graph by sector:
+-   **Transport**:
 
--   **Transport**: As the line graph shows, transport service fees (which include carriage for both goods and travelers) began increasing in 2020 and peaked in 2022. Since many countries had travel restrictions during 2020–2022, the high fees were likely due to surging goods carriage costs. Hence, after 2022, the transport export gradually decreased.
+    As the line graph shows, transport service fees (which include carriage for both goods and travelers) began increasing in 2020 and peaked in 2022. Since many countries had travel restrictions during 2020–2022, the high fees were likely due to surging goods carriage costs. Hence, after 2022, the transport export gradually decreased.
 
--   
+-   **Financial & Manufacturing Services on physical inputs owned by others**:
+
+    We observed a sharp decline in financial service exports in 2020, coinciding with the official UK Brexit (JAN 2020), which led to financial institutions moving away from the UK. However, there was also notable growth in UK's Manufacturing Services on physical inputs owned by others from 2021. After Brexit, the UK-Singapore Free Trade Agreement (Dec 2020) may have contributed to increased re-export activity and related services.
 :::
 
 # 5 Time-Series Analysis
@@ -1173,14 +1157,14 @@ m_usa_long %>%
         plot.background = element_rect(fill = "#f3f1e9", color = NA))
 ```
 
-::: {.callout-important appearance="simple"}
-## Insight
+::: {.callout-note appearance="simple"}
+## Observation
 
-Following the dashed line, from January 2020 onwards, the variation in both **imports and exports to the US** of both **value and remainder panels** becomes noticeably more volatile compared to the pre-January 2020 period.
+-   **Remainder and Value**: After January 2020, both imports and exports to the US showed noticeably more volatile patterns in the panels compared to the pre-2020 period.
 
-Trend-wise, there are slight upward trends for import, export, and re-export.
+-   **Trend-wise**: there are slight upward trends for import, export, and re-export.
 
-Seasonal-wise, although we can see clear seasonal patterns for each trade type, the range of variation is smaller than in the other three panels, suggesting the seasonal variation is weaker.
+-   **Seasonal-wise:**, although we can see clear seasonal patterns for each trade type, the range of variation is smaller than in the other three panels, suggesting the seasonal variation is weaker.
 :::
 
 ## 5.2 Cycle plot
@@ -1236,12 +1220,12 @@ m_usa_long%>%
   
 ```
 
-::: {.callout-caution appearance="simple"}
+::: {.callout-important appearance="simple"}
 ## Insight
 
-we can observe trend, seasonality and cylcles from the cycle polt graph. Based on the STL decomposition plot, we can see the lowest trade amounts occur around Feb and spike at Mar, suggesting monthly seasonal pattern. Additionally, the trend also suggest the trade line shows trade amounts gradually increase over the years.
+The cycle plot reveals trends, seasonality, and cycles. It shows a seasonal pattern, with trade amounts dipping in February and peaking in March. The trend also indicates a gradual increase in trade over the years.
 
-However, cycle-wise, it has irregular, high volatiltiy and less clear cycles, showing variations that repeat but not in a completely predictable manner. 
+However, the cycle component is irregular and highly volatile, with repeating variations that lack a clear, predictable pattern.
 
 -   **Cycle and Seasonality are different:**
 
@@ -1257,13 +1241,13 @@ To analyze autocorrelation and partial correlation, we use the ACF and PACF func
 ::: panel-tabset
 ## ACF
 
--   NOTICE: the lower and upper line supposed to be displayed in other three panels "export", "import" and "re_export"
+-   **NOTICE**: the lower and upper line supposed to be displayed in other three panels "export", "import" and "re_export"
 
 ```{r}
 m_usa_long %>%
   ACF(value) %>% 
   autoplot()+
-  labs(title = "Autocorrelation of US-Singapore Trade Amounts",
+  labs(title = "Autocorrelation Function of US-Singapore Trade Amounts",
        caption = "Source: singstat.gov.sg")+
   theme(plot.title = element_text(size = 11, hjust = 0.5, face = 'bold'),
         plot.subtitle = element_text(size = 8, hjust = 0.5),
@@ -1277,13 +1261,13 @@ m_usa_long %>%
 
 ## PACF
 
--   NOTICE: the lower and upper line supposed to be displayed in other three panels "export", "import" and "re_export"
+-   **NOTICE**: the lower and upper line supposed to be displayed in other three panels "export", "import" and "re_export"
 
 ```{r}
 m_usa_long %>%
   PACF(value) %>% 
   autoplot()+
-  labs(title = "Partial Autocorrelation of US-Singapore Trade Amounts",
+  labs(title = "Partial Autocorrelation Function of US-Singapore Trade Amounts",
        caption = "Source: singstat.gov.sg")+
   theme(plot.title = element_text(size = 10, hjust = 0.5, face = 'bold'),
         plot.subtitle = element_text(size = 8, hjust = 0.5),
@@ -1296,12 +1280,12 @@ m_usa_long %>%
 ```
 :::
 
-::: {.callout-caution appearance="simple"}
+::: {.callout-important appearance="simple"}
 ## Insight
 
-The ACF shows strong autocorrelation beyond 18 months, suggesting that SG-US's current trade amounts may be indirectly influenced by trade patterns from more than 18+ months ago.
+-   The ACF shows strong autocorrelation beyond 18 months, suggesting that SG-US's current trade amounts may be indirectly influenced by trade patterns from more than 18+ months ago.
 
-On the other hand, the PACF shows strong correlations only at lag 1, meaning that current trade amounts are significantly affected by the previous month's trade value. It doesn't show long-term direct relationships beyond 18 months like the ACF does, indicating that the ACF's strong long-term lags are likely due to indirect effects such as global demand cycles or other indirect long-term patterns.
+-   The PACF shows strong correlations only at lag 1, meaning that current trade amounts are significantly affected by the previous month's trade value. It doesn't show long-term direct relationships beyond 18 months like the ACF does, indicating that the ACF's strong long-term lags are likely due to indirect effects such as global demand cycles or other indirect long-term patterns.
 :::
 
 # 6 Reference
