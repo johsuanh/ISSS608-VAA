@@ -167,7 +167,7 @@ qtm(mpsz_pop2020, fill="DEPENDENCY")
 
 ```
 
-### 4.2 Creating a choropleth map by using *tmap*’s elementsStep 1: Deriving attack by country object
+### 4.2 Creating a choropleth map by using *tmap*’s elements
 
 Despite its usefulness of drawing a choropleth map quickly and easily, the disadvantge of *qtm()* is that it makes aesthetics of individual layers harder to control. To draw a high quality cartographic choropleth map as shown in the figure below, **tmap**’s drawing elements should be used.
 
@@ -279,7 +279,7 @@ Most choropleth maps employ some methods of **data classification**. The point o
 **tmap** provides a total ten data classification methods:
 
 | classification method | Description |
-|------------------------|-----------------------------------------------|
+|-------------------------|-----------------------------------------------|
 | **fixed** | Manully define the breakpoints for classification. |
 | **sd** | Classification is based on standard deviation from the mean. (highlight how much values deviate from mean) |
 | **equal** | Divides the data range into equal-sized intervals. (best for evenly distributed data) |
