@@ -16,7 +16,11 @@ listing:
     - Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_d.qmd
     - Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05_e.qmd
     - Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.qmd
-    
+    - Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_a.qmd
+    - Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_b.qmd
+    - Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_c.qmd
+
+
   type: grid
   sort: "date desc"
   categories: true
