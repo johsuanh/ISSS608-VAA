@@ -29,7 +29,7 @@ pacman::p_load(sf, tmap, tidyverse, knitr)
 ```
 
 | **Library** | **Description** |
-|------------------------------------|------------------------------------|
+|----|----|
 | **tidyverse** | a family of R packages for data processing |
 | sf | For drawing thematic maps |
 | tmap | Providing a standardized way to encode and analyze spatial vector data |
@@ -279,7 +279,7 @@ Most choropleth maps employ some methods of **data classification**. The point o
 **tmap** provides a total ten data classification methods:
 
 | classification method | Description |
-|-------------------------|-----------------------------------------------|
+|----|----|
 | **fixed** | Manully define the breakpoints for classification. |
 | **sd** | Classification is based on standard deviation from the mean. (highlight how much values deviate from mean) |
 | **equal** | Divides the data range into equal-sized intervals. (best for evenly distributed data) |

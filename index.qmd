@@ -19,7 +19,7 @@ listing:
     - Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_a.qmd
     - Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_b.qmd
     - Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_c.qmd
-
+    - Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.qmd
 
   type: grid
   sort: "date desc"
