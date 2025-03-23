@@ -1,0 +1,323 @@
+---
+title: "Take-Home Exercise 3: Prototyping Modules for Visual Analytics Shiny Application"
+author: Johsuan Huang
+date: 2024-03-21
+date-modified: "last-modified"
+categories: []
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+# 1 The Task
+
+In this take-home exercise, you are required to select one of the module of your proposed Shiny application and complete the following tasks:
+
+-   To evaluate and determine the necessary R packages needed for your Shiny application are supported in R CRAN,
+-   To prepare and test the specific R codes can be run and returned the correct output as expected,
+-   To determine the parameters and outputs that will be exposed on the Shiny applications, and
+-   To select the appropriate Shiny UI components for exposing the parameters determine above.
+
+# 2 Getting Started
+
+Our group project focuses on Singapore's weather, and we aim to provide an interactive weather dashboard where users can explore and gain a deeper understanding of Singapore's weather trends.
+
+I will be working on two modules: **Co-variance Analysis** and **Forecasting**.
+
+For a better understanding of these modules, please refer to our project proposal: [**Wheather or Not – Predicting the Unpredictable**](https://vaagroup13.netlify.app/team/project_proposal)
+
+## 2.1 Load Packages
+
+Below are the packages I'll be using for testing and building the prototypes:
+
+```{r}
+pacman::p_load(DT,sf, tmap, tidyverse,urca,tseries,plotly,ggdist,ggridges,lubridate,knitr,zoo)
+```
+
+| Package | Description |
+|------------------|------------------------------------------------------|
+| [tidyverse](https://www.tidyverse.org/) | For data manipulation |
+| [DT](https://rstudio.github.io/DT/) | For interactive data tables |
+| [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
+| [ggstatplot](https://indrajeetpatil.github.io/ggstatsplot/) | To visual correlation matrix and plots with statistical tests |
+| [plotly](https://plotly.com/r/) | For interactive, publication-quality plots |
+| [ggiraph](https://davidgohel.github.io/ggiraph/) | For dynamic, interactive ggplot2 graphs. |
+| [scales](https://scales.r-lib.org/) | For data labels and annotations for ggplot2 |
+| [patchwork](https://patchwork.data-imaginist.com/) | For preparing composite figure created using ggplot2. |
+| [ggdist](https://mjskay.github.io/ggdist/) | For visualisations of distributions and uncertainty. |
+| [ggtext](https://wilkelab.org/ggtext/) | Providing simple Markdown and HTML rendering for ggplot2 |
+| [ggridges](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) | For ridgeline plots that create the impression of a mountain range. They can be useful for visualising changes in distributions over time or space. |
+| [lubridate](https://lubridate.tidyverse.org/) | For handling date-time data |
+| [tsibble](https://tsibble.tidyverts.org/) | For tidy temporal data with wrangling tools |
+| [feasts](https://feasts.tidyverts.org/) | For analysing tidy time series data with decomposition methods (STL), statistical summaries and graphics functions(cycle plot) |
+| [fable](https://fable.tidyverts.org/) | Forecasting models for tidy time series data |
+| [tmap](https://r-tmap.github.io/tmap/reference/index.html) | For drawing thematic maps |
+| [sf](https://r-spatial.github.io/sf/) | Providing a standardized way to encode and analyze spatial vector data |
+| [urca](https://www.pfaffikus.de/rpacks/urca/) | For co-integration analysis (Engle-Granger and Johansen tests) |
+
+## 2.2 Import and Pre-process Weather Data
+
+```{r}
+station<-read_csv("data/Singapore_daily_records.csv")
+```
+
+### 2.2.1 Review the data structure
+
+There are 22,230 observation
+
+As shown in the table below, several variables have incorrect data formats, the transformation needed to be made for these variables:
+
+-   station should be a factor type
+
+-   rainfall, temperature, and wind speed should be numeric types
+
+-   highest 30, 60 and 90 mm rainfall columns contain character "\\u0997", which should be replaced by NA
+
+```{r}
+str(station)
+```
+
+### 2.2.2 Handle Incorrect Data Format
+
+The code chunk below is performed to address the data issues
+
+```{r}
+station <- station %>%
+  mutate(across(
+    c(highest_30_min_rainfall_mm, highest_60_min_rainfall_mm, highest_120_min_rainfall_mm,
+      daily_rainfall_total_mm, mean_temperature_c, maximum_temperature_c, 
+      minimum_temperature_c, mean_wind_speed_km_h, max_wind_speed_km_h,mean_temperature_a_c,
+      maximum_temperature_a_c,minimum_temperature_a_c),
+    ~ as.numeric(gsub("\u0097", NA, .))
+  )) %>%
+  mutate(station = as.factor(station))
+```
+
+### 2.2.3 Add Date
+
+As the weather data is a time-series data, it's necessary to add date information for further data analysis. The `lubridate` package is used for create date and weekday columns:
+
+```{r}
+station <- station %>%
+  mutate(date = ymd(paste(year, month, day, sep = "-")),
+         weekday = wday(date, label = TRUE, abbr = TRUE))
+
+```
+
+### 2.2.4 Handle Missing Values
+
+Now, we can check the data summary and missing value:
+
+Except for columns "station", "year", "month" and "day", the data contain lots of missing values, especially for temperature data (\*\_temperature_c and \*\_temperature_ac)
+
+```{r}
+summary(station)
+```
+
+```{r}
+kable(data.frame(Column = names(station), NAs = colSums(is.na(station))))
+
+```
+
+Upon closer inspection of the missing values, we discovered that the columns were switched: missing temperature_c values appeared in temperature_a_c, and vice versa. To maintain data integrity, we will use the `coalesce()` function to combine these values into the temperature_c column.
+
+::: panel-tabset
+## missing temperature_c
+
+The table below shows records with missing values in mean_temperature_c
+
+```{r}
+station_filtered_c <- station %>%
+  filter(is.na(mean_temperature_c))
+
+kable(head(station_filtered_c,10))
+```
+
+## missing temperature_a_c
+
+The table below shows records with missing values in mean_temperature_a_c
+
+```{r}
+station_filtered_a_c <- station %>%
+  filter(is.na(mean_temperature_a_c))
+
+kable(head(station_filtered_a_c,10))
+```
+:::
+
+The coalesce function combines values from min, max, and mean temperature columns (both temp_c and temp_a_c) to handle missing values, and remove the \_a_c columns:
+
+```{r}
+station$mean_temperature_c <- coalesce(station$mean_temperature_c, station$mean_temperature_a_c)
+station$maximum_temperature_c <- coalesce(station$maximum_temperature_c, station$maximum_temperature_a_c)
+station$minimum_temperature_c <- coalesce(station$minimum_temperature_c, station$minimum_temperature_a_c)
+
+station <- station %>% 
+  select(-c("mean_temperature_a_c", 
+            "maximum_temperature_a_c", "minimum_temperature_a_c"))
+
+```
+
+Now, let's review the summary of missing values again. The number of missing values has dramatically decreased to 1000ish.
+
+```{r}
+kable(data.frame(Column = names(station), NAs = colSums(is.na(station))))
+```
+
+As shown in the time-series plot, Marina Barrage has missing data since later half of year in 2022, since the missing value is too many, the station should be dropped
+
+```{r}
+ggplot(station, aes(x = date, y = mean_temperature_c, color = station, group = station)) +
+  geom_line(linewidth = 1, alpha = 0.7) +
+  facet_grid(~station)+
+  coord_flip()+
+  theme_minimal() +
+  labs(title = "Mean temperature",
+       x = "Date",
+       y = "Mean temperature (celcius degree)") +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "top"
+  )
+```
+
+```{r}
+station <- station %>% filter(station != "Marina Barrage")
+```
+
+As the filtered table shown, some missing mean temperature value:
+
+-   **Has minimum and maximum temperature values:** interpolate mean temperature by calculating the average of minimum and maximum temperatures
+
+-   **Has no temperature data:** interpolate mean temperature using the `zoo` package by calculating moving averages across 7 days \>\> 15 days \>\> 30 days
+
+For Rainfall data:
+
+-   **Some daily total rainfall shows 0 and NA for highest rainfall:** input 0 for data with 0 total rain fall and NA for highest rainfall
+
+-   **Daily Total Rainfall data:** apply same interpolation MA method
+
+For wind speed data, I'll apply the same interpolation methods used for temperature.
+
+```{r}
+#| echo: false
+station_filtered_c <- station %>%
+  filter(is.na(mean_temperature_c))
+
+station_filtered_c %>%
+  DT::datatable(class = "display",
+                caption = "Table: Missing Values in Temp_c") %>%
+  formatStyle(
+    columns = colnames(station_filtered_c),
+    fontSize = '12px',
+    fontFamily = 'Helvetica',
+    lineHeight = '1.2'
+  )
+```
+
+```{r}
+# Step 1: Interpolate mean temperature using min and max temp
+station <- station %>%
+  mutate(mean_temperature_c = ifelse(
+    is.na(mean_temperature_c) & !is.na(minimum_temperature_c) & !is.na(maximum_temperature_c),
+    round((minimum_temperature_c + maximum_temperature_c) / 2, 2),
+    mean_temperature_c
+  ))
+
+# Step 2: Define funtion for rolling mean for remaining missing values
+fill_missing_with_rollapply <- function(x, window_sizes) {
+  for (w in window_sizes) {
+    missing_idx <- which(is.na(x))
+    if (length(missing_idx) == 0) break  # Stop if no missing values remain
+    
+    roll_values <- rollapply(x, width = w, FUN = mean, fill = NA, align = "center", na.rm = TRUE)
+    x[missing_idx] <- ifelse(is.na(x[missing_idx]), round(roll_values[missing_idx],2), x[missing_idx])
+  }
+  return(x)
+}
+# Apply rolling mean imputation with increasing window sizes
+window_sizes <- c(7, 15, 30)
+station$mean_temperature_c <- fill_missing_with_rollapply(station$mean_temperature_c, window_sizes)
+station$minimum_temperature_c <- fill_missing_with_rollapply(station$minimum_temperature_c, window_sizes)
+station$maximum_temperature_c <- fill_missing_with_rollapply(station$maximum_temperature_c, window_sizes)
+station$mean_wind_speed_km_h <- fill_missing_with_rollapply(station$mean_wind_speed_km_h, window_sizes)
+station$max_wind_speed_km_h <- fill_missing_with_rollapply(station$max_wind_speed_km_h, window_sizes)
+station$daily_rainfall_total_mm <- fill_missing_with_rollapply(station$daily_rainfall_total_mm, window_sizes)
+```
+
+```{r}
+# Input 0 for missing highest rain fall
+station <- station %>%
+  mutate(
+    highest_30_min_rainfall_mm = ifelse(daily_rainfall_total_mm == 0 & is.na(highest_30_min_rainfall_mm), 0, highest_30_min_rainfall_mm),
+    highest_60_min_rainfall_mm = ifelse(daily_rainfall_total_mm == 0 & is.na(highest_60_min_rainfall_mm), 0, highest_60_min_rainfall_mm),
+    highest_120_min_rainfall_mm = ifelse(daily_rainfall_total_mm == 0 & is.na(highest_120_min_rainfall_mm), 0, highest_120_min_rainfall_mm))
+
+# Apply MA for remaining values
+station$highest_30_min_rainfall_mm <- fill_missing_with_rollapply(station$highest_30_min_rainfall_mm, window_sizes)
+station$highest_60_min_rainfall_mm <- fill_missing_with_rollapply(station$highest_60_min_rainfall_mm, window_sizes)
+station$highest_120_min_rainfall_mm <- fill_missing_with_rollapply(station$highest_120_min_rainfall_mm, window_sizes)
+
+
+```
+
+```{r}
+kable(data.frame(Column = names(station), NAs = colSums(is.na(station))))
+
+```
+
+```{r}
+station_filter_w <- station %>%
+  filter(is.na(mean_wind_speed_km_h))
+station_filter_w
+```
+
+```{r}
+ggplot(station, aes(x = date, y = mean_wind_speed_km_h, color = station, group = station)) +
+  geom_line(linewidth = 1, alpha = 0.7) +
+  facet_grid(~station)+
+  coord_flip()+
+  theme_minimal() +
+  labs(title = "Mean Wind Speed",
+       x = "Date",
+       y = "Mean Wind Speed (km/h)") +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "top"
+  )
+```
+
+### 2.2.5 Save the file as RDS 
+
+```{r}
+saveRDS(station, "data/station_data.rds")
+```
+
+### 2.2.5 Check time-series data
+
+```{r}
+
+ggplot(station, aes(x = date, y = mean_temperature_c, color = station, group = station)) +
+  geom_line(linewidth = 1, alpha = 0.7) +
+  facet_grid(~station)+
+  coord_flip()+
+  theme_minimal() +
+  labs(title = "Mean temperature",
+       x = "Date",
+       y = "Mean temperature (celcius degree)") +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "top"
+  )
+```
+
+## 2.3 EDA
+
+```{r}
+
+```
