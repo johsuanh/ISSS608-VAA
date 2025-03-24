@@ -37,7 +37,7 @@ pacman::p_load(DT,sf, tmap, tidyverse,urca,tseries,plotly,ggdist,ggridges,lubrid
 ```
 
 | Package | Description |
-|------------------|------------------------------------------------------|
+|----|----|
 | [tidyverse](https://www.tidyverse.org/) | For data manipulation |
 | [DT](https://rstudio.github.io/DT/) | For interactive data tables |
 | [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
@@ -291,7 +291,7 @@ ggplot(station, aes(x = date, y = mean_wind_speed_km_h, color = station, group =
   )
 ```
 
-### 2.2.5 Save the file as RDS 
+### 2.2.5 Save the file as RDS
 
 ```{r}
 saveRDS(station, "data/station_data.rds")
