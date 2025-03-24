@@ -37,7 +37,7 @@ pacman::p_load(DT,sf, tmap, tidyverse,urca,tseries,plotly,ggdist,ggridges,lubrid
 ```
 
 | Package | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | [tidyverse](https://www.tidyverse.org/) | For data manipulation |
 | [DT](https://rstudio.github.io/DT/) | For interactive data tables |
 | [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
@@ -95,15 +95,19 @@ station <- station %>%
   mutate(station = as.factor(station))
 ```
 
-### 2.2.3 Add Date
+### 2.2.3 Add Date and Week No.
 
 As the weather data is a time-series data, it's necessary to add date information for further data analysis. The `lubridate` package is used for create date and weekday columns:
 
 ```{r}
 station <- station %>%
   mutate(date = ymd(paste(year, month, day, sep = "-")),
-         weekday = wday(date, label = TRUE, abbr = TRUE))
+         weekday = wday(date, label = TRUE, abbr = TRUE), 
+         week_no = week(date))
 
+# if week_no =53, revise it to 52
+station <- station %>%
+  mutate(week_no = ifelse(week_no == 53, 52, week_no))
 ```
 
 ### 2.2.4 Handle Missing Values
@@ -299,9 +303,11 @@ saveRDS(station, "data/station_data.rds")
 
 ### 2.2.5 Check time-series data
 
+con
+
 ```{r}
 
-ggplot(station, aes(x = date, y = mean_temperature_c, color = station, group = station)) +
+ggplot(station, aes(x = date, y = daily_rainfall_total_mm, color = station, group = station)) +
   geom_line(linewidth = 1, alpha = 0.7) +
   facet_grid(~station)+
   coord_flip()+
@@ -316,8 +322,71 @@ ggplot(station, aes(x = date, y = mean_temperature_c, color = station, group = s
   )
 ```
 
-## 2.3 EDA
-
 ```{r}
+ggplot(station, aes(x = date, y = mean_temperature_c, color = station, group = station)) +
+  geom_line(linewidth = 1, alpha = 0.7) +
+  facet_grid(~station)+
+  coord_flip()+
+  theme_minimal() +
+  labs(title = "Mean temperature",
+       x = "Date",
+       y = "Mean temperature (celcius degree)") +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "top"
+  )
 
 ```
+
+## 2.3 Generate weekly and monthly data
+
+The group_by and summarise function will be used to aggregate weekly and monthly data:
+
+-   Monthly data
+
+    ```{r}
+    monthly <- station %>%
+      group_by(station,year,month) %>%
+      summarise(
+        mean_temperature = round(mean(mean_temperature_c, na.rm = TRUE), 1),
+        minimum_temperature_c = min(minimum_temperature_c, na.rm = TRUE),
+        maximum_temperature_c = max(maximum_temperature_c, na.rm = TRUE),
+        total_rainfall = round(sum(daily_rainfall_total_mm, na.rm = TRUE),1),
+        highest_30_min_rainfall_mm = max(highest_30_min_rainfall_mm, na.rm = TRUE),
+        highest_60_min_rainfall_mm = max(highest_60_min_rainfall_mm, na.rm = TRUE),
+        highest_120_min_rainfall_mm = max(highest_120_min_rainfall_mm, na.rm = TRUE),
+        mean_wind_speed_km_h = round(mean(mean_wind_speed_km_h, na.rm=TRUE),1),
+        max_wind_speed = max(max_wind_speed_km_h, na.rm = TRUE),
+        .groups = "drop"
+      )
+
+    monthly <- monthly %>%
+      mutate(date = ymd(paste(year, month, 1, sep = "-")),
+             max_wind_speed = ifelse(max_wind_speed == -Inf, NA, max_wind_speed))
+    ```
+
+<!-- -->
+
+-   Weekly data
+
+    ```{r}
+    weekly <- station %>%
+      group_by(station,year,month,week_no) %>%
+      summarise(
+        mean_temperature = round(mean(mean_temperature_c, na.rm = TRUE), 1),
+        minimum_temperature_c = min(minimum_temperature_c, na.rm = TRUE),
+        maximum_temperature_c = max(maximum_temperature_c, na.rm = TRUE),
+        total_rainfall = round(sum(daily_rainfall_total_mm, na.rm = TRUE),1),
+        highest_30_min_rainfall_mm = max(highest_30_min_rainfall_mm, na.rm = TRUE),
+        highest_60_min_rainfall_mm = max(highest_60_min_rainfall_mm, na.rm = TRUE),
+        highest_120_min_rainfall_mm = max(highest_120_min_rainfall_mm, na.rm = TRUE),
+        mean_wind_speed_km_h = round(mean(mean_wind_speed_km_h, na.rm=TRUE),1),
+        max_wind_speed = max(max_wind_speed_km_h, na.rm = TRUE),
+        .groups = "drop"
+      )
+
+    weekly <- weekly %>%
+      mutate(date = as.Date(paste(year, week_no, 1), format = "%Y %U %u"),
+             max_wind_speed = ifelse(max_wind_speed == -Inf, NA, max_wind_speed))
+    ```
