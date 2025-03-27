@@ -37,7 +37,7 @@ pacman::p_load(DT,sf, tmap, tidyverse,urca,tseries,plotly,ggdist,ggridges,lubrid
 ```
 
 | Package | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | [tidyverse](https://www.tidyverse.org/) | For data manipulation |
 | [DT](https://rstudio.github.io/DT/) | For interactive data tables |
 | [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
@@ -390,3 +390,22 @@ The group_by and summarise function will be used to aggregate weekly and monthly
       mutate(date = as.Date(paste(year, week_no, 1), format = "%Y %U %u"),
              max_wind_speed = ifelse(max_wind_speed == -Inf, NA, max_wind_speed))
     ```
+
+## 2.4 Plotting Line Chart
+
+```{e}
+ggplot(weekly, aes(x = date, y = total_rainfall, color = station, group = station)) +
+  geom_line(linewidth = 1, alpha = 0.7) +
+  facet_wrap(~station, scales = "free_y") +  # Use facet_wrap for better readability
+  theme_minimal() +
+  labs(title = "Total Rainfall Over Time",
+       x = "Date",
+       y = "Total Rainfall (mm)") +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "top",
+    axis.text.x = element_text(angle = 45, hjust = 1)  # Rotates x-axis labels for readability
+  )
+
+```

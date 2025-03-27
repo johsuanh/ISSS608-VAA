@@ -1,0 +1,514 @@
+---
+title: "Hands-on Exercise 10"
+author: Johsuan Huang
+date: 2024-03-27
+date-modified: "last-modified"
+description: "Information Dashboard Design: R methods"
+categories: [ggthemes,reactable,reactablefmtr, gt, gtExtras, tidyverse]
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+# 1 Overview
+
+In this hands-on exercise, we will be able to:
+
+-   create bullet chart by using ggplot2
+
+-   create sparklines by using ggplot2
+
+-   build industry standard dashboard by using R Shiny
+
+# 2 Getting Started
+
+## Load the packages
+
+-   [gtExtras](https://jthomasmock.github.io/gtExtras/index.html) provides some additional helper functions to assist in creating beautiful tables with [gt](https://gt.rstudio.com/), an R package specially designed for anyone to make wonderful-looking tables using the R programming language.
+
+-   [reactable](https://glin.github.io/reactable/index.html) provides functions to create interactive data tables for R, based on the [React Table](https://github.com/tanstack/table/tree/v7) library and made with [reactR](https://github.com/react-R/reactR).
+
+-   [reactablefmtr](https://kcuilla.github.io/reactablefmtr/index.html) provides various features to streamline and enhance the styling of interactive reactable tables with easy-to-use and highly-customizable functions and themes.
+
+```{r}
+pacman::p_load(lubridate, ggthemes, reactable,
+reactablefmtr, gt, gtExtras, tidyverse,odbc,svglite)
+```
+
+# 3 Import the data
+
+For the purpose of this study, a personal database in Microsoft Access mdb format called *Coffee Chain* will be used:
+
+Microsoft Access databases (.mdb, .accdb) are not natively supported on macOS because there is no official Microsoft Access ODBC driver for macOS. Instead, I will use `read_csv()` with `pipe()` to extract data directly from the database and load it into R:
+
+-   `system()`: Run a system command from within R
+
+-   `pipe()`: Run a shell Command from R and read command output directly into R
+
+-   `read_csv()`: Reading the Exported Data
+
+We first check tables' name in the mbd file:
+
+```{r}
+# check table names in the mdb file
+system('mdb-tables "data/Coffee Chain.mdb"')
+
+```
+
+Next, we import three tables:
+
+```{r}
+
+# Read each table
+factTable <- read_csv(pipe('mdb-export "data/Coffee Chain.mdb" "factTable"'))
+location <- read_csv(pipe('mdb-export "data/Coffee Chain.mdb" "location"'))
+product <- read_csv(pipe('mdb-export "data/Coffee Chain.mdb" "product"'))
+
+```
+
+After analyzing the data, we merged the fact table with the location and product tables using a left join:
+
+```{r}
+
+coffeechain <- factTable %>%
+  left_join(location, by = "Area Code") %>%
+  left_join(product, by = "ProductId")
+```
+
+## 3.1 Check data structure and data summary
+
+The data format of "Date" is "chr". We should transform the variable into date format.
+
+```{r}
+str(coffeechain)
+```
+
+```{r}
+coffeechain <- coffeechain %>%
+  mutate(Date = as.Date(Date,format="%m/%d/%y"))
+```
+
+```{r}
+summary(coffeechain)
+```
+
+## 3.2 Data Preparation
+
+The code chunk below is used to aggregate Sales and Budgeted Sales at the Product level:
+
+```{r}
+product <- coffeechain %>% 
+  group_by(Product) %>%
+  summarise(target = sum(`Budget Sales`),
+            current = sum(Sales)) %>%
+  ungroup()
+```
+
+# 4 Plotting Bullet chart & sparklines using ggplot2
+
+## 4.1 Plotting Bullet chart
+
+The code chunk below is used to plot the bullet charts using ggplot2 functions.
+
+The plot shows the sales target by product (red error bar) along with 75% and 85% of the target sales:
+
+```{r}
+ggplot(product, aes(Product, current)) + 
+  geom_col(aes(Product, max(target) * 1.01),
+           fill="grey85", width=0.85) +
+  geom_col(aes(Product, target * 0.75),
+           fill="grey60", width=0.85) +
+  geom_col(aes(Product, target * 0.5),
+           fill="grey50", width=0.85) +
+  geom_col(aes(Product, current), 
+           width=0.35,
+           fill = "black") + 
+  geom_errorbar(aes(y = target,
+                    x = Product, 
+                    ymin = target,
+                    ymax= target), 
+                width = .4,
+                colour = "red",
+                size = 1) +
+  coord_flip()
+```
+
+## 4.2 Plotting Sparklines
+
+### 4.2.1 Prepare the data
+
+The code chunk below is to aggregate sales by Month and product:
+
+```{r}
+sales_report <- coffeechain %>%
+  filter(Date >= "2013-01-01") %>%
+  mutate(Month = month(Date)) %>%
+  group_by(Month, Product) %>%
+  summarise(Sales = sum(Sales)) %>%
+  ungroup() %>%
+  select(Month, Product, Sales)
+```
+
+The code chunk below is used to compute the minimum, maximum and end othe the month sales:
+
+-   `slice()`: selects rows from the grouped data.
+
+-   `which.min(Sales)` finds the index of the minimum value in the Sales column for each product group.
+
+```{r}
+mins <- group_by(sales_report, Product) %>% 
+  slice(which.min(Sales))
+maxs <- group_by(sales_report, Product) %>% 
+  slice(which.max(Sales))
+ends <- group_by(sales_report, Product) %>% 
+  filter(Month == max(Month))
+```
+
+The code chunk below is used to compute the 25 and 75 quantiles:
+
+```{r}
+quarts <- sales_report %>%
+  group_by(Product) %>%
+  summarise(quart1 = quantile(Sales, 0.25),
+            quart2 = quantile(Sales, 0.75)) %>%
+  right_join(sales_report)
+```
+
+### 4.2.2 sparklines in ggplot2
+
+The sparkline plot displays monthly sales, highlighting maximum and minimum values, and shows sales in December by product.
+
+The code below uses `geom_ribbon` to compare total sales amounts, where the higher the sales, the wider the ribbon:
+
+```{r}
+#| fig-height: 6
+#| fig-width: 12
+
+ggplot(sales_report, aes(x=Month, y=Sales)) + 
+  facet_grid(Product ~ ., scales = "free_y") + 
+  geom_ribbon(data = quarts, aes(ymin = quart1, max = quart2), 
+              fill = 'grey80') +
+  geom_line(size=0.3) +
+  geom_point(data = mins, col = 'red') +
+  geom_point(data = maxs, col = 'blue') +
+  geom_text(data = mins, aes(label = Sales), vjust = -1) +
+  geom_text(data = maxs, aes(label = Sales), vjust = 2.5) +
+  geom_text(data = ends, aes(label = Sales), hjust = 0, nudge_x = 0.35) +
+  geom_text(data = ends, aes(label = Product), hjust = 0, nudge_x = 1.0) +
+  expand_limits(x = max(sales_report$Month) + 
+                  (0.25 * (max(sales_report$Month) - min(sales_report$Month)))) +
+  scale_x_continuous(breaks = seq(1, 12, 1)) +
+  scale_y_continuous(expand = c(0.1, 0)) +
+  labs(title= "Monthly Sales Breakdown by Product")+
+  theme_tufte(base_size = 3, base_family = "Helvetica") +
+  theme(plot.title = element_text(size=15,hjust=0.5,face="bold"),
+        axis.title=element_blank(), axis.text.y = element_blank(), 
+        axis.ticks = element_blank(), strip.text = element_blank(),
+        plot.background=element_rect(fill="#f3f1e9",colour="#f3f1e9"))
+```
+
+# 5 Static Information Dashboard Design: gt and gtExtras methods
+
+In this section, we will learn how to create static information dashboard by using [gt](https://gt.rstudio.com/) and [gtExtras](https://jthomasmock.github.io/gtExtras/index.html) packages.
+
+## 5.1 Plotting a simple bullet chart
+
+```{r}
+product %>%
+  gt::gt() %>%
+  gt_plt_bullet(column = current, 
+              target = target, 
+              width = 60,
+              palette = c("#A4A9D9", 
+                          "black")) %>%
+gt_theme_espn()
+```
+
+## 5.2 sparklines: gtExtras method
+
+Before we can prepare the sales report by product by using gtExtras functions, code chunk below will be used to prepare the data.
+
+```{r}
+report <- coffeechain %>%
+  mutate(Year = year(Date)) %>%
+  filter(Year == "2013") %>%
+  mutate (Month = month(Date, 
+                        label = TRUE, 
+                        abbr = TRUE)) %>%
+  group_by(Product, Month) %>%
+  summarise(Sales = sum(Sales),.groups = "drop") %>%
+  ungroup()
+```
+
+It is important to note that one of the requirement of gtExtras functions is that almost exclusively they require you to pass **data.frame with list columns**. In view of this, code chunk below will be used to convert the report data.frame into list columns.
+
+```{r}
+report %>%
+  group_by(Product) %>%
+  summarize('Monthly Sales' = list(Sales), 
+            .groups = "drop")
+```
+
+# 6 Plotting Coffechain Sales report
+
+## 6.1 Plotting Sparklines
+
+```{r}
+report %>%
+  group_by(Product) %>%
+  summarize('Monthly Sales' = list(Sales), 
+            .groups = "drop") %>%
+   gt() %>%
+   gt_plt_sparkline('Monthly Sales',
+                    same_limit = FALSE) %>%
+  tab_style(
+    style = cell_fill(color = "#f3f1e9"), 
+    locations = cells_body()
+  ) %>%
+  tab_style(
+    style = list(cell_fill(color = "#f3f1e9"),
+                 cell_text(weight = "bold")),
+    locations = cells_column_labels())
+
+```
+
+## 6.2 Adding statistics
+
+First, calculate summary statistics by using the code chunk below.
+
+```{r}
+report %>% 
+  group_by(Product) %>% 
+  summarise("Min" = min(Sales, na.rm = T),
+            "Max" = max(Sales, na.rm = T),
+            "Average" = mean(Sales, na.rm = T)
+            ) %>%
+  gt() %>%
+  fmt_number(columns = c(2,3,4),
+    decimals = 0)%>%
+  gt_theme_espn()
+```
+
+## 6.3 Combining the data.frame
+
+Next, use the code chunk below to add the statistics on the table.
+
+```{r}
+spark <- report %>%
+  group_by(Product) %>%
+  summarize('Monthly Sales' = list(Sales), 
+            .groups = "drop")
+
+sales <- report %>% 
+  group_by(Product) %>% 
+  summarise("Min" = min(Sales, na.rm = T),
+            "Max" = max(Sales, na.rm = T),
+            "Average" = mean(Sales, na.rm = T)
+            )
+
+sales_data = left_join(sales, spark)
+
+```
+
+## 6.4 Plotting the updated data.table
+
+```{r}
+sales_data %>%
+  gt() %>%
+  gt_plt_sparkline('Monthly Sales',
+                   same_limit = FALSE) %>%
+    fmt_number(columns = c(2,3,4),
+    decimals = 0)%>%
+    gt_theme_espn()
+```
+
+## 6.5 Combining bullet chart and sparklines
+
+```{r}
+bullet <- coffeechain %>%
+  filter(Date >= "2013-01-01") %>%
+  group_by(`Product`) %>%
+  summarise(`Target` = sum(`Budget Sales`),
+            `Actual` = sum(`Sales`)) %>%
+  ungroup() 
+
+sales_data <- sales_data %>%
+  left_join(bullet)
+
+sales_data %>%
+  gt() %>%
+  gt_plt_sparkline('Monthly Sales') %>%
+  gt_plt_bullet(column = Actual, 
+                target = Target, 
+                width = 28,
+                palette = c("#A4A9D9", 
+                          "black")) %>%
+      fmt_number(columns = c(2,3,4),
+    decimals = 0)%>%
+  gt_theme_538()
+```
+
+# 7 Interactive Information Dashboard Design: reactable and reactablefmtr methods
+
+In this section, we will learn how to create interactive information dashboard by using [reactable](https://glin.github.io/reactable/index.html) and [reactablefmtr](https://kcuilla.github.io/reactablefmtr/index.html) packages.
+
+In order to build an interactive sparklines, we need to install dataui R package by using the code chunk below.
+
+```{r}
+remotes::install_github("timelyportfolio/dataui")
+```
+
+```{r}
+library(dataui)
+```
+
+## 7.1 Plotting interactive sparklines
+
+Similar to gtExtras, to plot an interactive sparklines by using reactablefmtr package we need to prepare the list field by using the code chunk below.
+
+```{r}
+report <- report %>%
+  group_by(Product) %>%
+  summarize(`Monthly Sales` = list(Sales))
+```
+
+Next, [react_sparkline](https://kcuilla.github.io/reactablefmtr/reference/react_sparkline.html) will be to plot the sparklines as shown below.
+
+```{r}
+reactable(
+  report,
+  defaultPageSize = 13, #By default the pagesize is 10
+  columns = list(
+    Product = colDef(maxWidth = 200),
+    `Monthly Sales` = colDef(
+      cell = react_sparkline(report)
+    )
+  )
+)
+```
+
+## 7.2 Adding points and labels
+
+In the code chunk below `highlight_points` argument is used to show the minimum and maximum values points and `label` argument is used to label first and last values.
+
+```{r}
+#| fig-width: 12
+
+reactable(
+  report,
+  defaultPageSize = 13,
+  columns = list(
+    Product = colDef(maxWidth = 200,
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9")),
+    `Monthly Sales` = colDef(
+      cell = react_sparkline(
+        report,
+        highlight_points = highlight_points(
+          min = "red", max = "blue"),
+        labels = c("first", "last")
+        ),
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9"),
+    )
+  )
+)
+```
+
+::: {.callout-note appearance="simple"}
+-   **ggraph** introduces a special ggplot theme that provides better defaults for network graphs than the normal ggplot defaults. `theme_graph()`, besides removing axes, grids, and border, changes the font to Arial Narrow (this can be overridden).
+
+-   The ggraph theme can be set for a series of plots with the `set_graph_style()`command run before the graphs are plotted or by using `theme_graph()` in the individual plots.
+:::
+
+## 7.3 Adding reference line
+
+```{r}
+reactable(
+  report,
+  defaultPageSize = 13,
+  columns = list(
+    Product = colDef(
+      maxWidth = 200,
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9")
+      ),
+    `Monthly Sales` = colDef(
+      cell = react_sparkline(
+        report,
+        highlight_points = highlight_points(
+          min = "red", max = "blue"),
+        statline = "mean"
+        ),
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9"),
+    )
+  )
+)
+
+```
+
+## 7.4 Adding bandline
+
+Instead adding reference line, bandline can be added by using the `bandline` argument.
+
+```{r}
+reactable(
+  report,
+  defaultPageSize = 13,
+  columns = list(
+    Product = colDef(
+      maxWidth = 200,
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9")
+      ),
+    `Monthly Sales` = colDef(
+      cell = react_sparkline(
+        report,
+        highlight_points = highlight_points(
+          min = "red", max = "blue"),
+        line_width = 1,
+        bandline = "innerquartiles",
+        bandline_color = "green"
+        ),
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9"),
+    )
+  )
+)
+```
+
+## 7.5 Changing from sparkline to sparkbar
+
+Instead of displaying the values as sparklines, we can display them as sparkbars as shiwn below.
+
+```{r}
+reactable(
+  report,
+  defaultPageSize = 13,
+  columns = list(
+    Product = colDef(
+      maxWidth = 200,
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9")
+      ),
+    `Monthly Sales` = colDef(
+      cell = react_sparkbar(
+        report,
+        highlight_bars = highlight_bars(
+          min = "red", max = "blue"),
+        bandline = "innerquartiles",
+        statline = "mean"
+        ),
+      style = list(backgroundColor = "#f3f1e9"),
+      headerStyle = list(backgroundColor = "#f3f1e9"),
+    )
+  )
+)
+```
+
+# 8 Reference
+
+-   Kam, T.S. (2025). [Information Dashboard Design: R methods](https://r4va.netlify.app/chap31)
