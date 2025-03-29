@@ -38,7 +38,7 @@ pacman::p_load(tidyverse,DT,tseries,lubridate,knitr,tsibble,fable,feasts,ggtheme
 ```
 
 | Package | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | [tidyverse](https://www.tidyverse.org/) | For data manipulation |
 | [DT](https://rstudio.github.io/DT/) | For interactive data tables |
 | [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |

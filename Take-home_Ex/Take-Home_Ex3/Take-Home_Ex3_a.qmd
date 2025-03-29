@@ -68,7 +68,7 @@ As shown in the table below, several variables have incorrect data formats. Tran
 
 -   **rainfall**, **temperature**, and **wind speed** should be numeric types
 
--   **highest 30, 60 and 90 mm rainfall** will be removed since we will not use these attributes
+-   **highest 30, 60 and 90 mm rainfall** columns contain character “\\u0997”, which should be replaced by NA
 
 ```{r}
 str(station)
