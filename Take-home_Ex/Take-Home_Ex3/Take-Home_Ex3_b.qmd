@@ -78,7 +78,7 @@ To create time-series decomposition plots and correlograms, we need to transform
 time_resolution_input <- "weekly"
 start_date <- as.Date("2019-01-11")
 end_date <- as.Date("2024-2-13")
-variable <- "mean_temperature_c"
+variable <- "Mean Temperature"
 station_name <- "Clementi"
 
 ts_daily_tsibble <- daily_station %>%
@@ -87,7 +87,7 @@ ts_daily_tsibble <- daily_station %>%
          date <= end_date) %>%
   group_by(date) %>%
   select(date, variable) %>%
-  pivot_longer(cols = c(mean_temperature_c), 
+  pivot_longer(cols = c(variable), 
                names_to = "type", values_to = "value") %>%
   as_tsibble(index = date, key = type)
 
@@ -125,7 +125,7 @@ Let's assume the user input settings are:
 ```         
 start_date <- as.Date("2019-01-11")
 end_date <- as.Date("2024-2-13")
-variable <- "mean_temperature_c"
+variable <- "Mean Temperature"
 station_name <- "Clementi"
 ```
 
@@ -438,7 +438,7 @@ time_resolution_table %>%
 time_resolution_input <- "weekly"
 start_date <- as.Date("2022-01-01")
 end_date <- as.Date("2025-2-01")
-variable <- "mean_temperature_c"
+variable <- "Mean Temperature"
 station_name <- "Clementi"
 
 ts_daily_tsibble <- daily_station %>%
@@ -447,7 +447,7 @@ ts_daily_tsibble <- daily_station %>%
          date <= end_date) %>%
   group_by(date) %>%
   select(date, variable) %>%
-  pivot_longer(cols = c(mean_temperature_c), 
+  pivot_longer(cols = c(variable), 
                names_to = "type", values_to = "value") %>%
   as_tsibble(index = date, key = type)
 
