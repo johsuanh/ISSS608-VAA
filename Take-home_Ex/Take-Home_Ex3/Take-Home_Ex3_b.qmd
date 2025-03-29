@@ -1,0 +1,699 @@
+---
+title: "Take-Home Exercise 3.b: Shiny App Prototype - Forecasting"
+author: Johsuan Huang
+date: 2024-03-21
+date-modified: "last-modified"
+categories: []
+execute:
+  echo: true
+  eval: true
+  warning: false
+  freeze: true
+---
+
+# 1 The Task
+
+In this take-home exercise, you are required to select one of the module of your proposed Shiny application and complete the following tasks:
+
+-   To evaluate and determine the necessary R packages needed for your Shiny application are supported in R CRAN,
+-   To prepare and test the specific R codes can be run and returned the correct output as expected,
+-   To determine the parameters and outputs that will be exposed on the Shiny applications, and
+-   To select the appropriate Shiny UI components for exposing the parameters determine above.
+
+# 2 Getting Started
+
+Our group project focuses on Singapore's weather, and we aim to provide an interactive weather dashboard where users can explore and gain a deeper understanding of Singapore's weather trends.
+
+I will be working on two modules: **EDA** - **Geospatial Analysis (Isohyet Map)** and **Forecasting**.
+
+For a better understanding of these modules, please refer to our project proposal: [**Wheather or Not – Predicting the Unpredictable**](https://vaagroup13.netlify.app/team/project_proposal)
+
+## 2.1 Load Packages
+
+Below are the packages I'll be using for testing and building the prototypes:
+
+```{r}
+pacman::p_load(tidyverse,DT,tseries,lubridate,knitr,tsibble,fable,feasts,ggthemes, forecast,urca)
+
+```
+
+| Package | Description |
+|------------------------------------|------------------------------------|
+| [tidyverse](https://www.tidyverse.org/) | For data manipulation |
+| [DT](https://rstudio.github.io/DT/) | For interactive data tables |
+| [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
+| [lubridate](https://lubridate.tidyverse.org/) | For handling date-time data |
+| [tsibble](https://tsibble.tidyverts.org/) | For tidy temporal data with wrangling tools |
+| [feasts](https://feasts.tidyverts.org/) | For analysing tidy time series data with decomposition methods (STL), statistical summaries and graphics functions(cycle plot) |
+| [fable](https://fable.tidyverts.org/) | Forecasting models for tidy time series data |
+| [urca](https://www.pfaffikus.de/rpacks/urca/) | For co-integration analysis (Engle-Granger and Johansen tests) |
+| [forecast](https://cran.r-project.org/web/packages/forecast/index.html) | For displaying and analysing univariate time series forecasts |
+
+## 2.2 Import and Prepare Weather Data
+
+```{r}
+daily_station <- read_rds("data/station_daily_data.rds")
+weekly_station <- read_rds("data/station_weekly_data.rds")
+monthly_station <- read_rds("data/station_monthly_data.rds")
+```
+
+### 2.2.1 Review the data structure
+
+The data is pre-processed in last take-home exercise (Ex3.a)
+
+```{r}
+str(daily_station)
+```
+
+# 3 Time Series Decomposition & Correlograms
+
+## 3.1 Preparing data
+
+To create time-series decomposition plots and correlograms, we need to transform the data frame into tsibble using `as_tsibble` of **tsibble** package:
+
+-   year-month and year_week is created by `yearmonth()` and `yearweek()` of **tsibble** package
+
+```{r}
+# Simulate User Settings
+time_resolution_input <- "weekly"
+start_date <- as.Date("2019-01-11")
+end_date <- as.Date("2024-2-13")
+variable <- "mean_temperature_c"
+station_name <- "Clementi"
+
+ts_daily_tsibble <- daily_station %>%
+  filter(station == station_name, 
+         date >= start_date, 
+         date <= end_date) %>%
+  group_by(date) %>%
+  select(date, variable) %>%
+  pivot_longer(cols = c(mean_temperature_c), 
+               names_to = "type", values_to = "value") %>%
+  as_tsibble(index = date, key = type)
+
+# Aggregate to weekly data
+ts_weekly_tsibble <- ts_daily_tsibble %>%
+  mutate(year_week = yearweek(date)) %>%  
+  group_by(type, year_week) %>% 
+  summarise(value = mean(value, na.rm = TRUE), .groups = "drop") %>%
+  distinct(type, year_week, .keep_all = TRUE) %>% 
+  as_tsibble(index = year_week, key = type) 
+
+# Aggregate to monthly data
+ts_monthly_tsibble <- ts_daily_tsibble %>%
+  mutate(year_month = yearmonth(date)) %>%  
+  group_by(type, year_month) %>% 
+  summarise(value = mean(value, na.rm = TRUE), .groups = "drop") %>%
+  distinct(type, year_month, .keep_all = TRUE) %>% 
+  as_tsibble(index = year_month, key = type)
+```
+
+## 3.2 Time Series Decomposition - STL & Classical
+
+To understand the different patterns in weather data, we use STL and classical time series decomposition. These methods decompose the data into trend, seasonality, and remainder, providing deeper insights into the data that can be applied to ETS models.
+
+For example, if STL shows a strong trend but little yearly pattern, we know the climate change matter more than seasons for our predictions.
+
+### 3.2.1 STL (Seasonal and Trend decomposition using Loess)
+
+STL is a more flexible and robust decomposition method, based on **local regression (Loess)**. It can handle **non-linear trends** and **changing seasonal patterns** (which classical decomposition cannot**)** more effectively than classical decomposition.
+
+-   The grey bars to the left of each panel show the relative scales of the components.
+
+Let's assume the user input settings are:
+
+```         
+start_date <- as.Date("2019-01-11")
+end_date <- as.Date("2024-2-13")
+variable <- "mean_temperature_c"
+station_name <- "Clementi"
+```
+
+::: panel-tabset
+## Daily
+
+```{r}
+time_resolution_input <- "daily"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+
+time_resolution_table %>%
+  model(stl = STL(value)) %>%  
+  components() %>% 
+  autoplot() + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    legend.position = 'top',
+    legend.background = element_blank(),
+    legend.key = element_blank(), 
+    panel.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA))
+```
+
+## Weekly
+
+```{r}
+time_resolution_input <- "weekly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+
+time_resolution_table %>%
+  model(stl = STL(value)) %>%  
+  components() %>% 
+  autoplot() + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    legend.position = 'top',
+    legend.background = element_blank(),
+    legend.key = element_blank(), 
+    panel.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA))
+```
+
+## Monthly
+
+```{r}
+time_resolution_input <- "monthly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+
+time_resolution_table %>%
+  model(stl = STL(value)) %>%  
+  components() %>% 
+  autoplot() + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    legend.position = 'top',
+    legend.background = element_blank(),
+    legend.key = element_blank(), 
+    panel.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA))
+```
+:::
+
+::: {.callout-note appearance="simple"}
+## Observation
+
+From the plot below, we can observe:
+
+-   **Trend**:
+
+    -   a clear long-term pattern showing a U-shaped trend (temperatures declined from 2020 until around mid-2021 to 2022 then they began rising again toward 2024)
+
+    -   a multi-year cycle rather than a linear warming or cooling trend
+
+    -   The grey bar is quite small, indicating that the trend component contributes a relatively small amount to the overall variation.
+
+-   **Seasonal:**
+
+    -   a clear annual seasonal pattern (warmer during Apr-Aug and cooler during Dec-Jan) that repeats consistently each year
+
+    -   The seasonal pattern has the second largest effect
+
+-   **Residual:**
+
+    -   This represents weather noise and fluctuations that aren't explained by the seasonal patterns or long-term trends
+
+    -   The fluctuations is between -3\~+2 celcius degree, having the largest effect
+
+-   **Conclusion:**
+
+    An ARIMA model may perform better than ETS due to the large proportion of residuals....
+:::
+
+## 3.3 Time Series Decomposition - Classical \>\> removed
+
+Classical decomposition uses **additive** or **multiplicative** models to decompose a time series. The trend is typically done using moving averages (like a centered moving average) to smooth the data and extract the trend component. It assumes that the **seasonality and trend are linear** and that seasonality is constant over time.
+
+Compared to STL, classical decomposition performs poorly in capturing the detailed fluctuations in seasonality. Hence, we may not put classical decomposition in our Shiny APP.
+
+::: panel-tabset
+## Daily
+
+The classical decomposition cannot detect well on seasonal cycle on daily mean_temperature data.
+
+```{r}
+time_resolution_input <- "daily"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+time_resolution_table %>%
+  model(
+    classical_decomposition(
+      value, type = "additive")) %>%
+  components() %>%
+  autoplot()+
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    legend.position = 'top',
+    legend.background = element_blank(),
+    legend.key = element_blank()
+  )
+```
+
+## Weekly
+
+```{r}
+time_resolution_input <- "weekly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+time_resolution_table %>%
+  model(
+    classical_decomposition(
+      value, type = "additive")) %>%
+  components() %>%
+  autoplot()+
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    legend.position = 'top',
+    legend.background = element_blank(),
+    legend.key = element_blank(), 
+    panel.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA)
+  )
+```
+
+## Monthly
+
+```{r}
+time_resolution_input <- "monthly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+time_resolution_table %>%
+  model(
+    classical_decomposition(
+      value, type = "additive")) %>%
+  components() %>%
+  autoplot()+
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    legend.position = 'top',
+    legend.background = element_blank(),
+    legend.key = element_blank(), 
+    panel.background = element_rect(fill = "#f3f1e9", color = NA),
+    plot.background = element_rect(fill = "#f3f1e9", color = NA)
+  )
+```
+:::
+
+## 3.4 Time Series Decomposition - Seasonal subseries plot
+
+::: panel-tabset
+## Mean Temperature
+
+```{r}
+
+ts_monthly_tsibble %>%
+  gg_subseries(value)+
+  labs(title="Cycle Plot")+
+  theme_minimal()+
+    theme(
+    plot.title = element_text(hjust = 0.5, face = 'bold'),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.title = element_text(size = 8),
+    axis.text.x = element_text(angle=90)
+  )
+
+```
+:::
+
+## 3.5 Correlograms - ACF & PACF
+
+ACF and PACF plots will be displayed for users to check whether the data exhibit autocorrelation or partial autocorrelation:
+
+-   The PACF helps determine the "AR" (autoregressive) order : how many past values directly influence the current value.
+
+-   The ACF helps determine the "MA" (moving average) order : how past random shocks continue to influence the current value.
+
+For example, if the correlograms show strong connections at lag 1 (1 day) and lag 7 (7 days), we can infer that today's temperature is strongly related to yesterday's temperature and the temperature from exactly one week ago.
+
+### 3.5.1 ACF and PACF
+
+Both plots show weak seasonality, with only the ACF showing a strong correlation at lag 6.
+
+```{r}
+lag_input <- 24
+time_resolution_input <- "monthly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+
+time_resolution_table %>%
+  gg_tsdisplay(
+    plot_type='partial',lag_max = lag_input)
+```
+
+```{r}
+library(urca)
+adf_test <- ur.df(time_resolution_table$value, type = "drift", selectlags = "AIC")
+summary(adf_test)
+
+```
+
+### 3.5.2 Trend differencing
+
+-   `difference(value, lag = 1)`: Computes the **first difference** of the time series. This transformation helps **remove trends** and make the series stationary by calculating the change between consecutive values
+
+```{r}
+time_resolution_input <- "monthly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+time_resolution_table %>%
+  gg_tsdisplay(difference(
+    value,
+    lag = 1), 
+    plot_type='partial',
+    lag_max = lag_input
+    )
+```
+
+::: {.callout-note appearance="simple"}
+## Observation
+
+After removing trend, the model become strong at lag 1, with acf surgely cut-off after lag 1 and pacf decaying after lag 1:
+
+-   A strong spike at lag 1, followed by decay in the PACF, suggesting that the data follows an auto regressive process.
+
+-   ACF shows a sharp drop after lag 1, pointing to a pure AR process, where only the previous value directly influences the current value
+
+Based on observation, ARIMA(1,0,0) is more suitable.
+:::
+
+### 3.5.3 Seasonal differencing
+
+This removes **seasonal trends** and lets ACF/PACF highlight remaining correlations.
+
+```{r}
+time_resolution_table %>%
+  gg_tsdisplay(difference(value, difference = 12), 
+               plot_type = "partial",
+               lag_max = lag_input)
+```
+
+## 3.6 Univariate Forecasting Model
+
+### 3.6.1 Simulate user input data
+
+```{r}
+time_resolution_input <- "weekly"
+start_date <- as.Date("2022-01-01")
+end_date <- as.Date("2025-2-01")
+variable <- "mean_temperature_c"
+station_name <- "Clementi"
+
+ts_daily_tsibble <- daily_station %>%
+  filter(station == station_name, 
+         date >= start_date, 
+         date <= end_date) %>%
+  group_by(date) %>%
+  select(date, variable) %>%
+  pivot_longer(cols = c(mean_temperature_c), 
+               names_to = "type", values_to = "value") %>%
+  as_tsibble(index = date, key = type)
+
+# Aggregate to weekly data
+ts_weekly_tsibble <- ts_daily_tsibble %>%
+  mutate(year_week = yearweek(date)) %>%  
+  group_by(type, year_week) %>% 
+  summarise(value = mean(value, na.rm = TRUE), .groups = "drop") %>%
+  distinct(type, year_week, .keep_all = TRUE) %>% 
+  as_tsibble(index = year_week, key = type) 
+
+# Aggregate to monthly data
+ts_monthly_tsibble <- ts_daily_tsibble %>%
+  mutate(year_month = yearmonth(date)) %>%  
+  group_by(type, year_month) %>% 
+  summarise(value = mean(value, na.rm = TRUE), .groups = "drop") %>%
+  distinct(type, year_month, .keep_all = TRUE) %>% 
+  as_tsibble(index = year_month, key = type)
+```
+
+### 3.6.2 Train-test split (80%/20%)
+
+```{r}
+time_resolution_input <- "monthly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = ts_daily_tsibble,
+                                weekly = ts_weekly_tsibble,
+                                monthly = ts_monthly_tsibble)
+
+
+cutoff_row <- floor(0.8 * nrow(time_resolution_table))
+
+forecasting <- time_resolution_table %>%
+  mutate(split = if_else(row_number() > cutoff_row, "Hold-out", "Training"))
+
+
+forecasting_train <- forecasting %>%
+  filter(split=="Training")
+
+forecasting_test <- forecasting %>%
+  filter(split=="Hold-out")
+```
+
+### 3.6.3 Model Selection & Comparison
+
+The following models will be available for forecasting. For ARIMA, the user needs to specify the values for AR (AutoRegressive), I (Integrated), and MA (Moving Average). However, this may lead to errors if the model is not set up correctly. To prevent such issues, only Auto-ARIMA will be offered to users:
+
+```{r}
+
+models <- list(
+  ETS_AAA = ETS(value ~ error("A") + trend("A") + season("A")), 
+  ETS_MAM = ETS(value ~ error("M") + trend("A") + season("M")),
+  ETS_MMM = ETS(value ~ error("M") + trend("M") + season("M")),
+  ETS_AAN = ETS(value ~ error("A") + trend("A") + season("N")),
+  ETS_MMN = ETS(value ~ error("M") + trend("M") + season("N")),
+  ETS_ANN = ETS(value ~ error("A") + trend("N") + season("N")),
+  Auto_ETS = ETS(value),
+  Auto_ARIMA = ARIMA(value)
+)
+
+# User-selected models 
+model_chosen <- c("ETS_AAN","ETS_MMM", "Auto_ARIMA")
+
+models_to_fit <- models[model_chosen]
+
+fit_models <- forecasting_train %>%
+  model(!!!models_to_fit)
+```
+
+The code below displays the matrices of trained models to help the user choose the best model for forecasting. The Auto-ARIMA model demonstrates the lowest AIC and BIC values.
+
+```{r}
+matrix <- glance(fit_models) 
+matrix <- matrix %>%
+  select(.model, AIC, AICc, BIC)
+matrix
+
+```
+
+Next, we fit the test data and visualize the test results:
+
+```{r}
+forecast_results <- fit_models %>%
+  forecast(h = nrow(forecasting_test)) 
+
+```
+
+```{r}
+# Plot the forecast
+autoplot(forecast_results, level = c(95)) +
+  autolayer(forecasting, series = "Actual", color = "#4D4D4D") + 
+  labs(title = "Forecasting Performance: ETS Model vs Actual Test Data",
+       y = "Value",
+       x = "") +
+  theme_classic()+
+    theme(
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(color = "#4D4D4D", size = 0.5),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    legend.position = "bottom",
+    legend.key = element_blank(),
+    legend.key.size = unit(0.2, "cm"),
+    legend.title = element_text(size = 9),
+    legend.text = element_text(size = 8)
+  )
+```
+
+The code below compare the test accuracy between chosen models. ETS_MMM shows the lowest RMSE:
+
+```{r}
+acc <- accuracy(forecast_results, forecasting_test)
+acc <- acc %>%
+  select(.model,RMSE)
+
+acc
+```
+
+#### 3.6.3.1 Combine Test Accuracy with Training AIC & BIC
+
+The test RMSE, along with the training AIC and BIC, are combined for efficient reference by the user.
+
+-   tr stands for train, ts stands for test
+
+```{r}
+model_matrix <- matrix %>%
+  left_join(acc, by=".model") %>%
+  rename(RMSE_ts = RMSE, AIC_tr = AIC, AICc_tr = AICc, BIC_tr = BIC)
+
+model_matrix
+```
+
+#### 3.6.3.2 Table: Actual and Forecasted Values Comparison
+
+```{r}
+
+comparison_table_test <- forecast_results %>%
+  select(year_month, .model, value, .mean) %>%
+  rename(Actual = value, `Forecasted Value` = .mean)
+
+comparison_table_test <- comparison_table_test %>%
+  select(year_month, .model,`Forecasted Value`) %>%
+  rename( Model = .model)
+
+comparison_table_test <- 
+  left_join(comparison_table_test,forecasting,by="year_month")%>%
+  select(year_month, Model, `Forecasted Value`, value) %>%
+  rename(`Year Month` = `year_month`, `Actual Value` = value) %>%
+  mutate(`Forecasted Value` = round(`Forecasted Value`,2))
+  
+
+kable(comparison_table_test)
+```
+
+### 3.6.4 Select Best model for forecasting
+
+```{r}
+forecast_period <- 12
+
+# User-selected final forecasting model
+model_chosen <- c("ETS_MMM", "Auto_ARIMA")
+
+forecasting_models <- models[model_chosen]
+
+# Applying to forecasting pipeline
+fit_chosen_model <- forecasting %>%
+  model(!!!forecasting_models)
+
+forecast_results <- fit_chosen_model %>%
+  forecast(h = forecast_period)
+
+```
+
+#### 3.6.4.1 Show Forecasting Results
+
+```{r}
+# Plot the forecast
+autoplot(forecast_results, level = c(95)) +
+  autolayer(forecasting, series = "Actual", color = "#4D4D4D") + 
+  labs(title = "Forecast with Your Chosen Model",
+       y = variable,
+       x = "") +
+  theme_classic()+
+    theme(
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(color = "#4D4D4D", size = 0.5),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    legend.position = "bottom",
+    legend.key = element_blank(),
+    legend.key.size = unit(0.2, "cm"),
+    legend.title = element_text(size = 9),
+    legend.text = element_text(size = 8)
+  )
+```
+
+#### 3.6.4.2 Model's Parameter
+
+```{r}
+fit_chosen_model %>%
+  tidy()
+```
+
+### 3.6.5 Model Evaluation
+
+```{r}
+residuals <- residuals(fit_chosen_model)
+
+# Plot residuals
+autoplot(residuals, .vars = .resid) + 
+  labs(title = "Residuals of Chosen Model",
+       x = "", 
+       y = "Residuals") +
+  theme_classic()+
+    theme(
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    axis.line.y = element_blank(),
+    axis.line.x = element_line(color = "#4D4D4D", size = 0.5),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    legend.position = "bottom",
+    legend.key = element_blank(),
+    legend.key.size = unit(0.2, "cm"),
+    legend.title = element_text(size = 9),
+    legend.text = element_text(size = 8)
+  )
+
+```
+
+### 3.6.6 Create Table for forecaste value:
+
+```{r}
+# Keep only relevant columns: time, model, actual value, forecasted value
+comparison_table <- forecast_results %>%
+  select(year_month, .model, value, .mean) %>%
+  rename(Actual = value, `Forecast Value` = .mean)
+
+comparison_table <- comparison_table %>%
+  select(year_month, .model,`Forecast Value`) %>%
+  rename( Model = .model)
+
+kable(comparison_table)
+
+```
+
+# 4 Prototype
+
+# 5 Reference
+
+-   Kam, T.S. (2025). [Visualising, Analysing and Forecasting Time-series Data: tidyverts methods](https://r4va.netlify.app/chap19)

@@ -66,6 +66,10 @@ website:
             href: Take-home_Ex/Take-home_Ex1/Take-Home_Ex1.html
           - text: "Take-home Exercise 2: Be Tradewise or Otherwise"
             href: Take-home_Ex/Take-home_Ex2/Take-Home_Ex2.html
+          - text: "Take-Home Exercise 3.a: Shiny App Prototype - Isohyet Map"
+            href: Take-home_Ex/Take-home_Ex3/Take-Home_Ex3_a.html
+          - text: "Take-home Exercise 3.b: Shiny App Prototype - Forecasting"
+            href: Take-home_Ex/Take-home_Ex3/Take-Home_Ex3_b.html
     right:
       - href: index.html
         text: Home
