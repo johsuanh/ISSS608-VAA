@@ -33,12 +33,12 @@ For a better understanding of these modules, please refer to our project proposa
 Below are the packages I'll be using for testing and building the prototypes:
 
 ```{r}
-pacman::p_load(tidyverse,DT,tseries,lubridate,knitr,tsibble,fable,feasts,ggthemes, forecast,urca)
+pacman::p_load(tidyverse,DT,tseries,lubridate,knitr,tsibble,fable,feasts,ggthemes, forecast,urca,kableExtra)
 
 ```
 
 | Package | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | [tidyverse](https://www.tidyverse.org/) | For data manipulation |
 | [DT](https://rstudio.github.io/DT/) | For interactive data tables |
 | [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
@@ -144,16 +144,18 @@ time_resolution_table %>%
   model(stl = STL(value)) %>%  
   components() %>% 
   autoplot() + 
-  theme_minimal() + 
+  theme_classic() + 
+  scale_color_manual(values = c("#4D4D4D"))+
   theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
     axis.title = element_text(size = 8),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background = element_rect(fill="#C4C8FF",color="white"),
+    strip.text = element_text(color = "#1A1A1A",size =6),
     legend.position = 'top',
     legend.background = element_blank(),
-    legend.key = element_blank(), 
-    panel.background = element_rect(fill = "#f3f1e9", color = NA),
-    plot.background = element_rect(fill = "#f3f1e9", color = NA))
+    legend.key = element_blank())
 ```
 
 ## Weekly
@@ -170,16 +172,18 @@ time_resolution_table %>%
   model(stl = STL(value)) %>%  
   components() %>% 
   autoplot() + 
-  theme_minimal() + 
+  theme_classic() + 
+  scale_color_manual(values = c("#4D4D4D"))+
   theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
     axis.title = element_text(size = 8),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background = element_rect(fill="#C4C8FF",color="white"),
+    strip.text = element_text(color = "#1A1A1A",size =6),
     legend.position = 'top',
     legend.background = element_blank(),
-    legend.key = element_blank(), 
-    panel.background = element_rect(fill = "#f3f1e9", color = NA),
-    plot.background = element_rect(fill = "#f3f1e9", color = NA))
+    legend.key = element_blank())
 ```
 
 ## Monthly
@@ -196,16 +200,18 @@ time_resolution_table %>%
   model(stl = STL(value)) %>%  
   components() %>% 
   autoplot() + 
-  theme_minimal() + 
+  theme_classic() + 
+  scale_color_manual(values = c("#4D4D4D"))+
   theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
     axis.title = element_text(size = 8),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background = element_rect(fill="#C4C8FF",color="white"),
+    strip.text = element_text(color = "#1A1A1A",size =6),
     legend.position = 'top',
     legend.background = element_blank(),
-    legend.key = element_blank(), 
-    panel.background = element_rect(fill = "#f3f1e9", color = NA),
-    plot.background = element_rect(fill = "#f3f1e9", color = NA))
+    legend.key = element_blank())
 ```
 :::
 
@@ -263,15 +269,18 @@ time_resolution_table %>%
       value, type = "additive")) %>%
   components() %>%
   autoplot()+
-  theme_minimal() + 
+  theme_classic() + 
+  scale_color_manual(values = c("#4D4D4D"))+
   theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
     axis.title = element_text(size = 8),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background = element_rect(fill="#C4C8FF",color="white"),
+    strip.text = element_text(color = "#1A1A1A",size =6),
     legend.position = 'top',
     legend.background = element_blank(),
-    legend.key = element_blank()
-  )
+    legend.key = element_blank())
 ```
 
 ## Weekly
@@ -289,17 +298,18 @@ time_resolution_table %>%
       value, type = "additive")) %>%
   components() %>%
   autoplot()+
-  theme_minimal() + 
+  theme_classic() + 
+  scale_color_manual(values = c("#4D4D4D"))+
   theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
     axis.title = element_text(size = 8),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background = element_rect(fill="#C4C8FF",color="white"),
+    strip.text = element_text(color = "#1A1A1A",size =6),
     legend.position = 'top',
     legend.background = element_blank(),
-    legend.key = element_blank(), 
-    panel.background = element_rect(fill = "#f3f1e9", color = NA),
-    plot.background = element_rect(fill = "#f3f1e9", color = NA)
-  )
+    legend.key = element_blank())
 ```
 
 ## Monthly
@@ -317,17 +327,18 @@ time_resolution_table %>%
       value, type = "additive")) %>%
   components() %>%
   autoplot()+
-  theme_minimal() + 
+  theme_classic() + 
+  scale_color_manual(values = c("#4D4D4D"))+
   theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
     axis.title = element_text(size = 8),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background = element_rect(fill="#C4C8FF",color="white"),
+    strip.text = element_text(color = "#1A1A1A",size =6),
     legend.position = 'top',
     legend.background = element_blank(),
-    legend.key = element_blank(), 
-    panel.background = element_rect(fill = "#f3f1e9", color = NA),
-    plot.background = element_rect(fill = "#f3f1e9", color = NA)
-  )
+    legend.key = element_blank())
 ```
 :::
 
@@ -337,17 +348,29 @@ time_resolution_table %>%
 ## Mean Temperature
 
 ```{r}
+ 
 
 ts_monthly_tsibble %>%
   gg_subseries(value)+
-  labs(title="Cycle Plot")+
-  theme_minimal()+
-    theme(
-    plot.title = element_text(hjust = 0.5, face = 'bold'),
-    plot.subtitle = element_text(hjust = 0.5),
+  labs(title="Cycle Plot", subtitle="",y = paste0(variable),x="")+
+  theme_classic()+
+  scale_color_manual(values = c("#4D4D4D"))+
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5,color="#4D4D4D"),
+    plot.subtitle = element_text(hjust = 0.5,color="#4D4D4D"),
+    panel.background = element_rect(fill = "#f5f5f5", color = NA),
     axis.title = element_text(size = 8),
-    axis.text.x = element_text(angle=90)
+    axis.line = element_blank(),
+    axis.ticks = element_blank(),
+    axis.title.y = element_text(color = "#4D4D4D",margin = margin(r = 10)),
+    strip.background.x = element_rect(fill="#C4C8FF",color="white"),
+    strip.background.y = element_rect(color="white"),
+    strip.text.x = element_text(color = "#1A1A1A",size =8),
+    strip.text.y = element_text(color = "white",size =7),
+    axis.text.x = element_blank()
   )
+
+
 
 ```
 :::
@@ -368,6 +391,9 @@ Both plots show weak seasonality, with only the ACF showing a strong correlation
 
 ```{r}
 lag_input <- 24
+
+# partial, scatter, histogram
+plot <- "partial"
 time_resolution_input <- "monthly"
 time_resolution_table <- switch(time_resolution_input,
                                 daily = ts_daily_tsibble,
@@ -377,7 +403,10 @@ time_resolution_table <- switch(time_resolution_input,
 
 time_resolution_table %>%
   gg_tsdisplay(
-    plot_type='partial',lag_max = lag_input)
+    y=value,
+    plot_type = plot,
+    lag_max = lag_input)
+
 ```
 
 ```{r}
@@ -575,9 +604,12 @@ The test RMSE, along with the training AIC and BIC, are combined for efficient r
 ```{r}
 model_matrix <- matrix %>%
   left_join(acc, by=".model") %>%
-  rename(RMSE_ts = RMSE, AIC_tr = AIC, AICc_tr = AICc, BIC_tr = BIC)
+  rename(RMSE_ts = RMSE, AIC_tr = AIC, AICc_tr = AICc, BIC_tr = BIC, Model = .model)
 
-model_matrix
+kable(model_matrix) %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  row_spec(0, background = "#C4C8FF", color = "#4D4D4D") 
+
 ```
 
 #### 3.6.3.2 Table: Actual and Forecasted Values Comparison
@@ -594,12 +626,26 @@ comparison_table_test <- comparison_table_test %>%
 
 comparison_table_test <- 
   left_join(comparison_table_test,forecasting,by="year_month")%>%
-  select(year_month, Model, `Forecasted Value`, value) %>%
-  rename(`Year Month` = `year_month`, `Actual Value` = value) %>%
-  mutate(`Forecasted Value` = round(`Forecasted Value`,2))
-  
+  mutate(`Forecasted Value` = round(`Forecasted Value`,2),
+         Year = year(year_month),
+         Month = month(year_month))%>%
+  select(c(Year, Month, Model, `Forecasted Value`, value)) %>%
+  rename(`Actual Value` = value) %>%
+  mutate(`Forecasted Value` = round(`Forecasted Value`,2))%>%
+  select(-c(year_month))
 
-kable(comparison_table_test)
+datatable(comparison_table_test, 
+          options = list(
+            scrollY = "250px",       # Set the scroll height
+            scrollCollapse = TRUE,   # Collapse empty space when scrolling
+            paging = FALSE,          # Disable paging for continuous scrolling
+            searching = TRUE,        
+            headerCallback = JS(
+              "function(thead, data, start, end, display) {",
+              "  $(thead).find('th').css({'background-color': '#C4C8FF', 'color': '#4D4D4D', 'font-weight': 'bold'});", 
+              "}"
+            )
+          ))
 ```
 
 ### 3.6.4 Select Best model for forecasting
@@ -616,7 +662,7 @@ forecasting_models <- models[model_chosen]
 fit_chosen_model <- forecasting %>%
   model(!!!forecasting_models)
 
-forecast_results <- fit_chosen_model %>%
+forecast_final_results <- fit_chosen_model %>%
   forecast(h = forecast_period)
 
 ```
@@ -625,7 +671,7 @@ forecast_results <- fit_chosen_model %>%
 
 ```{r}
 # Plot the forecast
-autoplot(forecast_results, level = c(95)) +
+autoplot(forecast_final_results, level = c(95)) +
   autolayer(forecasting, series = "Actual", color = "#4D4D4D") + 
   labs(title = "Forecast with Your Chosen Model",
        y = variable,
@@ -647,8 +693,28 @@ autoplot(forecast_results, level = c(95)) +
 #### 3.6.4.2 Model's Parameter
 
 ```{r}
-fit_chosen_model %>%
-  tidy()
+parameters <- fit_chosen_model %>%
+  tidy() %>%
+  mutate(estimate = round(estimate,3),
+         `std.error` = round(`std.error`,3),
+         statistic = round(statistic,3),
+         `std.error` = round(`std.error`,3),
+         `p.value` = round(`p.value`,3)
+         )
+
+datatable(parameters, 
+          options = list(
+            scrollY = "250px",       # Set the scroll height
+            scrollCollapse = TRUE,   # Collapse empty space when scrolling
+            paging = FALSE,          # Disable paging for continuous scrolling
+            searching = TRUE,        
+            headerCallback = JS(
+              "function(thead, data, start, end, display) {",
+              "  $(thead).find('th').css({'background-color': '#C4C8FF', 'color': '#4D4D4D', 'font-weight': 'bold'});", 
+              "}"
+            )
+          ))
+
 ```
 
 ### 3.6.5 Model Evaluation
@@ -658,7 +724,7 @@ residuals <- residuals(fit_chosen_model)
 
 # Plot residuals
 autoplot(residuals, .vars = .resid) + 
-  labs(title = "Residuals of Chosen Model",
+  labs(title = "Residuals of Forecasting Model",
        x = "", 
        y = "Residuals") +
   theme_classic()+
@@ -679,20 +745,52 @@ autoplot(residuals, .vars = .resid) +
 ### 3.6.6 Create Table for forecaste value:
 
 ```{r}
-# Keep only relevant columns: time, model, actual value, forecasted value
-comparison_table <- forecast_results %>%
+comparison_table <- forecast_final_results %>%
   select(year_month, .model, value, .mean) %>%
-  rename(Actual = value, `Forecast Value` = .mean)
+  rename( `Forecasted Value`= .mean) %>%
+  mutate(`Forecasted Value` = round(`Forecasted Value`,2),
+         Year = year(year_month),
+         Month = month(year_month))
 
 comparison_table <- comparison_table %>%
-  select(year_month, .model,`Forecast Value`) %>%
-  rename( Model = .model)
+  select(Year, Month, .model,`Forecasted Value`) %>%
+  rename(Model = .model)
 
-kable(comparison_table)
 
+# Display as a datatable
+datatable(comparison_table, 
+          options = list(
+            scrollY = "250px",       # Set the scroll height
+            scrollCollapse = TRUE,   # Collapse empty space when scrolling
+            paging = FALSE,          # Disable paging for continuous scrolling
+            searching = TRUE,        
+            headerCallback = JS(
+              "function(thead, data, start, end, display) {",
+              "  $(thead).find('th').css({'background-color': '#C4C8FF', 'color': '#4D4D4D', 'font-weight': 'bold'});", 
+              "}"
+            )
+          ))
 ```
 
 # 4 Prototype
+
+::: panel-tabset
+## Time Decomposition
+
+![](prototype/Protoype-2.png){fig-align="center"}
+
+## Correlograms
+
+![](prototype/Protoype-3.png){fig-align="center"}
+
+## Forecasting - Model Training
+
+![](prototype/Protoype-4.png){fig-align="center"}
+
+## Forecasting - Model Selection
+
+![](prototype/Protoype-5.png){fig-align="center"}
+:::
 
 # 5 Reference
 

@@ -42,7 +42,7 @@ library(gstat)
 ```
 
 | Package | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | [tidyverse](https://www.tidyverse.org/) | For data manipulation |
 | [DT](https://rstudio.github.io/DT/) | For interactive data tables |
 | [knitr](https://yihui.org/knitr/) | For dynamic report generation with R |
@@ -426,11 +426,44 @@ tm_shape(weekly_station_sf) +
              popup.vars=c("Name: " = "station"))
 ```
 
+Next, we use the tm_dots layer to display mean temperature across nine stations:
+
+```{r}
+# Assume the user set date range to 2023-01-01~2024-02-1  
+start_date <- as.Date("2023-01-01")
+end_date <- as.Date("2024-02-01")
+
+# Assume the user choose monthly data
+time_resolution_input <- "monthly"
+time_resolution_table <- switch(time_resolution_input,
+                                daily = daily_station_sf,
+                                weekly = weekly_station_sf,
+                                monthly = monthly_station_sf)
+# Assume the user choose mean_temperature
+variable <- "Mean Temperature"
+
+station_summary <- time_resolution_table %>%
+  filter(date >= start_date & date <= end_date) %>%
+  group_by(station) %>%
+  summarize(value = mean(get(variable), na.rm = TRUE))
+
+```
+
+```{r}
+tmap_mode("view")
+
+tm_shape(mpsz) +
+  tm_borders(alpha = 0.6) +
+tm_shape(station_summary) +
+  tm_dots(col = "value", palette = "brewer.purples", size = 0.8, alpha = 0.9, title = variable)
+
+```
+
 ## 3.2 Spatial Interpolation
 
 Since we have data from only 9 stations, spatial interpolation is needed to visualize the weather data. We will test two methods — **Inverse Distance Weighting** and **Ordinary** **Kriging** for spatial Interpolation.
 
-### 3.2.1 Spatial Interpolation - Inverse Distance Weighting
+### 3.2.1 Spatial Interpolation - **Inverse Distance Weighting**
 
 **Inverse Distance Weighting (IDW)** is a spatial interpolation method that estimates unknown values at a location based on the values of nearby points. The closer a known point is to the unknown point, the greater its influence.
 
@@ -521,10 +554,16 @@ We will map the interpolated surface by using tmap functions as shown in the cod
 ```{r}
 tmap_mode("view")
 
+
+title_text <- paste("Distribution of", variable)
+legend_text <- paste(variable)
+
 tm_shape(pred) + 
-  tm_raster(col_alpha = 1, 
+ tm_raster(col_alpha = 0.6, 
             col.scale = tm_scale(
-              values = "brewer.purples"))
+              values = "brewer.purples"),
+            col.legend = tm_legend(legend_text)) +
+  tm_title(title_text) + tm_layout(frame = TRUE)
 ```
 
 ### 3.2.2 Spatial Interpolation - Ordinary **Kriging**
@@ -600,6 +639,8 @@ tm_shape(kpred) +
 ```
 
 # 4 Prototype for Isohyet Map
+
+![](prototype/prototype_IsohyetMap.png){fig-align="center"}
 
 # 5 Reference
 
